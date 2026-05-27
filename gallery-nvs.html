@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>General NVS Results — Neural Space-Time Memory</title>
+  <meta name="description" content="General novel view synthesis results across all models and scenes.">
+  <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="data-gallery.css">
+</head>
+
+<body>
+
+  <div class="dg-page">
+    <a href="gallery.html" class="dg-back-link">&larr; Back to Data Gallery</a>
+
+    <div class="dg-header">
+      <h1 class="dg-title">General NVS Results</h1>
+      <p class="dg-subtitle">Novel view synthesis comparison across 4 models on 72 randomly selected evaluation scenes
+        (camera 59).</p>
+    </div>
+
+    <div id="gallery-root"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="content-width">
+      <p>Anonymous ECCV 2026 Submission — Paper #5217</p>
+    </div>
+  </footer>
+
+  <script src="js/data-gallery.js"></script>
+  <script>
+    (function () {
+      var SCENE_IDS = [
+        '100917', '101032', '101073', '101177', '101336', '101403', '101500', '101637',
+        '101688', '101721', '101727', '101754', '101883', '101964', '102023', '102231',
+        '102391', '102515', '102788', '103022', '103061', '103138', '103270', '103421',
+        '103444', '103540', '103572', '103660', '103851', '103991', '104223', '104324',
+        '200191', '200366', '200429', '200499', '200574', '200598', '200724', '200776',
+        '200822', '200850', '200903', '200998', '201128', '201214', '201311', '201360',
+        '201432', '201527', '201576', '201594', '201680', '201748', '201792', '201845',
+        '202018', '202233', '202459', '202563', '202601', '202640', '202738', '202941',
+        '203027', '203063', '203132', '203235', '203832', '203959', '204030', '204224'
+      ];
+
+      var scenes = SCENE_IDS.map(function (id) {
+        return { id: id, file: id + '_59.mp4' };
+      });
+
+      DataGallery.init({
+        containerId: 'gallery-root',
+        models: [
+          { id: 'nstm_ours', label: 'NSTM (Ours)', pathPrefix: 'data_gallery/general_nvs/nstm_ours' },
+          { id: 'lvsm', label: 'LVSM', pathPrefix: 'data_gallery/general_nvs/lvsm' },
+          { id: 'token_mem_cut3r', label: 'Token-Mem (CUT3R)', pathPrefix: 'data_gallery/general_nvs/token_mem_cut3r' },
+          { id: 'lact_dot', label: 'LaCT-NVS', pathPrefix: 'data_gallery/general_nvs/lact_dot' }
+        ],
+        scenes: scenes
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

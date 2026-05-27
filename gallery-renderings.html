@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Memory Persistence Test Renderings — Neural Space-Time Memory</title>
+  <meta name="description"
+    content="Complete rendering gallery with input views, rendered outputs, and memory visualizations.">
+  <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="data-gallery.css">
+</head>
+
+<body>
+
+  <div class="dg-page">
+    <a href="gallery.html" class="dg-back-link">&larr; Back to Data Gallery</a>
+
+    <div class="dg-header">
+      <h1 class="dg-title">Memory Persistence Test Renderings</h1>
+      <p class="dg-subtitle">Examples demonstrating our memory capability with full input views, rendered
+        outputs, and memory visualizations.</p>
+    </div>
+
+    <div id="gallery-root"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="content-width">
+      <p>Anonymous ECCV 2026 Submission — Paper #5217</p>
+    </div>
+  </footer>
+
+  <script src="js/data-gallery.js"></script>
+  <script>
+    (function () {
+      /* 8 curated demo scenes — each has its own orbit group/index */
+      var SCENE_IDS = [
+        { id: 'ft_202307_20230709_00007_02', label: 'Text', og: 'near_backreveal', oi: 'orbit_1' },
+        { id: 'ft_202310_20231014_00011_01', label: 'Logo', og: 'near_backreveal', oi: 'orbit_1' },
+        { id: 'lg_202307_20230705_00015_02', label: 'Logo (LG)', og: 'near_backreveal', oi: 'orbit_1' },
+        { id: 'lg_202307_20230720_00036_02', label: 'Ribbon', og: 'near_backreveal', oi: 'orbit_1' },
+        { id: 'ft_202307_20230716_00026_02', label: 'Hair', og: 'near_backreveal', oi: 'orbit_1' },
+        { id: 'ft_202310_20231014_00026_01', label: 'Unique Pose', og: 'near_backreveal', oi: 'orbit_1' },
+        { id: 'ft_202307_20230718_00021_01', label: 'Graphic Logo', og: 'near_backreveal', oi: 'orbit_2' },
+        { id: 'lg_202306_20230629_00015_02', label: 'General NVS', og: 'at_backreveal', oi: 'orbit_1' }
+      ];
+
+      var SCENES = SCENE_IDS.map(function (s) { return { id: s.id, label: s.label, og: s.og, oi: s.oi }; });
+
+      /* Path helper */
+      function vp(model, sceneId, og, oi, file) {
+        return 'videos/' + model + '/' + sceneId + '/' + og + '/' + oi + '/' + file;
+      }
+
+      /* Models with their output types */
+      var MEMORY_MODELS = ['nstm', 'nstm_hires'];
+      var MODEL_DEFS = [
+        { key: 'nstm', label: 'NSTM (Ours)' },
+        { key: 'nstm_hires', label: 'NSTM 512×512' },
+        { key: 'token_mem', label: 'Token-Mem' },
+        { key: 'full_attn', label: 'LVSM' },
+        { key: 'lact_nvs', label: 'LACT-NVS' }
+      ];
+
+      /* Build columns: for each model → input + rendered + [memory] */
+      var MODELS = [];
+      MODEL_DEFS.forEach(function (def) {
+        MODELS.push({ id: def.key + '_input', label: def.label + ' (Input)', modelKey: def.key, file: 'input.mp4' });
+        MODELS.push({ id: def.key + '_rendered', label: def.label + ' (Rendered)', modelKey: def.key, file: 'rendered.mp4' });
+        if (MEMORY_MODELS.indexOf(def.key) > -1) {
+          MODELS.push({ id: def.key + '_memory', label: def.label + ' (Memory)', modelKey: def.key, file: 'memory.mp4' });
+        }
+      });
+
+      DataGallery.init({
+        containerId: 'gallery-root',
+        gridCols: 'dg-grid--cols-6',
+        models: MODELS,
+        scenes: SCENES,
+        pathResolver: function (model, scene) {
+          return vp(model.modelKey, scene.id, scene.og, scene.oi, model.file);
+        }
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

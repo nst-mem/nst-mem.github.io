@@ -1,0 +1,964 @@
+/* ==========================================================================
+   NSTM Project Website — Global Styles
+   Built on top of Bulma 0.9.4. All fonts and CSS are bundled locally.
+   ========================================================================== */
+
+/* --- Font Faces (bundled for offline use) --- */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('vendor/fonts/inter-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('vendor/fonts/inter-medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('vendor/fonts/inter-bold.woff2') format('woff2');
+}
+
+/* --- Design Tokens (CSS Custom Properties) --- */
+
+:root {
+  /* Colors */
+  --color-bg:           #FFFFFF;
+  --color-text-primary: #363636;
+  --color-text-secondary: #6B7280;
+  --color-accent:       #3A86C8;     /* teal-blue for interactive highlights */
+  --color-accent-light: #E8F2FB;     /* subtle accent background */
+  --color-btn-bg:       #363636;
+  --color-btn-text:     #FFFFFF;
+
+  /* Typography */
+  --font-family:        'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-size-body:     17px;
+  --font-size-caption:  14px;
+  --font-size-ui: 12px;
+  --font-size-small:    13px;
+  --line-height-body:   1.65;
+
+  /* Layout */
+  --content-width:      1080px;
+  --section-padding-y:  100px;
+  --section-padding-y-sm: 60px;
+}
+
+/* --- Base Resets & Globals --- */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* --- Typography --- */
+
+h1, h2, h3, h4, h5, h6,
+.title, .subtitle {
+  font-family: var(--font-family);
+  color: var(--color-text-primary);
+}
+
+.publication-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.publication-subtitle {
+  font-size: 1.15rem;
+  color: var(--color-text-secondary);
+  font-weight: 400;
+}
+
+.section-heading {
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.caption-text {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* --- Layout Utilities --- */
+
+.content-width {
+  max-width: var(--content-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.section-padding {
+  padding-top: var(--section-padding-y);
+  padding-bottom: var(--section-padding-y);
+}
+
+.full-bleed {
+  max-width: 100%;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* --- Nerfies-style Link Buttons (dark pill) --- */
+
+.publication-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.link-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background-color: var(--color-btn-bg);
+  color: var(--color-btn-text);
+  font-size: var(--font-size-caption);
+  font-weight: 500;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.link-button:hover {
+  opacity: 0.85;
+  color: var(--color-btn-text);
+}
+
+.link-button svg,
+.link-button img {
+  width: 18px;
+  height: 18px;
+}
+
+/* --- Hero Video --- */
+
+.hero-video-container {
+  max-width: calc(var(--content-width) * 1.2);
+    margin: 0 auto;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.hero-video-container video {
+  width: 100%;
+  display: block;
+}
+
+/* --- Abstract --- */
+
+.abstract-text {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* --- Figures --- */
+
+.figure-container {
+  text-align: center;
+}
+
+.figure-container img,
+.figure-container embed {
+  max-width: 100%;
+  height: auto;
+  border: none;
+}
+
+/* --- Overview 2-Row Grid Layout --- */
+
+.overview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px 40px;
+}
+
+/* Architecture = full-width first row */
+.overview-item--arch {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  padding-bottom: 40px;
+  }
+  
+  /* Constrain architecture carousel images to 90% on large screens */
+  .overview-item--arch .gallery-carousel-slide img {
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+/* Camera = second row left */
+.overview-item--camera {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+/* Scaling = second row right */
+.overview-item--scaling {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+/* Fixed-height container for top-row images — ensures captions align */
+.overview-img-box-top {
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.overview-img-box-top img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Description text for overview items */
+.overview-desc {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-top: 6px;
+  text-align: center;
+}
+/* --- PDF Embed --- */
+
+.pdf-embed {
+  width: 100%;
+  height: 80vh;
+  border: none;
+}
+
+/* --- Placeholder Style (for sections under development) --- */
+
+.placeholder-notice {
+  text-align: center;
+  padding: 60px 24px;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  font-size: var(--font-size-caption);
+}
+
+/* --- Footer --- */
+
+.site-footer {
+  padding: 40px 0;
+  text-align: center;
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
+/* --- Gallery Carousel --- */
+
+.gallery-carousel {
+  position: relative;
+  overflow: hidden;
+    /* clip arrows that sit outside on desktop */
+}
+
+/* The track that holds all slides side-by-side */
+.gallery-carousel-track {
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform;
+}
+
+/* Each slide is exactly 100% of carousel width */
+.gallery-carousel-slide {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+    padding: 0 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Images fill the slide width, constrained by max-height */
+.gallery-carousel-slide img {
+  width: 100%;
+    height: auto;
+  max-height: 600px;
+  object-fit: contain;
+  border: none;
+  display: block;
+}
+
+.gallery-carousel-slide .caption-text {
+  margin-top: 12px;
+  margin-bottom: 0;
+  width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Prev / Next arrows — circular buttons, vertically centered */
+.gallery-carousel-nav {
+  position: absolute;
+  top: 50%;
+    transform: translateY(-50%);
+  z-index: 2;
+  cursor: pointer;
+  width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.06);
+  border: none;
+  padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  opacity: 0.65;
+    transition: opacity 0.2s ease, background 0.2s ease;
+  }
+
+  /* CSS-drawn chevron — border trick on a rotated square */
+  .gallery-carousel-nav::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid var(--color-text-secondary);
+    border-right: 2px solid var(--color-text-secondary);
+    transition: border-color 0.2s ease;
+  }
+
+                                /* Prev: rotate to point left.
+                                   The chevron's visual weight is toward the tip (left), so nudge
+                                   the bounding box 3px right to optically center it in the circle. */
+  .gallery-carousel-nav--prev::before {
+    transform: rotate(-135deg);
+    margin-left: 3px;
+  }
+
+                                /* Next: rotate to point right — same optical correction, mirrored. */
+  .gallery-carousel-nav--next::before {
+    transform: rotate(45deg);
+    margin-right: 3px;
+  }
+
+  .gallery-carousel-nav:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.10);
+  }
+
+  .gallery-carousel-nav:hover::before {
+    border-color: var(--color-text-primary);
+}
+
+.gallery-carousel-nav:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
+}
+
+.gallery-carousel:hover .gallery-carousel-nav {
+  opacity: 0.8;
+  }
+
+  .gallery-carousel:hover .gallery-carousel-nav:hover {
+  opacity: 1;
+}
+
+.gallery-carousel-nav--prev {
+  left: 8px;
+}
+
+.gallery-carousel-nav--next {
+  right: 8px;
+}
+
+/* Dot indicators */
+.gallery-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.gallery-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #D1D5DB;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.gallery-carousel-dot.is-active {
+  background-color: var(--color-accent);
+}
+
+/* Hide controls when only 1 slide */
+.gallery-carousel[data-count="1"] .gallery-carousel-nav,
+.gallery-carousel[data-count="1"] .gallery-carousel-dots {
+  display: none;
+}
+
+/* Mobile: always show arrows (no hover on touch) */
+@media (hover: none) {
+  .gallery-carousel-nav {
+    opacity: 0.7;
+  }
+}
+/* --- Visual Results: Example Selector (Zone 1) --- */
+
+.example-selector-wrap {
+  position: relative;
+}
+
+/* Gradient fade masks on left/right edges to hint at scrollable content */
+.example-selector-wrap::before,
+.example-selector-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.example-selector-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--color-bg), transparent);
+}
+
+.example-selector-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--color-bg), transparent);
+}
+
+/* JS adds these classes based on scroll position */
+.example-selector-wrap.can-scroll-left::before {
+  opacity: 1;
+}
+
+.example-selector-wrap.can-scroll-right::after {
+  opacity: 1;
+}
+.example-selector {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 4px 0 12px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-behavior: smooth;
+}
+
+.example-selector::-webkit-scrollbar {
+  display: none;
+}
+
+.example-card {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 20px;
+  border: 2px solid #E5E7EB;
+  border-radius: 10px;
+  background: none;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  min-width: 120px;
+  text-align: center;
+}
+
+.example-card:hover {
+  border-color: #B0C4D8;
+  background-color: #F7FAFD;
+}
+
+.example-card.is-active {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-light);
+}
+
+.example-card-label {
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.example-card-desc {
+  font-size: var(--font-size-ui);
+  color: var(--color-text-secondary);
+}
+
+/* --- Visual Results: Model Strip (Zone 2) --- */
+
+.model-strip {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+  align-items: flex-start;
+}
+
+.model-strip-item {
+  flex: 1;
+  min-width: 0;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 2px solid #E5E7EB;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  overflow: hidden;
+}
+
+.model-strip-item:hover {
+  border-color: #B0C4D8;
+}
+
+.model-strip-item.is-selected {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(58, 134, 200, 0.2);
+}
+
+.model-strip-video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 6px 6px 0 0;
+  background: #F3F4F6;
+}
+
+.model-strip-video-wrap video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Checkmark multi-select indicator */
+.model-strip-check {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.75);
+  border: 1.5px solid #D1D5DB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-ui);
+  font-weight: 700;
+  color: transparent;
+  transition: all 0.15s ease;
+  pointer-events: none;
+}
+
+.model-strip-item.is-selected .model-strip-check {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+}
+
+.model-strip-label {
+  display: block;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding: 5px 4px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.model-strip-item.is-selected .model-strip-label {
+  color: var(--color-accent);
+}
+
+/* --- Visual Results: Analysis Box (Zone 3) --- */
+
+/*
+ * Layout system (revised):
+ *   .analysis-row    — flex row, no stretch (JS sets explicit heights)
+ *   .analysis-col    — column container for a video + overlay label
+ *                      widths & heights are computed by layoutAnalysisRow() in JS
+ *   .vid-label       — semi-transparent overlay badge
+ *
+ *   --input    col:  single video (128×256, two stacked views)
+ *   --rendered col:  rendered output, height-matched to input
+ *   --memory   col:  optional, same sizing logic as rendered
+ *   --compare  col:  swipe container, fills remaining width
+ */
+.analysis-box {
+  margin-top: 20px;
+  min-height: 200px;
+}
+
+.analysis-row {
+  display: flex;
+  gap: 8px;
+}
+
+.analysis-col {
+  position: relative;
+  min-width: 0;
+  border-radius: 8px;
+    overflow: hidden;
+    /* width and height set by JS */
+}
+
+.analysis-col video {
+  width: 100%;
+  height: 100%;
+  display: block;
+    object-fit: cover;
+}
+
+/* ── Unified overlay label ── */
+
+.vid-label {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  font-size: var(--font-size-ui);
+  font-weight: 600;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.vid-label--right {
+  left: auto;
+  right: 8px;
+}
+
+/* .vid-label--left is effectively the default (left: 8px), defined for symmetry */
+.vid-label--left {
+  left: 8px;
+}
+
+/* ── Memory toggle (checkbox overlay, top-right of rendered col) ── */
+
+.memory-toggle {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  cursor: pointer;
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.memory-toggle:hover {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.memory-toggle-checkbox {
+  accent-color: var(--color-accent);
+  width: 14px;
+  height: 14px;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* --- Visual Results: Swipe Comparison --- */
+
+.compare-container {
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+
+.compare-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.compare-video--over {
+  position: absolute;
+  top: 0;
+  left: 0;
+  clip-path: inset(0 50% 0 0);
+}
+
+.compare-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  cursor: ew-resize;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.compare-divider-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+}
+
+.compare-divider-handle {
+  position: relative;
+  z-index: 6;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+}
+/* --- Visual Results: Playback Controls --- */
+
+.playback-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 8px 14px;
+  background: #F7F8FA;
+  border-radius: 10px;
+  border: 1px solid #E5E7EB;
+}
+
+.playback-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  border-radius: 6px;
+  transition: background 0.12s ease, color 0.12s ease;
+  flex-shrink: 0;
+}
+
+.playback-btn:hover {
+  background: #E5E7EB;
+  color: var(--color-text-primary);
+}
+
+.playback-btn--play {
+  color: var(--color-text-primary);
+}
+
+.playback-seek-wrap {
+  flex: 1;
+  position: relative;
+  height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.playback-seek {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #D1D5DB;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.playback-seek::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  position: relative;
+  z-index: 3;
+}
+
+.playback-seek::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.playback-seek-fill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  transform: translateY(-50%);
+  background: var(--color-accent);
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 1;
+  width: 0%;
+}
+
+.playback-time {
+  font-size: var(--font-size-ui);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Responsive --- */
+
+@media screen and (max-width: 768px) {
+  .publication-title {
+    font-size: 1.75rem;
+  }
+
+  .section-heading {
+    font-size: 1.35rem;
+  }
+
+  .section-padding {
+    padding-top: var(--section-padding-y-sm);
+    padding-bottom: var(--section-padding-y-sm);
+  }
+
+  .content-width {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .model-strip {
+    flex-wrap: wrap;
+  }
+
+  .model-strip-item {
+    flex: 0 0 calc(50% - 4px);
+  }
+
+    #analysis-single {
+    flex-direction: column;
+  }
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                #abstract .content {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  padding-left: 16px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  padding-right: 16px;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }
+
+  .playback-controls {
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  .playback-seek-wrap {
+    flex: 1 1 0;
+    min-width: 60px;
+    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                /* Overview: single-column on mobile */
+    .overview-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .overview-item--arch {
+      grid-column: 1;
+      grid-row: auto;
+      order: 1;
+    }
+
+    .overview-item--camera {
+      grid-column: 1;
+      grid-row: auto;
+      order: 2;
+    }
+
+    .overview-item--scaling {
+      grid-column: 1;
+      grid-row: auto;
+      order: 3;
+
+    .overview-img-box-top {
+      height: auto;
+        max-height: 280px;
+      }
+
+      .overview-item--arch img {
+        max-height: 300px;
+      }
+}
+

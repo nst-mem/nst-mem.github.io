@@ -1,0 +1,73 @@
+#!/bin/bash
+# build.sh — Assembles index.html from section fragments.
+#
+# Usage: bash build.sh
+#
+# This script reads the section placeholder files from sections/ and injects
+# them into index.html. Run this after editing any section file.
+#
+# The assembled index.html is a self-contained static page that works
+# when double-clicked (file:// protocol) with zero dependencies.
+
+set -e
+cd "$(dirname "$0")"
+
+SECTIONS=(
+  "sections/title.html"
+  "sections/links.html"
+  "sections/hero-demo.html"
+  "sections/abstract.html"
+  "sections/visual-results.html"
+  "sections/overview-graph.html"
+  "sections/figures.html"
+  "sections/ablation.html"
+  "sections/gallery-links.html"
+  "sections/supplementary-pdf.html"
+)
+
+cat > index.html << 'HEAD_EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neural Space-Time Memory</title>
+  <meta name="description" content="Neural Space-Time Memory (NSTM) — Real-time novel view synthesis with minute-scale persistent memory. Supplementary materials and interactive results.">
+
+  <!-- Bundled CSS (offline-safe) -->
+  <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="data-gallery.css">
+</head>
+<body>
+
+HEAD_EOF
+
+for section in "${SECTIONS[@]}"; do
+  if [ -f "$section" ]; then
+    echo "  <!-- ===== $(basename "$section" .html) ===== -->" >> index.html
+    cat "$section" >> index.html
+    echo "" >> index.html
+  else
+    echo "  <!-- WARNING: $section not found -->" >> index.html
+  fi
+done
+
+cat >> index.html << 'FOOT_EOF'
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="content-width">
+      <p>Anonymous ECCV 2026 Submission — Paper #5217</p>
+      <p>This website is the supplementary material for our anonymous submission.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts (loaded after content for fast rendering) -->
+  <script src="js/gallery-carousel.js"></script>
+  <script src="js/video-player.js"></script>
+
+</body>
+</html>
+FOOT_EOF
+
+echo "✓ index.html assembled from ${#SECTIONS[@]} sections."

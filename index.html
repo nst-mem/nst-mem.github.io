@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Neural Space-Time Memory</title>
+  <meta name="description" content="Neural Space-Time Memory (NSTM) — Real-time novel view synthesis with minute-scale persistent memory. Supplementary materials and interactive results.">
+
+  <!-- Bundled CSS (offline-safe) -->
+  <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="data-gallery.css">
+</head>
+<body>
+
+  <!-- ===== title ===== -->
+<!-- Title Section — Nerfies-style hero header -->
+<section id="title" class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="publication-title">Neural Space-Time Memory</h1>
+          <p class="publication-subtitle" style="margin-top: 16px;">
+            Anonymous ECCV 2026 Submission &mdash; Paper #5217
+          </p>
+        </div>
+        </div>
+        </div>
+  </div>
+</section>
+
+  <!-- ===== links ===== -->
+<!-- Links Section — Nerfies-style icon link row -->
+<section id="links">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column has-text-centered" style="padding-bottom: 40px;">
+        <div class="publication-links">
+          <!-- Paper PDF -->
+          <a class="link-button" href="resources/main_paper.pdf">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6z" />
+            </svg>
+            Paper
+          </a>
+          <!-- Supplemental PDF -->
+          <a class="link-button" href="resources/supplemental_draft.pdf">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6z" />
+            </svg>
+            Supplemental
+          </a>
+          <!-- Video Gallery -->
+          <a class="link-button" href="gallery.html">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M4 6H2v14a2 2 0 0 0 2 2h14v-2H4V6zm16-4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 14H8V4h12v12zm-6-1l-2-3-1.5 2L9 12l-3 4h12l-4-6z" />
+            </svg>
+            Data Gallery
+            </a>
+        </div>
+        </div>
+        </div>
+  </div>
+</section>
+
+  <!-- ===== hero-demo ===== -->
+<section id="hero-demo">
+  <div class="hero-video-container">
+    <video autoplay loop muted playsinline>
+      <source src="videos/hero_combined.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+  <!-- ===== abstract ===== -->
+<!-- Abstract Section — Nerfies-style centered narrow column -->
+<section id="abstract" class="section-padding">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="section-heading">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Novel view synthesis from dynamic streaming video faces a fundamental
+            trade-off: maintaining a persistent, long-horizon memory to reconstruct
+            temporarily occluded regions while operating under strict real-time
+            constraints. While Test-Time Training (TTT) offers a powerful memory
+            mechanism, standard models mandate gradient-based memory updates at every
+            frame to adapt to the changing motion in dynamic scenes. This
+            computational overhead from heavy memory updates precludes real-time
+            application and can lead to instability over extended contexts.
+            Recognizing that memory updates are considerably more demanding than
+            memory application and that video content is largely redundant, we propose
+            to decouple the frequencies of these two processes. Our approach performs
+            periodic memory updates while applying the memory on a per-frame basis,
+            utilizing cross-view attention to manage deformations between the prior
+            memory state and the current frame. To lock in the historical context, we
+            introduce two critical mechanisms: an auxiliary <em>Memory Loss</em> that
+            forces persistent internalization of the scene, and a
+            <em>Memory Caching</em> strategy that regularizes active weights against
+            catastrophic drift. Extensive evaluations on unconstrained, dynamic human
+            motion demonstrate that our method exhibits state-of-the-art performance,
+            and successfully demonstrates minute-scale online memorization while
+            operating in real-time.
+          </p>
+        </div>
+        </div>
+        </div>
+  </div>
+</section>
+
+  <!-- ===== visual-results ===== -->
+<section id="visual-results" class="section-padding">
+  <div class="content-width">
+    <h2 class="section-heading">Visual Results</h2>
+    <p class="caption-text" style="margin-bottom: 2rem;">
+      Select a scene, then click models in the comparison strip to inspect them in detail below.
+    </p>
+
+    <!-- ═══ Zone 1: Example Selector ═══ -->
+    <div class="example-selector-wrap" id="example-selector-wrap">
+      <div class="example-selector" id="example-selector">
+        <!-- Cards populated by JS -->
+      </div>
+    </div>
+
+    <!-- ═══ Zone 2: Model Strip ═══ -->
+    <div class="model-strip" id="model-strip">
+      <div class="model-strip-item" data-model="nstm">
+        <div class="model-strip-video-wrap">
+          <video autoplay loop muted playsinline></video>
+          <div class="model-strip-check" aria-hidden="true">✓</div>
+        </div>
+        <span class="model-strip-label">NSTM (Ours)</span>
+      </div>
+      <div class="model-strip-item" data-model="nstm_hires">
+        <div class="model-strip-video-wrap">
+          <video autoplay loop muted playsinline></video>
+          <div class="model-strip-check" aria-hidden="true">✓</div>
+        </div>
+        <span class="model-strip-label">NSTM 512×512</span>
+      </div>
+      <div class="model-strip-item" data-model="token_mem">
+        <div class="model-strip-video-wrap">
+          <video autoplay loop muted playsinline></video>
+          <div class="model-strip-check" aria-hidden="true">✓</div>
+        </div>
+        <span class="model-strip-label">Token-Mem</span>
+      </div>
+      <div class="model-strip-item" data-model="full_attn">
+        <div class="model-strip-video-wrap">
+          <video autoplay loop muted playsinline></video>
+          <div class="model-strip-check" aria-hidden="true">✓</div>
+        </div>
+        <span class="model-strip-label">LVSM</span>
+        </div>
+        <div class="model-strip-item" data-model="lact_nvs">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">LACT-NVS</span>
+      </div>
+    </div>
+
+    <!-- ═══ Zone 3: Analysis Box ═══ -->
+    <div class="analysis-box" id="analysis-box">
+
+      <!-- Single-model view: Input | Rendered | Memory (optional) -->
+      <div class="analysis-row" id="analysis-single" style="display:none;">
+        <!-- Column 1: Input (single video, two stacked views) -->
+        <div class="analysis-col analysis-col--input" id="analysis-col-input">
+          <video id="analysis-input-video" autoplay loop muted playsinline></video>
+          <span class="vid-label">Input</span>
+        </div>
+        <!-- Column 2: Rendered output -->
+        <div class="analysis-col analysis-col--rendered" id="analysis-col-rendered">
+          <video id="analysis-model-video" autoplay loop muted playsinline></video>
+          <span class="vid-label" id="analysis-model-label"></span>
+          <!-- Memory toggle: checkbox overlay, top-right corner -->
+          <label class="memory-toggle" id="memory-toggle" style="display:none;">
+            <input type="checkbox" class="memory-toggle-checkbox" id="memory-checkbox">
+            <span class="memory-toggle-text">Memory</span>
+          </label>
+        </div>
+        <!-- Column 3: Memory (conditional) -->
+        <div class="analysis-col analysis-col--memory" id="analysis-col-memory" style="display:none;">
+          <video id="analysis-memory-video" autoplay loop muted playsinline></video>
+          <span class="vid-label">Memory</span>
+        </div>
+      </div>
+
+      <!-- Comparison (swipe) view: Input | Swipe -->
+      <div class="analysis-row" id="analysis-compare" style="display:none;">
+        <!-- Column 1: Input -->
+        <div class="analysis-col analysis-col--input" id="compare-col-input">
+          <video id="compare-input-video" autoplay loop muted playsinline></video>
+          <span class="vid-label">Input</span>
+        </div>
+        <!-- Column 2: Swipe comparison -->
+        <div class="analysis-col analysis-col--compare compare-container" id="compare-container">
+          <video class="compare-video compare-video--under" id="compare-video-under" autoplay loop muted playsinline></video>
+          <video class="compare-video compare-video--over" id="compare-video-over" autoplay loop muted playsinline></video>
+          <div class="compare-divider" id="compare-divider">
+            <div class="compare-divider-line"></div>
+            <div class="compare-divider-handle">⇔</div>
+          </div>
+          <span class="vid-label vid-label--left" id="compare-label-left"></span>
+          <span class="vid-label vid-label--right" id="compare-label-right"></span>
+        </div>
+      </div>
+
+      <!-- Playback Controls -->
+      <div class="playback-controls" id="playback-controls">
+        <button class="playback-btn playback-btn--play" id="playback-toggle" title="Pause">
+          <svg class="icon-pause" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+            <rect x="3" y="2" width="4" height="12" rx="1" />
+            <rect x="9" y="2" width="4" height="12" rx="1" />
+          </svg>
+          <svg class="icon-play" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="display:none">
+            <path d="M4 2.5v11l9-5.5z" />
+          </svg>
+        </button>
+        <div class="playback-seek-wrap">
+          <input type="range" class="playback-seek" id="playback-seek" min="0" max="1000" value="0" step="1">
+          <div class="playback-seek-fill" id="playback-seek-fill"></div>
+        </div>
+        <span class="playback-time" id="playback-time">0:00 / 0:00</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- ===== overview-graph ===== -->
+<!-- Architecture Section — Carousel for architecture/training regime, two-column for camera/scaling -->
+<section id="overview-graph" class="section-padding">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Architecture</h2>
+
+    <div class="overview-grid">
+
+      <!-- Architecture / Training Regime carousel (full-width 1st row) -->
+      <div class="overview-item overview-item--arch">
+        <div class="gallery-carousel" tabindex="0" aria-label="Architecture and training regime">
+          <!-- Navigation arrows -->
+          <button class="gallery-carousel-nav gallery-carousel-nav--prev" aria-label="Previous slide"></button>
+          <button class="gallery-carousel-nav gallery-carousel-nav--next" aria-label="Next slide"></button>
+        
+          <!-- Track -->
+          <div class="gallery-carousel-track">
+            <!-- Slide 1: Architecture -->
+            <div class="gallery-carousel-slide">
+              <img src="resources/architecture_v2.png"
+                alt="NSTM architecture with memorization and synthesis steps and layer details">
+              <p class="caption-text">
+                <em>NSTM Architecture:</em> NSTM alternates between Memorization Steps, where
+                fast-weight memory is updated via Apply/Update operations, and Synthesis Steps,
+                where the memory is read-only queried for novel view rendering. The NSTM Layer
+                (right) combines cross-view attention, learned scale modulation, and fast-weight
+                Apply/Update blocks with LayerNorm and feed-forward layers.
+              </p>
+            </div>
+<!-- Slide 2: Training regime -->
+<div class="gallery-carousel-slide">
+  <img src="resources/training_regime_v6.png"
+    alt="NSTM training regime with alternating memory and synthesis supervision">
+  <p class="caption-text">
+    <em>Training Regime:</em> NSTM alternates between two training objectives. In the
+    Memory Supervision step, isolated memory tokens query the fast-weights to reconstruct
+    a target view entirely from internalized context. In the Synthesis Supervision step,
+    input and target tokens freely cross-attend to capture current motion, querying
+    the previously updated memory without altering it.
+  </p>
+</div>
+          </div>
+          
+          <!-- Dot indicators -->
+          <div class="gallery-carousel-dots">
+            <button class="gallery-carousel-dot is-active" aria-label="Go to slide 1"></button>
+            <button class="gallery-carousel-dot" aria-label="Go to slide 2"></button>
+          </div>
+          </div>
+          </div>
+
+      <!-- Camera Setup (2nd row left) -->
+      <div class="overview-item overview-item--camera">
+        <div class="overview-img-box-top">
+          <img src="resources/camera_setup.png" alt="Multi-view camera rig setup">
+        </div>
+        <p class="caption-text" style="margin-top: 12px;"><strong>Camera Setup</strong></p>
+        <p class="overview-desc">
+          Our multi-view camera rig captures synchronized video streams of dynamic scenes,
+          providing the multi-view input observations at each timestep.
+        </p>
+      </div>
+
+      <!-- Runtime Scaling (2nd row right) -->
+      <div class="overview-item overview-item--scaling">
+        <div class="overview-img-box-top">
+          <img src="resources/teaser_graph.png" alt="Runtime scaling comparison graph">
+        </div>
+        <p class="caption-text" style="margin-top: 12px;"><strong>Runtime Scaling</strong></p>
+        <p class="overview-desc">
+          Unlike temporal full-attention baselines that scale quadratically with context length,
+          NSTM maintains constant inference latency regardless of video length, enabling
+          real-time performance on minute-scale streams.
+        </p>
+      </div>
+
+</div>
+  </div>
+</section>
+  <!-- ===== figures ===== -->
+<section id="figures" class="section-padding">
+  <div class="content-width">
+    <h2 class="section-heading">Figures</h2>
+
+    <div class="gallery-carousel" tabindex="0" aria-label="Paper figures gallery">
+      <!-- Navigation arrows -->
+      <button class="gallery-carousel-nav gallery-carousel-nav--prev" aria-label="Previous figure"></button>
+      <button class="gallery-carousel-nav gallery-carousel-nav--next" aria-label="Next figure"></button>
+
+      <!-- Track (slides sit side-by-side, translated by JS) -->
+      <div class="gallery-carousel-track">
+        <div class="gallery-carousel-slide">
+          <img src="resources/qualitative_results_v3.png"
+               alt="Qualitative comparison of novel view synthesis results across models">
+          <p class="caption-text">
+            <em>Fig. 3:</em> Qualitative comparison on challenging scenes. Our NSTM method produces
+            sharper details and fewer artifacts compared to baselines, particularly on reflective
+            surfaces and fine-grained textures.
+          </p>
+        </div>
+
+        <div class="gallery-carousel-slide">
+          <img src="resources/stability.png" alt="Long-horizon stability analysis over time">
+          <p class="caption-text">
+            <em>Fig. 4:</em> Stability over extended sequences. NSTM maintains consistent rendering
+            quality across minute-scale video streams, while baselines degrade due to catastrophic
+            forgetting.
+          </p>
+        </div>
+        <div class="gallery-carousel-slide">
+          <img src="resources/mvhuman_net_experiments.png" alt="Quantitative comparison table across timestep horizons">
+          <p class="caption-text">
+            <em>Table 1:</em> Quantitative comparison on MVHumanNet. NSTM maintains high performance
+            across all timestep horizons, while LaCT-NVS degrades significantly over longer sequences.
+          </p>
+        </div>
+      </div>
+
+      <!-- Dot indicators -->
+      <div class="gallery-carousel-dots">
+        <button class="gallery-carousel-dot is-active" aria-label="Go to figure 1"></button>
+        <button class="gallery-carousel-dot" aria-label="Go to figure 2"></button>
+        <button class="gallery-carousel-dot" aria-label="Go to figure 3"></button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <!-- ===== ablation ===== -->
+<section id="ablation" class="section-padding">
+  <div class="content-width">
+    <h2 class="section-heading">Ablation Study</h2>
+
+    <div class="gallery-carousel" tabindex="0" aria-label="Ablation study figures">
+      <!-- Navigation arrows (hidden automatically when only 1 slide) -->
+      <button class="gallery-carousel-nav gallery-carousel-nav--prev" aria-label="Previous figure"></button>
+      <button class="gallery-carousel-nav gallery-carousel-nav--next" aria-label="Next figure"></button>
+
+      <!-- Track -->
+      <div class="gallery-carousel-track">
+        <div class="gallery-carousel-slide">
+          <img src="resources/ablations.png" alt="Ablation study results showing contribution of each component">
+          <p class="caption-text">
+            <em>Table 2 &amp; Fig. 5:</em> Ablation study. Each proposed component — Memory Loss,
+            Memory Caching, and decoupled update frequency — contributes independently to the
+            final performance. Removing any single component degrades quality.
+          </p>
+        </div>
+        <div class="gallery-carousel-slide">
+          <img src="resources/ablations_exp.png" alt="Ablation study quantitative results table">
+          <p class="caption-text">
+            <em>Table 2:</em> Ablation study of our model. Metrics are averaged over
+            60 timesteps in 390 MVHumanNet eval scenes.
+          </p>
+        </div>
+      </div>
+
+      <!-- Dot indicators -->
+      <div class="gallery-carousel-dots">
+        <button class="gallery-carousel-dot is-active" aria-label="Go to figure 1"></button>
+        <button class="gallery-carousel-dot" aria-label="Go to figure 2"></button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <!-- ===== gallery-links ===== -->
+<!-- Gallery Links Section — Large chip-style links to the four data gallery pages -->
+<section id="gallery-links" class="section-padding">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Data Gallery</h2>
+    <p class="caption-text" style="margin-bottom: 28px;">
+      Explore all supplementary video results organized by category.
+    </p>
+
+    <div class="dg-footer-links">
+      <a class="dg-footer-chip" href="gallery-nvs.html">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M4 6H2v14a2 2 0 0 0 2 2h14v-2H4V6zm16-4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 14H8V4h12v12zm-6-1l-2-3-1.5 2L9 12l-3 4h12l-4-6z" />
+        </svg>
+        General NVS Results
+      </a>
+      <a class="dg-footer-chip" href="gallery-ablations.html">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54a7.04 7.04 0 0 0-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L3.73 8.87a.48.48 0 0 0 .12.61l2.03 1.58a7.2 7.2 0 0 0 0 1.88l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.04.7 1.62.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54a7.04 7.04 0 0 0 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z" />
+        </svg>
+        Ablation Results
+      </a>
+      <a class="dg-footer-chip" href="gallery-comparisons.html">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z" />
+        </svg>
+        Comparison by Timestep
+      </a>
+      <a class="dg-footer-chip" href="gallery-renderings.html">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4h-4z" />
+        </svg>
+        Memory Persistence Test Renderings
+      </a>
+    </div>
+  </div>
+</section>
+  <!-- ===== supplementary-pdf ===== -->
+<!-- Supplementary PDF Section — Embedded viewer for the supplemental document -->
+<section id="supplementary-pdf" class="section-padding">
+  <div class="container is-max-desktop">
+    <h2 class="section-heading">Supplementary Material</h2>
+
+    <iframe src="resources/supplemental_draft.pdf#view=FitH" class="pdf-embed"></iframe>
+  </div>
+</section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="site-footer">
+    <div class="content-width">
+      <p>Anonymous ECCV 2026 Submission — Paper #5217</p>
+      <p>This website is the supplementary material for our anonymous submission.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts (loaded after content for fast rendering) -->
+  <script src="js/gallery-carousel.js"></script>
+  <script src="js/video-player.js"></script>
+
+</body>
+</html>

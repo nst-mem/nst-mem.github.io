@@ -1,0 +1,26 @@
+\begin{figure}[t]
+  \centering
+  \begin{minipage}[c]{0.4\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{sections/tables/nstm_inference_scaling.pdf}
+  \end{minipage}
+  \hfill
+  \begin{minipage}[c]{0.40\textwidth}
+    \centering
+    \small
+    \begin{tabular}{lcc}
+      \toprule
+      Step & Latency (ms) $\downarrow$ & FPS $\uparrow$ \\
+      \midrule
+      Memorization & 58.14 & 17.19 \\
+      Synthesis    & 27.01 & 37.02 \\
+      \bottomrule
+    \end{tabular}
+  \end{minipage}
+  
+  \vspace{-5pt}
+  \caption{\textbf{Inference Performance and Scaling.} \textbf{(Left)} Inference latency of NSTM compared to Temporal-Full-Attn based on LVSM~\cite{jin2025lvsm}. NSTM achieves constant latency whereas full-attention results in quadratic cost. \textbf{(Right)} Inference performance breakdown measured on a single H100 GPU with a resolution of 256x256.}
+  \label{fig:performance_scaling}
+  \label{tab:perf_breakdown}
+  \vspace{-17pt}
+\end{figure}

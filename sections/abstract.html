@@ -1,0 +1,35 @@
+<!-- Abstract Section — Nerfies-style centered narrow column -->
+<section id="abstract" class="section-padding">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered">
+      <div class="column is-four-fifths">
+        <h2 class="section-heading">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Novel view synthesis from dynamic streaming video faces a fundamental
+            trade-off: maintaining a persistent, long-horizon memory to reconstruct
+            temporarily occluded regions while operating under strict real-time
+            constraints. While Test-Time Training (TTT) offers a powerful memory
+            mechanism, standard models mandate gradient-based memory updates at every
+            frame to adapt to the changing motion in dynamic scenes. This
+            computational overhead from heavy memory updates precludes real-time
+            application and can lead to instability over extended contexts.
+            Recognizing that memory updates are considerably more demanding than
+            memory application and that video content is largely redundant, we propose
+            to decouple the frequencies of these two processes. Our approach performs
+            periodic memory updates while applying the memory on a per-frame basis,
+            utilizing cross-view attention to manage deformations between the prior
+            memory state and the current frame. To lock in the historical context, we
+            introduce two critical mechanisms: an auxiliary <em>Memory Loss</em> that
+            forces persistent internalization of the scene, and a
+            <em>Memory Caching</em> strategy that regularizes active weights against
+            catastrophic drift. Extensive evaluations on unconstrained, dynamic human
+            motion demonstrate that our method exhibits state-of-the-art performance,
+            and successfully demonstrates minute-scale online memorization while
+            operating in real-time.
+          </p>
+        </div>
+        </div>
+        </div>
+  </div>
+</section>

@@ -1,0 +1,408 @@
+/* ==========================================================================
+   Data Gallery — Styles
+   Separate from styles.css to avoid breaking the main page.
+   ========================================================================== */
+
+/* --- Page Shell --- */
+
+.dg-page {
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.dg-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: var(--font-size-caption);
+  font-weight: 500;
+  padding: 40px 0 0;
+}
+
+.dg-back-link:hover {
+  text-decoration: underline;
+}
+
+.dg-header {
+  text-align: center;
+  padding: 32px 0 24px;
+}
+
+.dg-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0 0 8px;
+}
+
+.dg-subtitle {
+  font-size: 1rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* --- Filter / Tab Bar --- */
+
+.dg-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 0 0 28px;
+}
+
+.dg-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 18px;
+  border-radius: 999px;
+  border: 1.5px solid #D1D5DB;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: all 0.15s ease;
+}
+
+.dg-filter-pill:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.dg-filter-pill.is-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+}
+
+/* Tab bar (for comparisons page) */
+.dg-tab-bar {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #E5E7EB;
+}
+
+.dg-tab {
+  padding: 10px 28px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.dg-tab:hover {
+  color: var(--color-text-primary);
+}
+
+.dg-tab.is-active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+/* --- Scene Group --- */
+
+.dg-scene-group {
+  margin-bottom: 32px;
+}
+
+.dg-scene-heading {
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+/* --- Video Grid --- */
+
+.dg-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.dg-grid--cols-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.dg-grid--cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* --- Video Card --- */
+
+.dg-card {
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #F3F4F6;
+  cursor: pointer;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.dg-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px);
+}
+
+.dg-card video {
+  width: 100%;
+  display: block;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #000;
+}
+
+.dg-card-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* --- Lightbox --- */
+
+.dg-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.dg-lightbox.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dg-lightbox-inner {
+  position: relative;
+  max-width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dg-lightbox-inner video {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 8px;
+  display: block;
+}
+
+.dg-lightbox-caption {
+  color: #fff;
+  font-size: var(--font-size-caption);
+  font-weight: 500;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.dg-lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: -8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.dg-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Lightbox prev/next navigation */
+.dg-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.dg-lightbox-nav:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.dg-lightbox-nav--prev {
+  left: -64px;
+}
+
+.dg-lightbox-nav--next {
+  right: -64px;
+}
+
+/* --- Landing Page (gallery.html) --- */
+
+.dg-landing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  padding-bottom: 60px;
+}
+
+.dg-landing-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 40px 28px;
+  border-radius: 14px;
+  border: 2px solid #E5E7EB;
+  text-decoration: none;
+  color: var(--color-text-primary);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.dg-landing-card:hover {
+  border-color: var(--color-accent);
+  box-shadow: 0 6px 24px rgba(58, 134, 200, 0.12);
+  transform: translateY(-3px);
+  color: var(--color-text-primary);
+}
+
+.dg-landing-card svg {
+  width: 44px;
+  height: 44px;
+  color: var(--color-accent);
+}
+
+.dg-landing-card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.dg-landing-card-desc {
+  font-size: var(--font-size-caption);
+  color: var(--color-text-secondary);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.dg-landing-card-arrow {
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+/* --- Footer Gallery Links (on main page) --- */
+
+.dg-footer-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.dg-footer-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background-color: var(--color-btn-bg);
+  color: var(--color-btn-text);
+  font-size: var(--font-size-caption);
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.15s ease;
+}
+
+.dg-footer-chip:hover {
+  opacity: 0.85;
+  color: var(--color-btn-text);
+}
+
+.dg-footer-chip svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* --- Responsive --- */
+
+@media (max-width: 1024px) {
+  .dg-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .dg-grid--cols-6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dg-grid,
+  .dg-grid--cols-6,
+  .dg-grid--cols-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dg-landing-grid {
+    grid-template-columns: 1fr;
+  }
+  .dg-footer-links {
+    grid-template-columns: 1fr;
+  }
+  .dg-lightbox-nav--prev {
+    left: 8px;
+  }
+  .dg-lightbox-nav--next {
+    right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dg-grid,
+  .dg-grid--cols-6,
+  .dg-grid--cols-3 {
+    grid-template-columns: 1fr;
+  }
+}

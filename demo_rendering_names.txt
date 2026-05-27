@@ -1,0 +1,18 @@
+
+ft_202307_20230709_00007_02/near_backreveal/orbit_1  -- Text memorization
+
+ft_202310_20231014_00011_01/near_backreveal/orbit_1  -- Logo memorization
+
+lg_202307_20230705_00015_02/near_backreveal/orbit_1  -- Logo memorization
+
+lg_202307_20230720_00036_02/near_backreveal/orbit_1  -- Ribbon memorization
+
+ft_202307_20230716_00026_02/near_backreveal/orbit_1  -- Hair length memorization
+
+ft_202310_20231014_00026_01/near_backreveal/orbit_1  -- Memorization from a unique pose
+
+ft_202307_20230718_00021_01/near_backreveal/orbit_2  -- Graphic logo memorization
+
+lg_202306_20230629_00015_02/at_backreveal/orbit_1  -- General Novel View Synthesis
+
+ft_202307_20230713_00014_02/at_backreveal/orbit_1  -- Graphic Picture memorization

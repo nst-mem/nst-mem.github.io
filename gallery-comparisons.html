@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Comparison by Timestep — Neural Space-Time Memory</title>
+  <meta name="description" content="Baseline comparison results at different timesteps (t=4, t=30, t=60).">
+  <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="data-gallery.css">
+</head>
+
+<body>
+
+  <div class="dg-page">
+    <a href="gallery.html" class="dg-back-link">&larr; Back to Data Gallery</a>
+
+    <div class="dg-header">
+      <h1 class="dg-title">Comparison Results by Timestep</h1>
+      <p class="dg-subtitle">Baseline comparisons across 4 models on randomly selected evaluation scenes at t=4 (72
+        scenes), t=30 (3 scenes), and t=60 (72 scenes).</p>
+    </div>
+
+    <div id="gallery-root"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="content-width">
+      <p>Anonymous ECCV 2026 Submission — Paper #5217</p>
+    </div>
+  </footer>
+
+  <script src="js/data-gallery.js"></script>
+  <script>
+    (function () {
+      /* Scene IDs + camera for t=4 (per-scene camera angle) */
+      var T4_SCENES = [
+        { id: '100917', file: '100917_26.mp4' }, { id: '101032', file: '101032_40.mp4' }, { id: '101073', file: '101073_23.mp4' },
+        { id: '101177', file: '101177_50.mp4' }, { id: '101336', file: '101336_13.mp4' }, { id: '101403', file: '101403_23.mp4' },
+        { id: '101500', file: '101500_26.mp4' }, { id: '101637', file: '101637_13.mp4' }, { id: '101688', file: '101688_20.mp4' },
+        { id: '101721', file: '101721_20.mp4' }, { id: '101727', file: '101727_47.mp4' }, { id: '101754', file: '101754_12.mp4' },
+        { id: '101883', file: '101883_40.mp4' }, { id: '101964', file: '101964_33.mp4' }, { id: '102023', file: '102023_17.mp4' },
+        { id: '102231', file: '102231_37.mp4' }, { id: '102391', file: '102391_28.mp4' }, { id: '102515', file: '102515_27.mp4' },
+        { id: '102788', file: '102788_20.mp4' }, { id: '103022', file: '103022_56.mp4' }, { id: '103061', file: '103061_30.mp4' },
+        { id: '103138', file: '103138_17.mp4' }, { id: '103270', file: '103270_39.mp4' }, { id: '103421', file: '103421_3.mp4' },
+        { id: '103444', file: '103444_33.mp4' }, { id: '103540', file: '103540_38.mp4' }, { id: '103572', file: '103572_22.mp4' },
+        { id: '103660', file: '103660_17.mp4' }, { id: '103851', file: '103851_27.mp4' }, { id: '103991', file: '103991_44.mp4' },
+        { id: '104223', file: '104223_32.mp4' }, { id: '104324', file: '104324_26.mp4' }, { id: '200191', file: '200191_37.mp4' },
+        { id: '200366', file: '200366_21.mp4' }, { id: '200429', file: '200429_13.mp4' }, { id: '200499', file: '200499_37.mp4' },
+        { id: '200574', file: '200574_12.mp4' }, { id: '200598', file: '200598_22.mp4' }, { id: '200724', file: '200724_10.mp4' },
+        { id: '200776', file: '200776_53.mp4' }, { id: '200822', file: '200822_29.mp4' }, { id: '200850', file: '200850_25.mp4' },
+        { id: '200903', file: '200903_22.mp4' }, { id: '200998', file: '200998_46.mp4' }, { id: '201128', file: '201128_10.mp4' },
+        { id: '201214', file: '201214_38.mp4' }, { id: '201311', file: '201311_24.mp4' }, { id: '201360', file: '201360_12.mp4' },
+        { id: '201432', file: '201432_16.mp4' }, { id: '201527', file: '201527_29.mp4' }, { id: '201576', file: '201576_19.mp4' },
+        { id: '201594', file: '201594_57.mp4' }, { id: '201680', file: '201680_38.mp4' }, { id: '201748', file: '201748_17.mp4' },
+        { id: '201792', file: '201792_44.mp4' }, { id: '201845', file: '201845_11.mp4' }, { id: '202018', file: '202018_16.mp4' },
+        { id: '202233', file: '202233_29.mp4' }, { id: '202459', file: '202459_17.mp4' }, { id: '202563', file: '202563_13.mp4' },
+        { id: '202601', file: '202601_18.mp4' }, { id: '202640', file: '202640_43.mp4' }, { id: '202738', file: '202738_15.mp4' },
+        { id: '202941', file: '202941_14.mp4' }, { id: '203027', file: '203027_40.mp4' }, { id: '203063', file: '203063_23.mp4' },
+        { id: '203132', file: '203132_10.mp4' }, { id: '203235', file: '203235_26.mp4' }, { id: '203832', file: '203832_52.mp4' },
+        { id: '203959', file: '203959_17.mp4' }, { id: '204030', file: '204030_3.mp4' }, { id: '204224', file: '204224_13.mp4' }
+      ];
+
+      /* Scene IDs for t=30 (camera 59, only 3 scenes) */
+      var T30_SCENES = [
+        { id: '103421', file: '103421_59.mp4' },
+        { id: '103444', file: '103444_59.mp4' },
+        { id: '202640', file: '202640_59.mp4' }
+      ];
+
+      /* Scene IDs for t=60 (camera 59, all 72 scenes) */
+      var SCENE_IDS_60 = [
+        '100917', '101032', '101073', '101177', '101336', '101403', '101500', '101637',
+        '101688', '101721', '101727', '101754', '101883', '101964', '102023', '102231',
+        '102391', '102515', '102788', '103022', '103061', '103138', '103270', '103421',
+        '103444', '103540', '103572', '103660', '103851', '103991', '104223', '104324',
+        '200191', '200366', '200429', '200499', '200574', '200598', '200724', '200776',
+        '200822', '200850', '200903', '200998', '201128', '201214', '201311', '201360',
+        '201432', '201527', '201576', '201594', '201680', '201748', '201792', '201845',
+        '202018', '202233', '202459', '202563', '202601', '202640', '202738', '202941',
+        '203027', '203063', '203132', '203235', '203832', '203959', '204030', '204224'
+      ];
+      var T60_SCENES = SCENE_IDS_60.map(function (id) {
+        return { id: id, file: id + '_59.mp4' };
+      });
+
+      var MODELS = [
+        { id: 'ours', label: 'NSTM (Ours)' },
+        { id: 'lact', label: 'LaCT (dot)' },
+        { id: 'lact_l2', label: 'LaCT (L2)' },
+        { id: 'lvsm', label: 'LVSM' }
+      ];
+
+      function makeResolver(prefix) {
+        return function (model, scene) {
+          return prefix + '/' + model.id + '/' + scene.file;
+        };
+      }
+
+      DataGallery.init({
+        containerId: 'gallery-root',
+        models: MODELS,
+        tabs: [
+          { id: 't4', label: 't = 4 frames', scenes: T4_SCENES, models: MODELS, pathResolver: makeResolver('data_gallery/baselines_t4') },
+          { id: 't30', label: 't = 30 frames', scenes: T30_SCENES, models: MODELS, pathResolver: makeResolver('data_gallery/baselines_t30') },
+          { id: 't60', label: 't = 60 frames', scenes: T60_SCENES, models: MODELS, pathResolver: makeResolver('data_gallery/baselines_t60') }
+        ]
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

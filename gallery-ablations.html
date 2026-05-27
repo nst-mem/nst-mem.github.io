@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ablation Results — Neural Space-Time Memory</title>
+  <meta name="description" content="Ablation study results comparing architectural variants of NSTM.">
+  <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="data-gallery.css">
+</head>
+
+<body>
+
+  <div class="dg-page">
+    <a href="gallery.html" class="dg-back-link">&larr; Back to Data Gallery</a>
+
+    <div class="dg-header">
+      <h1 class="dg-title">Ablation Results</h1>
+      <p class="dg-subtitle">Ablation study across 6 model variants on 72 randomly selected evaluation scenes.</p>
+    </div>
+
+    <div id="gallery-root"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="content-width">
+      <p>Anonymous ECCV 2026 Submission — Paper #5217</p>
+    </div>
+  </footer>
+
+  <script src="js/data-gallery.js"></script>
+  <script>
+    (function () {
+      var SCENE_IDS = [
+        '100917', '101032', '101073', '101177', '101336', '101403', '101500', '101637',
+        '101688', '101721', '101727', '101754', '101883', '101964', '102023', '102231',
+        '102391', '102515', '102788', '103022', '103061', '103138', '103270', '103421',
+        '103444', '103540', '103572', '103660', '103851', '103991', '104223', '104324',
+        '200191', '200366', '200429', '200499', '200574', '200598', '200724', '200776',
+        '200822', '200850', '200903', '200998', '201128', '201214', '201311', '201360',
+        '201432', '201527', '201576', '201594', '201680', '201748', '201792', '201845',
+        '202018', '202233', '202459', '202563', '202601', '202640', '202738', '202941',
+        '203027', '203063', '203132', '203235', '203832', '203959', '204030', '204224'
+      ];
+
+      var scenes = SCENE_IDS.map(function (id) {
+        return { id: id, file: id + '_59.mp4' };
+      });
+
+      DataGallery.init({
+        containerId: 'gallery-root',
+        gridCols: 'dg-grid--cols-6',
+        models: [
+          { id: 'ours_with_memcaching', label: 'Ours (w/ MemCache)', pathPrefix: 'data_gallery/ablations/ours_with_memcaching' },
+          { id: 'ours_no_memcaching', label: 'Ours (no MemCache)', pathPrefix: 'data_gallery/ablations/ours_no_memcaching' },
+          { id: 'no_memaux_loss', label: 'No MemAux Loss', pathPrefix: 'data_gallery/ablations/no_memaux_loss' },
+          { id: 'causal_l2_memcache', label: 'Causal L2 + MemCache', pathPrefix: 'data_gallery/ablations/causal_l2_memcache' },
+          { id: 'causal_l2', label: 'Causal L2', pathPrefix: 'data_gallery/ablations/causal_l2' },
+          { id: 'causal_dot_product', label: 'Causal Dot-Product', pathPrefix: 'data_gallery/ablations/causal_dot_product' }
+        ],
+        scenes: scenes
+      });
+    })();
+  </script>
+
+</body>
+
+</html>
