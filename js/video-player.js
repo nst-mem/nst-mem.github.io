@@ -51,44 +51,44 @@
 
   var SCENES = [
     {
-      id: 'ft_202307_20230709_00007_02', label: 'Text', desc: 'Text memorization',
-      input: vp('nstm', 'ft_202307_20230709_00007_02', 'near_backreveal', 'orbit_1', 'input.mp4'),
-      models: buildModels('ft_202307_20230709_00007_02', 'near_backreveal', 'orbit_1')
-    },
-    {
-      id: 'ft_202310_20231014_00011_01', label: 'Logo', desc: 'Logo memorization',
-      input: vp('nstm', 'ft_202310_20231014_00011_01', 'near_backreveal', 'orbit_1', 'input.mp4'),
-      models: buildModels('ft_202310_20231014_00011_01', 'near_backreveal', 'orbit_1')
-    },
-    {
-      id: 'lg_202307_20230705_00015_02', label: 'Logo (LG)', desc: 'Logo memorization',
-      input: vp('nstm', 'lg_202307_20230705_00015_02', 'near_backreveal', 'orbit_1', 'input.mp4'),
-      models: buildModels('lg_202307_20230705_00015_02', 'near_backreveal', 'orbit_1')
-    },
-    {
       id: 'lg_202307_20230720_00036_02', label: 'Ribbon', desc: 'Ribbon memorization',
-      input: vp('nstm', 'lg_202307_20230720_00036_02', 'near_backreveal', 'orbit_1', 'input.mp4'),
+      input: vp('nstm_hires', 'lg_202307_20230720_00036_02', 'near_backreveal', 'orbit_1', 'input.mp4'),
       models: buildModels('lg_202307_20230720_00036_02', 'near_backreveal', 'orbit_1')
     },
     {
-      id: 'ft_202307_20230716_00026_02', label: 'Hair', desc: 'Hair length memorization',
-      input: vp('nstm', 'ft_202307_20230716_00026_02', 'near_backreveal', 'orbit_1', 'input.mp4'),
+      id: 'ft_202307_20230716_00026_02', label: 'Hair Length', desc: 'Hair length memorization',
+      input: vp('nstm_hires', 'ft_202307_20230716_00026_02', 'near_backreveal', 'orbit_1', 'input.mp4'),
       models: buildModels('ft_202307_20230716_00026_02', 'near_backreveal', 'orbit_1')
     },
     {
-      id: 'ft_202310_20231014_00026_01', label: 'Unique Pose', desc: 'Memorization from a unique pose',
-      input: vp('nstm', 'ft_202310_20231014_00026_01', 'near_backreveal', 'orbit_1', 'input.mp4'),
-      models: buildModels('ft_202310_20231014_00026_01', 'near_backreveal', 'orbit_1')
+      id: 'ft_202307_20230707_00017_01', label: 'Unique Pose', desc: 'Memorization from a unique pose',
+      input: vp('nstm_hires', 'ft_202307_20230707_00017_01', 'near_backreveal', 'orbit_1', 'input.mp4'),
+      models: buildModels('ft_202307_20230707_00017_01', 'near_backreveal', 'orbit_1')
+    },
+    {
+      id: 'lg_202307_20230719_00007_01', label: 'Large Number', desc: 'Large number memorization',
+      input: vp('nstm_hires', 'lg_202307_20230719_00007_01', 'near_backreveal', 'orbit_1', 'input.mp4'),
+      models: buildModels('lg_202307_20230719_00007_01', 'near_backreveal', 'orbit_1')
+    },
+    {
+      id: 'ft_202307_20230709_00007_02', label: 'Text', desc: 'Text memorization',
+      input: vp('nstm_hires', 'ft_202307_20230709_00007_02', 'near_backreveal', 'orbit_1', 'input.mp4'),
+      models: buildModels('ft_202307_20230709_00007_02', 'near_backreveal', 'orbit_1')
     },
     {
       id: 'ft_202307_20230718_00021_01', label: 'Graphic Logo', desc: 'Graphic logo memorization',
-      input: vp('nstm', 'ft_202307_20230718_00021_01', 'near_backreveal', 'orbit_2', 'input.mp4'),
+      input: vp('nstm_hires', 'ft_202307_20230718_00021_01', 'near_backreveal', 'orbit_2', 'input.mp4'),
       models: buildModels('ft_202307_20230718_00021_01', 'near_backreveal', 'orbit_2')
     },
     {
       id: 'lg_202306_20230629_00015_02', label: 'General NVS', desc: 'General novel view synthesis',
-      input: vp('nstm', 'lg_202306_20230629_00015_02', 'at_backreveal', 'orbit_1', 'input.mp4'),
-      models: buildModels('lg_202306_20230629_00015_02', 'at_backreveal', 'orbit_1')
+      input: vp('nstm_hires', 'lg_202306_20230629_00015_02', 'NVS', 'orbit_1', 'input.mp4'),
+      models: buildModels('lg_202306_20230629_00015_02', 'NVS', 'orbit_1')
+    },
+    {
+      id: 'ft_202307_20230714_00032_02', label: 'Memorize >1min', desc: 'Long-horizon memory persistence',
+      input: vp('nstm_hires', 'ft_202307_20230714_00032_02', 'reverse', 'orbit_1', 'input.mp4'),
+      models: buildModels('ft_202307_20230714_00032_02', 'reverse', 'orbit_1')
     }
   ];
 
@@ -195,6 +195,14 @@
     // Initial check (after layout)
     requestAnimationFrame(update);
     window.addEventListener('resize', update);
+
+    // Convert vertical mouse wheel to horizontal scroll (desktop UX)
+    selectorEl.addEventListener('wheel', function (e) {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        selectorEl.scrollLeft += e.deltaY;
+      }
+    }, { passive: false });
   }
 
   function selectScene(index) {

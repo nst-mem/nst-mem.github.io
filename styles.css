@@ -159,6 +159,18 @@ h1, h2, h3, h4, h5, h6,
   height: 18px;
 }
 
+/* --- Hero Section Padding Override --- */
+
+.hero .hero-body {
+  padding-top: 5rem;
+  padding-bottom: 3rem;
+}
+
+/* --- Publication Links Container --- */
+
+.publication-links-container {
+  padding-bottom: clamp(60px, 8vw, 100px);
+}
 /* --- Hero Video --- */
 
 .hero-video-container {
@@ -209,7 +221,7 @@ h1, h2, h3, h4, h5, h6,
   grid-row: 1;
   padding-bottom: 40px;
   }
-  
+
   /* Constrain architecture carousel images to 90% on large screens */
   .overview-item--arch .gallery-carousel-slide img {
     max-width: 90%;
@@ -495,6 +507,29 @@ h1, h2, h3, h4, h5, h6,
   display: none;
 }
 
+/* Show a minimalist gray scrollbar on hover */
+.example-selector-wrap:hover .example-selector {
+  scrollbar-width: thin;
+  scrollbar-color: #B0B3B8 transparent;
+}
+
+.example-selector-wrap:hover .example-selector::-webkit-scrollbar {
+  display: block;
+  height: 6px;
+}
+
+.example-selector-wrap:hover .example-selector::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.example-selector-wrap:hover .example-selector::-webkit-scrollbar-thumb {
+  background: #B0B3B8;
+  border-radius: 3px;
+}
+
+.example-selector-wrap:hover .example-selector::-webkit-scrollbar-thumb:hover {
+  background: #8E9196;
+}
 .example-card {
   flex-shrink: 0;
   scroll-snap-align: start;
@@ -951,14 +986,14 @@ h1, h2, h3, h4, h5, h6,
       grid-column: 1;
       grid-row: auto;
       order: 3;
+    
 
     .overview-img-box-top {
       height: auto;
-        max-height: 280px;
+      max-height: 280px;
       }
 
-      .overview-item--arch img {
-        max-height: 300px;
-      }
+        .overview-item--arch img {
+          max-height: 300px;
+        }
 }
-

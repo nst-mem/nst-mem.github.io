@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Long Sequence Natural Memory — Neural Space-Time Memory</title>
+  <meta name="description" content="Long sequence natural memory view synthesis results across models and scenes.">
+  <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="data-gallery.css">
+</head>
+
+<body>
+
+  <div class="dg-page">
+    <a href="gallery.html" class="dg-back-link">&larr; Back to Data Gallery</a>
+
+    <div class="dg-header">
+      <h1 class="dg-title">Long Sequence Natural Memory Results</h1>
+      <p class="dg-subtitle">Evaluation of 4 models on long-horizon unconstrained natural sequences (17 scenes, camera 59).</p>
+    </div>
+
+    <div id="gallery-root"></div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="content-width">
+      <p>Anonymous ECCV 2026 Submission — Paper #5217</p>
+    </div>
+  </footer>
+
+  <script src="js/data-gallery.js"></script>
+  <script>
+    (function () {
+      var SCENE_IDS = [
+        '101154', '101397', '101403', '101500', '101558', '101637', '101649', '101721',
+        '103106', '103423', '104223', '104324', '200451', '201131', '201214', '203050',
+        '204224'
+      ];
+
+      var scenes = SCENE_IDS.map(function (id) {
+        return { id: id, file: id + '_59.mp4' };
+      });
+
+      DataGallery.init({
+        containerId: 'gallery-root',
+        models: [
+          { id: 'ours', label: 'NSTM (Ours)', pathPrefix: 'data_gallery/natural_memory/ours' },
+          { id: 'lvsm', label: 'LVSM', pathPrefix: 'data_gallery/natural_memory/lvsm' },
+          { id: 'token_mem_cut3r', label: 'Token-Mem (CUT3R)', pathPrefix: 'data_gallery/natural_memory/token_mem_cut3r' },
+          { id: 'lact', label: 'LaCT-NVS', pathPrefix: 'data_gallery/natural_memory/lact' }
+        ],
+        scenes: scenes
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

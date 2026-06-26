@@ -38,6 +38,15 @@ cat > index.html << 'HEAD_EOF'
   <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="data-gallery.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="resources/favicon.svg">
+
+  <!-- Force page to open at top (prevent browser scroll-restoration) -->
+  <script>
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('DOMContentLoaded', function () { window.scrollTo(0, 0); });
+  </script>
 </head>
 <body>
 
