@@ -47,7 +47,7 @@ def render_ablation_table():
         [WHITE, BEST_COLOR, BEST_COLOR, BEST_COLOR, BEST_COLOR, BEST_COLOR],
     ]
 
-    fig, ax = plt.subplots(figsize=(12, 3.5))
+    fig, ax = plt.subplots(figsize=(14, 3.5))
     ax.axis('off')
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
@@ -80,10 +80,10 @@ def render_ablation_table():
             cell.set_height(0.15)
         else:
             cell.set_height(0.13)
-        if col == 0:  # Method names left-aligned and wider
+        if col == 0:  # Method names left-aligned and wider (fits "LaCT-NVS w/ L₂ w/ Mem Caching")
             cell.set_text_props(ha='left')
             cell._loc = 'left'
-            cell.set_width(0.25)
+            cell.set_width(0.40)
 
     # Second pass: add booktabs rules by drawing lines at cell boundaries
     # Get table bbox in axes coordinates

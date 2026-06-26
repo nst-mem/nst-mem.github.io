@@ -1,7 +1,7 @@
 # NSTM Website — Design Guidelines
 
 High-level visual direction for the Neural Space-Time Memory project page.
-For paper details, see [`resources/nstm_main_paper.md`](resources/nstm_main_paper.md).
+For paper details, see [`resources/main_paper.pdf`](resources/main_paper.pdf).
 
 ---
 

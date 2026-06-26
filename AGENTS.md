@@ -1,7 +1,7 @@
 # AGENTS.md — NSTM Project Website
 
 > **What is this?** Developer documentation for the Neural Space-Time Memory supplementary website.
-> For paper content and details, see [`resources/nstm_main_paper.md`](resources/nstm_main_paper.md).
+> For paper content and details, see [`resources/main_paper.pdf`](resources/main_paper.pdf).
 > For visual direction, see [`docs/design_guidelines.md`](docs/design_guidelines.md).
 
 ---
