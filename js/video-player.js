@@ -173,36 +173,6 @@
       if (!card) return;
       selectScene(parseInt(card.dataset.index, 10));
     });
-
-    // Scroll-fade indicators
-    initScrollIndicators();
-  }
-
-  /** Toggle can-scroll-left / can-scroll-right classes on the wrapper
-   *  to show gradient fade hints when content overflows. */
-  function initScrollIndicators() {
-    var wrap = document.getElementById('example-selector-wrap');
-    if (!wrap) return;
-
-    function update() {
-      var sl = selectorEl.scrollLeft;
-      var maxScroll = selectorEl.scrollWidth - selectorEl.clientWidth;
-      wrap.classList.toggle('can-scroll-left', sl > 2);
-      wrap.classList.toggle('can-scroll-right', sl < maxScroll - 2);
-    }
-
-    selectorEl.addEventListener('scroll', update, { passive: true });
-    // Initial check (after layout)
-    requestAnimationFrame(update);
-    window.addEventListener('resize', update);
-
-    // Convert vertical mouse wheel to horizontal scroll (desktop UX)
-    selectorEl.addEventListener('wheel', function (e) {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault();
-        selectorEl.scrollLeft += e.deltaY;
-      }
-    }, { passive: false });
   }
 
   function selectScene(index) {
@@ -214,9 +184,6 @@
 
     selectorEl.querySelectorAll('.example-card').forEach(function (c, i) {
       c.classList.toggle('is-active', i === index);
-      if (i === index) {
-        c.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-      }
     });
 
     loadStripVideos();

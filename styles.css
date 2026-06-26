@@ -460,90 +460,26 @@ h1, h2, h3, h4, h5, h6,
   position: relative;
 }
 
-/* Gradient fade masks on left/right edges to hint at scrollable content */
-.example-selector-wrap::before,
-.example-selector-wrap::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 40px;
-  z-index: 2;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.example-selector-wrap::before {
-  left: 0;
-  background: linear-gradient(to right, var(--color-bg), transparent);
-}
-
-.example-selector-wrap::after {
-  right: 0;
-  background: linear-gradient(to left, var(--color-bg), transparent);
-}
-
-/* JS adds these classes based on scroll position */
-.example-selector-wrap.can-scroll-left::before {
-  opacity: 1;
-}
-
-.example-selector-wrap.can-scroll-right::after {
-  opacity: 1;
-}
+/* Two-row grid: chips stretch to fill their row evenly (4 per row). */
 .example-selector {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 4px 0 12px;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  scroll-behavior: smooth;
+  padding: 4px 0;
 }
 
-.example-selector::-webkit-scrollbar {
-  display: none;
-}
-
-/* Show a minimalist gray scrollbar on hover */
-.example-selector-wrap:hover .example-selector {
-  scrollbar-width: thin;
-  scrollbar-color: #B0B3B8 transparent;
-}
-
-.example-selector-wrap:hover .example-selector::-webkit-scrollbar {
-  display: block;
-  height: 6px;
-}
-
-.example-selector-wrap:hover .example-selector::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.example-selector-wrap:hover .example-selector::-webkit-scrollbar-thumb {
-  background: #B0B3B8;
-  border-radius: 3px;
-}
-
-.example-selector-wrap:hover .example-selector::-webkit-scrollbar-thumb:hover {
-  background: #8E9196;
-}
 .example-card {
-  flex-shrink: 0;
-  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding: 10px 20px;
+  justify-content: center;
+  gap: 3px;
+  padding: 12px 14px;
   border: 2px solid #E5E7EB;
   border-radius: 10px;
   background: none;
   cursor: pointer;
   transition: border-color 0.15s ease, background-color 0.15s ease;
-  min-width: 120px;
   text-align: center;
 }
 
@@ -566,6 +502,7 @@ h1, h2, h3, h4, h5, h6,
 .example-card-desc {
   font-size: var(--font-size-ui);
   color: var(--color-text-secondary);
+  line-height: 1.3;
 }
 
 /* --- Visual Results: Model Strip (Zone 2) --- */
@@ -937,6 +874,11 @@ h1, h2, h3, h4, h5, h6,
   .content-width {
     padding-left: 16px;
     padding-right: 16px;
+  }
+
+  /* Scene chips: 2 per row on narrow screens (4 rows of 2). */
+  .example-selector {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .model-strip {
