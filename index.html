@@ -106,19 +106,18 @@
             frame to adapt to the changing motion in dynamic scenes. This
             computational overhead from heavy memory updates precludes real-time
             application and can lead to instability over extended contexts.
-            Recognizing that memory updates are considerably more demanding than
+            Given that memory updates are considerably more demanding than
             memory application and that video content is largely redundant, we propose
             to decouple the frequencies of these two processes. Our approach performs
             periodic memory updates while applying the memory on a per-frame basis,
-            utilizing cross-view attention to manage deformations between the prior
+            using cross-view attention to manage deformations between the prior
             memory state and the current frame. To lock in the historical context, we
             introduce two critical mechanisms: an auxiliary <em>Memory Loss</em> that
             forces persistent internalization of the scene, and a
             <em>Memory Caching</em> strategy that regularizes active weights against
-            catastrophic drift. Extensive evaluations on unconstrained, dynamic human
-            motion demonstrate that our method exhibits state-of-the-art performance,
-            and successfully demonstrates minute-scale online memorization while
-            operating in real-time.
+            catastrophic drift. Our method demonstrates real-time, state-of-the-art
+            performance on scenes with dynamic human motion as well as minute-scale
+            online memorization.
           </p>
         </div>
         </div>
@@ -270,11 +269,11 @@
               <img src="resources/architecture_v2.png"
                 alt="NSTM architecture with memorization and synthesis steps and layer details">
               <p class="caption-text">
-                <em>NSTM Architecture:</em> NSTM alternates between Memorization Steps, where
-                fast-weight memory is updated via Apply/Update operations, and Synthesis Steps,
-                where the memory is read-only queried for novel view rendering. The NSTM Layer
-                (right) combines cross-view attention, learned scale modulation, and fast-weight
-                Apply/Update blocks with LayerNorm and feed-forward layers.
+                <em>NSTM Architecture:</em> NSTM operates in two alternating modes. In
+                Memorization Mode, the model attends over multi-view inputs and updates its
+                fast-weight memory with a test-time gradient step (W &rarr; W'). In Novel View
+                Synthesis Mode, the updated memory is frozen and applied &mdash; together with the
+                current posed inputs and target rays &mdash; to render novel views in real time.
               </p>
             </div>
 <!-- Slide 2: Training regime -->
@@ -343,25 +342,28 @@
           <img src="resources/qualitative_results_v3.png"
                alt="Qualitative comparison of novel view synthesis results across models">
           <p class="caption-text">
-            <em>Fig. 3:</em> Qualitative comparison on challenging scenes. Our NSTM method produces
-            sharper details and fewer artifacts compared to baselines, particularly on reflective
-            surfaces and fine-grained textures.
+            <em>Fig. 3:</em> MVHumanNet++ qualitative comparison after one minute of continuous
+            video. NSTM accurately recalls back-view details such as T-shirt patterns and
+            hairstyles, while LVSM hallucinates unseen regions, LaCT-NVS suffers
+            out-of-distribution errors, and Token-Mem fails to recall back views.
           </p>
         </div>
 
         <div class="gallery-carousel-slide">
           <img src="resources/stability.png" alt="Long-horizon stability analysis over time">
           <p class="caption-text">
-            <em>Fig. 4:</em> Stability over extended sequences. NSTM maintains consistent rendering
-            quality across minute-scale video streams, while baselines degrade due to catastrophic
-            forgetting.
+            <em>Fig. 4:</em> Memory stress test over time. The back view is shown only at T=0; for
+            later timesteps the model sees only frontal views and must synthesize the occluded
+            back. NSTM maintains high-fidelity recall across the sequence, while baselines drift or
+            collapse to a stateless prior.
           </p>
         </div>
         <div class="gallery-carousel-slide">
           <img src="resources/mvhuman_net_experiments.png" alt="Quantitative comparison table across timestep horizons">
           <p class="caption-text">
-            <em>Table 1:</em> Quantitative comparison on MVHumanNet. NSTM maintains high performance
-            across all timestep horizons, while LaCT-NVS degrades significantly over longer sequences.
+            <em>Table 1:</em> Memory stress test comparison on MVHumanNet++ across 360 scenes and
+            three durations (t=4/30/60). NSTM holds 20+ mPSNR at every duration, while LaCT-NVS
+            drops 5.47 dB and Token-Mem 1.56 dB from t=4 to t=60; the stateless LVSM stays roughly flat.
           </p>
         </div>
       </div>
@@ -401,7 +403,7 @@
           <img src="resources/ablations_exp.png" alt="Ablation study quantitative results table">
           <p class="caption-text">
             <em>Table 2:</em> Ablation study of our model. Metrics are averaged over
-            60 timesteps in 390 MVHumanNet eval scenes.
+            60 timesteps in 390 MVHumanNet++ eval scenes.
           </p>
         </div>
       </div>
