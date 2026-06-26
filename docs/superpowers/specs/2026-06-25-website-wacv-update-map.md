@@ -13,11 +13,13 @@ The live site is the **ECCV 2026 anonymous submission** (title "Neural Space-Tim
 
 This document maps **every website surface → its source-of-truth → current (ECCV) value → target (WACV) value → required action**, plus a per-figure regeneration appendix and a risk list. It is the spec that will drive the actual edit pass (not done yet).
 
-### Decisions (locked during brainstorming)
+### Decisions (locked)
 - **Branding:** stay **anonymous**, rebrand `ECCV 2026 / #5217` → `WACV 2027 / #707`.
+- **Title (resolved):** use the **full paper title** — "Online Neural Space Time Memory for Dynamic Novel View Synthesis" — for the main-page `<h1>` and `<title>`. Gallery browser-tab titles keep the short "Neural Space-Time Memory" brand.
+- **Watermark (resolved):** **ship the review-copy PDFs as-is** (precedent: ECCV site used a review copy). The "CONFIDENTIAL REVIEW COPY" / "WACV 2026" headers remain in the PDFs.
+- **Year (resolved):** site says **WACV 2027**; embedded PDFs still print 2026 until the team recompiles — accepted temporary mismatch.
 - **Figures:** **regenerate** PNGs from the WACV LaTeX/PDF sources (toolchain verified: `pdftoppm`, `pdfcrop`, `pdflatex`/`latexmk`, ImageMagick `convert`, `gs`).
 - **Galleries/videos:** **out of scope** (unchanged).
-- **Stop point:** deliver this mapping doc, then pause for review.
 
 ---
 

@@ -31,7 +31,7 @@ cat > index.html << 'HEAD_EOF'
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Neural Space-Time Memory</title>
+  <title>Online Neural Space Time Memory for Dynamic Novel View Synthesis</title>
   <meta name="description" content="Neural Space-Time Memory (NSTM) — Real-time novel view synthesis with minute-scale persistent memory. Supplementary materials and interactive results.">
 
   <!-- Bundled CSS (offline-safe) -->
@@ -66,7 +66,7 @@ cat >> index.html << 'FOOT_EOF'
   <!-- ===== Footer ===== -->
   <footer class="site-footer">
     <div class="content-width">
-      <p>Anonymous ECCV 2026 Submission — Paper #5217</p>
+      <p>Anonymous WACV 2027 Submission — Paper #707</p>
       <p>This website is the supplementary material for our anonymous submission.</p>
     </div>
   </footer>
