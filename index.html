@@ -269,11 +269,11 @@
               <img src="resources/architecture_v2.png"
                 alt="NSTM architecture with memorization and synthesis steps and layer details">
               <p class="caption-text">
-                <em>NSTM Architecture:</em> NSTM operates in two alternating modes. In
-                Memorization Mode, the model attends over multi-view inputs and updates its
-                fast-weight memory with a test-time gradient step (W &rarr; W'). In Novel View
-                Synthesis Mode, the updated memory is frozen and applied &mdash; together with the
-                current posed inputs and target rays &mdash; to render novel views in real time.
+                <em>NSTM Architecture:</em> NSTM alternates between Memorization Steps, where
+                fast-weight memory is updated via Apply/Update operations, and Synthesis Steps,
+                where the memory is read-only queried for novel view rendering. The NSTM Layer
+                (right) combines cross-view attention, learned scale modulation, and fast-weight
+                Apply/Update blocks with LayerNorm and feed-forward layers.
               </p>
             </div>
 <!-- Slide 2: Training regime -->
