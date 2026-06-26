@@ -56,3 +56,12 @@ temp/
 # System files
 *.bak
 *.cache
+
+# Dev-only files with internal infrastructure references (kept out of the public repo)
+scripts/download_renderings.sh
+scripts/download_data_gallery.sh
+scratch/compress_and_copy.sh
+docs/data_dump_sources.md
+docs/finding_interesting_scenes.md
+.agents/skills/update-data-gallery/
+.agents/skills/update-renderings/

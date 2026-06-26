@@ -58,6 +58,7 @@ nstm_website/
 │   ├── overview-graph.html
 │   ├── figures.html
 │   ├── ablation.html
+│   ├── additional-results.html ← Natural Rotations figure/table + inference perf
 │   ├── gallery-links.html  ← footer links to the four data gallery pages
 │   └── supplementary-pdf.html
 ├── gallery.html            ← data gallery landing page (links to 4 sub-galleries)
@@ -75,19 +76,16 @@ nstm_website/
 ├── data_gallery/           ← evaluation videos for data gallery pages
 │   ├── general_nvs/        ← 4 models × 72 scenes
 │   ├── ablations/          ← 6 models × 72 scenes
-│   ├── baselines_t4/       ← 4 models × 72 scenes (per-scene camera)
-│   ├── baselines_t30/      ← 4 models × 3 scenes
-│   └── baselines_t60/      ← 4 models × 72 scenes
+│   ├── stress_test_t4/     ← 4 models × 72 scenes (per-scene camera)
+│   ├── stress_test_t30/    ← 4 models × 3 scenes
+│   ├── stress_test_t60/    ← 4 models × 72 scenes
+│   └── natural_memory/     ← 4 models × 17 scenes
 ├── resources/              ← PNGs (converted from PDF), tex, and reference files
 ├── scripts/                ← dev-only scripts (excluded from deliverable zip)
-│   ├── download_renderings.sh  ← downloads demo renderings from CNS
-│   ├── download_data_gallery.sh← downloads data gallery videos from CNS
 │   ├── package_website.sh      ← zips deliverable, excluding dev-only files
-│   └── demo_rendering_names.txt← list of demo scenes for download_renderings.sh
+│   └── demo_rendering_names.txt← list of demo scene IDs
 ├── docs/                   ← dev-only reference documentation (excluded from zip)
-│   ├── design_guidelines.md    ← visual direction document
-│   ├── data_dump_sources.md    ← CNS path reference for data gallery sources
-│   └── finding_interesting_scenes.md ← scene labeling & filtering guide
+│   └── design_guidelines.md    ← visual direction document
 └── AGENTS.md               ← this file (dev-only)
 ```
 
@@ -180,7 +178,7 @@ The site uses [Bulma 0.9.4](https://bulma.io/documentation/) for grid (`columns`
 ## 6. How to Add Media
 
 ### Videos
-- See the **update-renderings** skill (`.agents/skills/update-renderings/SKILL.md`) for the full download pipeline, model mapping, and path conventions.
+- Result videos live under `videos/` and `data_gallery/`, organized by model/scene/orbit.
 - Use `<video autoplay loop muted playsinline>` for result videos in HTML.
 
 ### Figures / Images
