@@ -31,10 +31,10 @@ def render_ablation_table():
     data = [
         ['LaCT-NVS Baseline',              '22.32', '0.9275', '0.0616', '13.49', '0.4942'],
         ['LaCT-NVS w/ L₂',                 '27.77', '0.9594', '0.0275', '19.08', '0.6189'],
-        ['LaCT-NVS w/ L₂ w/ Mem Caching',  '19.91', '0.9096', '0.0746', '11.63', '0.4509'],
+        ['LaCT-NVS w/ L₂ w/ Mem Caching',  '20.25', '0.9135', '0.0688', '12.03', '0.4707'],
         ['Ours wo/ ℒ_mem',                  '28.23', '0.9639', '0.0251', '19.36', '0.6198'],
         ['Ours wo/ Mem Caching',            '29.24', '0.9673', '0.0232', '19.78', '0.6321'],
-        ['Ours w/ Mem Caching',             '30.09', '0.9708', '0.0212', '20.82', '0.6604'],
+        ['Ours w/ Mem Caching',             '30.09', '0.9705', '0.0217', '20.79', '0.6537'],
     ]
 
     # Cell colors: None = white, 'best', 'second', 'third'
@@ -126,32 +126,33 @@ def render_ablation_table():
 def render_mvhuman_table():
     """Render the MVHumanNet experiments table (Table 1)."""
 
-    metrics = ['PSNR↑', 'SSIM↑', 'LPIPS↓', 'mPSNR↑', 'mSSIM↑']
+    metrics = ['PSNR↑', 'SSIM↑', 'LPIPS↓', 'DISTS↓', 'mPSNR↑', 'mSSIM↑']
 
-    methods = ['Full-Attn', 'Token-Mem', 'LaCT-NVS', 'Ours']
+    methods = ['LVSM', 'LaCT-NVS', 'Token-Mem', 'Ours']
 
     # Data organized as [method][timestep_group][metric]
     # Timestep groups: 4, 30, 60
+    # Source: sections/tables/mvhuman_net_experiments_arxiv_v5.tex (WACV)
     data_values = {
-        'Full-Attn': [
-            ['28.72', '0.9659', '0.0256', '19.49', '0.6152'],
-            ['28.49', '0.9640', '0.0271', '19.08', '0.5715'],
-            ['28.47', '0.9639', '0.0272', '19.05', '0.5694'],
-        ],
-        'Token-Mem': [
-            ['28.75', '0.9638', '0.0277', '19.68', '0.5955'],
-            ['28.66', '0.9634', '0.0284', '19.42', '0.5706'],
-            ['28.65', '0.9634', '0.0286', '19.37', '0.5674'],
+        'LVSM': [
+            ['29.13', '0.9666', '0.0258', '0.1040', '19.55', '0.5790'],
+            ['28.98', '0.9656', '0.0263', '0.1055', '19.40', '0.5707'],
+            ['28.99', '0.9662', '0.0257', '0.1034', '19.34', '0.5670'],
         ],
         'LaCT-NVS': [
-            ['30.84', '0.9746', '0.0180', '22.06', '0.7348'],
-            ['25.67', '0.9478', '0.0369', '16.94', '0.5794'],
-            ['22.32', '0.9275', '0.0616', '13.49', '0.4942'],
+            ['30.69', '0.9741', '0.0196', '0.0822', '21.72', '0.7110'],
+            ['30.38', '0.9708', '0.0216', '0.0885', '21.22', '0.6507'],
+            ['25.85', '0.9500', '0.0360', '0.1236', '16.25', '0.5158'],
+        ],
+        'Token-Mem': [
+            ['29.36', '0.9674', '0.0249', '0.1009', '20.40', '0.6409'],
+            ['28.36', '0.9621', '0.0290', '0.1136', '19.14', '0.5624'],
+            ['28.11', '0.9617', '0.0295', '0.1141', '18.84', '0.5505'],
         ],
         'Ours': [
-            ['30.71', '0.9745', '0.0186', '21.78', '0.7300'],
-            ['30.21', '0.9712', '0.0210', '20.98', '0.6646'],
-            ['30.09', '0.9708', '0.0212', '20.82', '0.6604'],
+            ['30.43', '0.9731', '0.0203', '0.0851', '21.46', '0.6971'],
+            ['30.03', '0.9700', '0.0225', '0.0915', '20.86', '0.6434'],
+            ['29.99', '0.9701', '0.0225', '0.0919', '20.71', '0.6286'],
         ],
     }
 
@@ -160,25 +161,25 @@ def render_mvhuman_table():
     W, B, S, T = WHITE, BEST_COLOR, SECOND_COLOR, THIRD_COLOR
 
     color_map = {
-        'Full-Attn': [
-            [W, T, T, W, T],
-            [T, S, S, T, T],
-            [T, S, S, T, S],
-        ],
-        'Token-Mem': [
-            [T, W, W, T, W],
-            [S, T, T, S, W],
-            [S, T, T, S, T],
+        'LVSM': [
+            [W, W, W, W, W, W],
+            [T, T, T, T, T, T],
+            [S, S, S, S, S, S],
         ],
         'LaCT-NVS': [
-            [B, B, B, B, B],
-            [W, W, W, W, S],
-            [W, W, W, W, W],
+            [B, B, B, B, B, B],
+            [B, B, B, B, B, B],
+            [W, W, W, W, W, W],
+        ],
+        'Token-Mem': [
+            [T, T, T, T, T, T],
+            [W, W, W, W, W, W],
+            [T, T, T, T, T, T],
         ],
         'Ours': [
-            [S, S, S, S, S],
-            [B, B, B, B, B],
-            [B, B, B, B, B],
+            [S, S, S, S, S, S],
+            [S, S, S, S, S, S],
+            [B, B, B, B, B, B],
         ],
     }
 
@@ -202,7 +203,7 @@ def render_mvhuman_table():
         table_data.append(row)
         table_colors.append(row_colors)
 
-    fig, ax = plt.subplots(figsize=(18, 3.5))
+    fig, ax = plt.subplots(figsize=(22, 3.5))
     ax.axis('off')
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
@@ -229,8 +230,8 @@ def render_mvhuman_table():
     for (row, col), cell in table.get_celld().items():
         cell.set_edgecolor('white')
         cell.set_linewidth(0)
-        # Spacer columns (col 6 and col 12 — 0-indexed)
-        if col in [6, 12]:
+        # Spacer columns (col 7 and col 14 — 0-indexed, after 6-metric groups)
+        if col in [7, 14]:
             cell.set_width(0.005)
             cell.set_facecolor(WHITE)
             cell.set_text_props(text='')
