@@ -287,7 +287,215 @@ def render_mvhuman_table():
     return out_path
 
 
+def render_natural_memory_table():
+    """Render the Memory from Natural Rotations comparison table (supplemental)."""
+
+    metrics = ['PSNR↑', 'SSIM↑', 'LPIPS↓', 'DISTS↓', 'mPSNR↑', 'mSSIM↑']
+    methods = ['LVSM', 'LaCT-NVS', 'Token-Mem', 'Ours']
+
+    # [method][group][metric]; group 0 = Average over T=60, group 1 = Last frame
+    # Source: sections/tables/natural_memory_t4_arxiv_v3.tex (WACV supplemental)
+    data_values = {
+        'LVSM': [
+            ['28.81', '0.9654', '0.0286', '0.1216', '19.21', '0.5069'],
+            ['28.81', '0.9656', '0.0296', '0.1298', '19.69', '0.5272'],
+        ],
+        'LaCT-NVS': [
+            ['29.13', '0.9667', '0.0253', '0.1045', '19.98', '0.5850'],
+            ['27.01', '0.9551', '0.0340', '0.1414', '17.93', '0.4982'],
+        ],
+        'Token-Mem': [
+            ['27.24', '0.9565', '0.0353', '0.1303', '18.05', '0.4926'],
+            ['28.11', '0.9615', '0.0329', '0.1363', '19.14', '0.5194'],
+        ],
+        'Ours': [
+            ['29.53', '0.9692', '0.0247', '0.1056', '20.39', '0.5928'],
+            ['29.68', '0.9691', '0.0250', '0.1107', '20.88', '0.5997'],
+        ],
+    }
+
+    W, B, S, T = WHITE, BEST_COLOR, SECOND_COLOR, THIRD_COLOR
+    color_map = {
+        'LVSM': [
+            [T, T, T, T, T, T],
+            [S, S, S, S, S, S],
+        ],
+        'LaCT-NVS': [
+            [S, S, S, B, S, S],
+            [W, W, W, W, W, W],
+        ],
+        'Token-Mem': [
+            [W, W, W, W, W, W],
+            [T, T, T, T, T, T],
+        ],
+        'Ours': [
+            [B, B, B, S, B, B],
+            [B, B, B, B, B, B],
+        ],
+    }
+
+    group_labels = ['Average over T=60', 'Last frame']
+    columns = ['Method'] + metrics + [''] + metrics
+    n_cols = len(columns)
+
+    table_data = []
+    table_colors = []
+    for method in methods:
+        row = [method]
+        row_colors = [WHITE]
+        for g in range(2):
+            if g > 0:
+                row.append('')
+                row_colors.append(WHITE)
+            row.extend(data_values[method][g])
+            row_colors.extend(color_map[method][g])
+        table_data.append(row)
+        table_colors.append(row_colors)
+
+    fig, ax = plt.subplots(figsize=(16, 3.5))
+    ax.axis('off')
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+
+    ax.text(0.5, 1.05, 'Memory from Natural Rotations', fontsize=14, fontweight='bold',
+            ha='center', va='top', transform=ax.transAxes)
+
+    table = ax.table(
+        cellText=table_data,
+        colLabels=columns,
+        cellColours=table_colors,
+        colColours=[HEADER_BG]*n_cols,
+        cellLoc='center',
+        loc='center',
+        bbox=[0.01, 0.05, 0.98, 0.80]
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+
+    n_data_rows = len(table_data)
+    for (row, col), cell in table.get_celld().items():
+        cell.set_edgecolor('white')
+        cell.set_linewidth(0)
+        if col == 7:  # spacer column between the two groups
+            cell.set_width(0.01)
+            cell.set_facecolor(WHITE)
+            cell.set_text_props(text='')
+        if row == 0:
+            cell.set_text_props(fontweight='bold', fontsize=9)
+            cell.set_height(0.18)
+        else:
+            cell.set_height(0.16)
+        if col == 0:
+            cell.set_text_props(ha='left')
+            cell._loc = 'left'
+            cell.set_width(0.10)
+
+    group_positions = [(0.30, group_labels[0]), (0.68, group_labels[1])]
+    for x, label in group_positions:
+        ax.text(x, 0.90, label, fontsize=11, fontweight='bold',
+                ha='center', va='center', transform=ax.transAxes)
+
+    table_bbox = table.get_window_extent(fig.canvas.get_renderer())
+    inv_transform = ax.transAxes.inverted()
+    header_cells = [(col, cell) for (row, col), cell in table.get_celld().items() if row == 0]
+    last_row_cells = [(col, cell) for (row, col), cell in table.get_celld().items() if row == n_data_rows]
+    if header_cells:
+        sample = header_cells[0][1]
+        bbox = sample.get_window_extent(fig.canvas.get_renderer())
+        top_y = inv_transform.transform((0, bbox.y1))[1]
+        bot_y = inv_transform.transform((0, bbox.y0))[1]
+        x_left = inv_transform.transform((table_bbox.x0, 0))[0]
+        x_right = inv_transform.transform((table_bbox.x1, 0))[0]
+        ax.plot([x_left, x_right], [top_y, top_y], color='black', linewidth=1.5, transform=ax.transAxes, clip_on=False)
+        ax.plot([x_left, x_right], [bot_y, bot_y], color='black', linewidth=0.8, transform=ax.transAxes, clip_on=False)
+    if last_row_cells:
+        sample = last_row_cells[0][1]
+        bbox = sample.get_window_extent(fig.canvas.get_renderer())
+        bot_y = inv_transform.transform((0, bbox.y0))[1]
+        x_left = inv_transform.transform((table_bbox.x0, 0))[0]
+        x_right = inv_transform.transform((table_bbox.x1, 0))[0]
+        ax.plot([x_left, x_right], [bot_y, bot_y], color='black', linewidth=1.5, transform=ax.transAxes, clip_on=False)
+
+    out_path = os.path.join(SCRIPT_DIR, 'natural_memory_experiments.png')
+    fig.savefig(out_path, dpi=200, bbox_inches='tight', pad_inches=0.15, facecolor='white')
+    plt.close(fig)
+    print(f'Saved: {out_path}')
+    return out_path
+
+
+def render_inference_perf_table():
+    """Render the inference performance breakdown table (supplemental)."""
+
+    columns = ['Step', 'Latency (ms) ↓', 'FPS ↑']
+    data = [
+        ['Memorization', '58.14', '17.19'],
+        ['Synthesis',    '27.01', '37.02'],
+    ]
+
+    fig, ax = plt.subplots(figsize=(7, 2.4))
+    ax.axis('off')
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+
+    ax.text(0.5, 1.02, 'Inference Performance', fontsize=14, fontweight='bold',
+            ha='center', va='top', transform=ax.transAxes)
+
+    table = ax.table(
+        cellText=data,
+        colLabels=columns,
+        colColours=[HEADER_BG]*3,
+        cellLoc='center',
+        loc='center',
+        bbox=[0.05, 0.05, 0.90, 0.74]
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(12)
+
+    n_data_rows = len(data)
+    for (row, col), cell in table.get_celld().items():
+        cell.set_edgecolor('white')
+        cell.set_linewidth(0)
+        if row == 0:
+            cell.set_text_props(fontweight='bold')
+            cell.set_height(0.24)
+        else:
+            cell.set_height(0.22)
+        if col == 0:
+            cell.set_text_props(ha='left')
+            cell._loc = 'left'
+            cell.set_width(0.40)
+
+    table_bbox = table.get_window_extent(fig.canvas.get_renderer())
+    inv_transform = ax.transAxes.inverted()
+    header_cells = [(col, cell) for (row, col), cell in table.get_celld().items() if row == 0]
+    last_row_cells = [(col, cell) for (row, col), cell in table.get_celld().items() if row == n_data_rows]
+    if header_cells:
+        sample = header_cells[0][1]
+        bbox = sample.get_window_extent(fig.canvas.get_renderer())
+        top_y = inv_transform.transform((0, bbox.y1))[1]
+        bot_y = inv_transform.transform((0, bbox.y0))[1]
+        x_left = inv_transform.transform((table_bbox.x0, 0))[0]
+        x_right = inv_transform.transform((table_bbox.x1, 0))[0]
+        ax.plot([x_left, x_right], [top_y, top_y], color='black', linewidth=1.5, transform=ax.transAxes, clip_on=False)
+        ax.plot([x_left, x_right], [bot_y, bot_y], color='black', linewidth=0.8, transform=ax.transAxes, clip_on=False)
+    if last_row_cells:
+        sample = last_row_cells[0][1]
+        bbox = sample.get_window_extent(fig.canvas.get_renderer())
+        bot_y = inv_transform.transform((0, bbox.y0))[1]
+        x_left = inv_transform.transform((table_bbox.x0, 0))[0]
+        x_right = inv_transform.transform((table_bbox.x1, 0))[0]
+        ax.plot([x_left, x_right], [bot_y, bot_y], color='black', linewidth=1.5, transform=ax.transAxes, clip_on=False)
+
+    out_path = os.path.join(SCRIPT_DIR, 'inference_performance.png')
+    fig.savefig(out_path, dpi=200, bbox_inches='tight', pad_inches=0.15, facecolor='white')
+    plt.close(fig)
+    print(f'Saved: {out_path}')
+    return out_path
+
+
 if __name__ == '__main__':
     render_ablation_table()
     render_mvhuman_table()
-    print('Done — both tables rendered.')
+    render_natural_memory_table()
+    render_inference_perf_table()
+    print('Done — all tables rendered.')

@@ -194,6 +194,11 @@ After regenerating all figures, **rebuild** (`bash build.sh`) only matters if `<
 - ✅ Both tables regenerated via `render_tables.py` (added DISTS column, LVSM rename, WACV numbers/rankings) and visually verified.
 - ✅ Abstract + figure/table captions updated to WACV wording/claims.
 - ✅ Verification: no ECCV/#5217 strings remain in any user-facing file; all asset references resolve.
+- ✅ Reverted the architecture figure + caption to the original detailed diagram — it is **not** a WACV paper figure (only referenced by obsolete `method.tex`/`method_backup.tex`); the earlier regeneration had wrongly swapped it.
+- ✅ Added new WACV supplemental content (not in the ECCV paper) as a new **"Additional Results"** section: *Memory from Natural Rotations* figure (`natural_memory_v2.pdf`) + comparison table (`natural_memory_t4_arxiv_v3`), and the *Inference Performance* table (`inference_perf_breakdown`). New renderers added to `render_tables.py`.
+
+### ECCV→WACV figure/table diff (from compiled PDFs)
+New in WACV vs ECCV: **Memory from Natural Rotations** figure + table (new experiment); **Inference Performance** is now a table (was a figure). All WACV main-paper-body figures/tables were already on the site; these three new supplemental items are now added to "Additional Results".
 
 **Deferred / open:**
 - ⏸️ `resources/nstm_main_paper.md` — still the ECCV-era full-paper markdown (38 KB / ~5.3k words). Dev-only reference, not on the live site. A faithful WACV refresh is a large transcription; **left for a dedicated pass** to avoid rushed inaccuracy.

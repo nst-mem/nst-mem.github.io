@@ -21,6 +21,7 @@ SECTIONS=(
   "sections/overview-graph.html"
   "sections/figures.html"
   "sections/ablation.html"
+  "sections/additional-results.html"
   "sections/gallery-links.html"
   "sections/supplementary-pdf.html"
 )

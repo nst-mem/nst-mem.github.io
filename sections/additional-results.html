@@ -1,0 +1,54 @@
+<section id="additional-results" class="section-padding">
+  <div class="content-width">
+    <h2 class="section-heading">Additional Results</h2>
+
+    <div class="gallery-carousel" tabindex="0" aria-label="Additional results gallery">
+      <!-- Navigation arrows -->
+      <button class="gallery-carousel-nav gallery-carousel-nav--prev" aria-label="Previous figure"></button>
+      <button class="gallery-carousel-nav gallery-carousel-nav--next" aria-label="Next figure"></button>
+
+      <!-- Track -->
+      <div class="gallery-carousel-track">
+        <div class="gallery-carousel-slide">
+          <img src="resources/natural_memory.png"
+               alt="Qualitative comparison of memory from natural rotations across models">
+          <p class="caption-text">
+            <em>Fig. 6:</em> Memory from natural rotations. On natural video sequences with dynamic
+            reveals and occlusions, NSTM accurately recalls back-view details such as T-shirt patterns
+            and hairstyles, while LVSM hallucinates unseen regions and LaCT-NVS and Token-Mem fail to
+            recall back views.
+          </p>
+        </div>
+
+        <div class="gallery-carousel-slide">
+          <img src="resources/natural_memory_experiments.png"
+               alt="Quantitative comparison table for memory from natural rotations">
+          <p class="caption-text">
+            <em>Table 3:</em> Memory from natural rotations, comparison on natural sequences. NSTM
+            outperforms Token-Mem and LaCT-NVS by 1.74 dB and 2.95 dB mPSNR on the last frame, while
+            the stateless LVSM shows near-identical average and last-frame scores &mdash; confirming it
+            cannot retain past detail.
+          </p>
+        </div>
+
+        <div class="gallery-carousel-slide">
+          <img src="resources/inference_performance.png"
+               alt="Inference performance breakdown table">
+          <p class="caption-text">
+            <em>Table 5:</em> Inference performance breakdown on a single H100 GPU at 256&times;256.
+            Decoupling the update and synthesis frequencies lets the frequent Synthesis step run at
+            37 FPS, while the heavier Memorization step runs only periodically.
+          </p>
+        </div>
+      </div>
+
+      <!-- Dot indicators -->
+      <div class="gallery-carousel-dots">
+        <button class="gallery-carousel-dot is-active" aria-label="Go to figure 1"></button>
+        <button class="gallery-carousel-dot" aria-label="Go to figure 2"></button>
+        <button class="gallery-carousel-dot" aria-label="Go to figure 3"></button>
+      </div>
+    </div>
+
+  </div>
+</section>
