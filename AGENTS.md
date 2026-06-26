@@ -8,7 +8,7 @@
 
 ## 1. Project Overview
 
-This is a **static, offline-capable** academic project page for the NSTM paper (ECCV 2026, anonymous submission #5217). It showcases supplementary materials — videos, figures, ablations, and interactive comparisons.
+This is a **static, offline-capable** academic project page for the NSTM paper (WACV 2027, anonymous submission #707). It showcases supplementary materials — videos, figures, ablations, and interactive comparisons.
 
 **Key constraints:**
 - **No build step.** Double-clicking `index.html` must work.

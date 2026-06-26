@@ -182,3 +182,22 @@ After regenerating all figures, **rebuild** (`bash build.sh`) only matters if `<
 7. **Dev reference** (§3F/R1) — refresh `nstm_main_paper.md`.
 8. Resolve the **§6 decisions** (title, watermark, year) — ideally before step 1.
 9. Rebuild, open `index.html`, visual-check every section + gallery page.
+
+---
+
+## 9. Execution status (2026-06-25)
+
+**Done** (branch `update-website-latest`):
+- ✅ Branding → WACV 2027 / #707, full paper title on main page (`build.sh`, `title.html`, 6 galleries, `AGENTS.md`/`CLAUDE.md`).
+- ✅ PDFs swapped: `resources/main_paper.pdf` (WACV main, 16 pp), `resources/supplemental_draft.pdf` (WACV supp, 4 pp); root leftover removed.
+- ✅ All 7 figures regenerated from WACV PDFs and **visually verified**.
+- ✅ Both tables regenerated via `render_tables.py` (added DISTS column, LVSM rename, WACV numbers/rankings) and visually verified.
+- ✅ Abstract + figure/table captions updated to WACV wording/claims.
+- ✅ Verification: no ECCV/#5217 strings remain in any user-facing file; all asset references resolve.
+
+**Deferred / open:**
+- ⏸️ `resources/nstm_main_paper.md` — still the ECCV-era full-paper markdown (38 KB / ~5.3k words). Dev-only reference, not on the live site. A faithful WACV refresh is a large transcription; **left for a dedicated pass** to avoid rushed inaccuracy.
+- ⚠️ **Cosmetic:** in `ablations_exp.png`, the row label "LaCT-NVS w/ L₂ w/ Mem Caching" clips to "…w/ Mem" (method column width) — pre-existing `render_tables.py` behavior; widen the method column if the full label is wanted.
+- ⚠️ **Year/watermark (accepted):** PDFs still print "WACV 2026" and "CONFIDENTIAL REVIEW COPY — DO NOT DISTRIBUTE"; site says WACV 2027. Recompile the paper to reconcile the year before final.
+- ⚠️ **Paper internal:** main table cites 360 scenes, ablation table 390 — reconcile in the paper.
+- ⚠️ `supplemental_wacv.tex` builds from `additional_method_v2` while the main appendix uses `v3` — rebuild the standalone supplemental from v3 for consistency, then re-export.
