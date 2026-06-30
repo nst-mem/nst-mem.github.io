@@ -91,6 +91,44 @@ h1, h2, h3, h4, h5, h6,
   font-weight: 400;
 }
 
+.publication-authors {
+  margin-top: 1.25rem;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.publication-authors .author-block {
+  display: inline-block;
+  margin: 0 0.15rem;
+  white-space: nowrap;
+}
+
+.publication-authors .author-block a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.publication-authors .author-block a:hover {
+  text-decoration: underline;
+}
+
+.publication-affiliations {
+  margin-top: 0.6rem;
+  font-size: 1.05rem;
+  color: var(--color-text-secondary);
+}
+
+.publication-affiliations .affiliation-block {
+  display: inline-block;
+  margin: 0 0.5rem;
+  white-space: nowrap;
+}
+
+.publication-authors sup,
+.publication-affiliations sup {
+  font-size: 0.7em;
+}
+
 .section-heading {
   font-size: 1.75rem;
   font-weight: 700;
