@@ -77,7 +77,7 @@
               <path
                 d="M4 6H2v14a2 2 0 0 0 2 2h14v-2H4V6zm16-4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 14H8V4h12v12zm-6-1l-2-3-1.5 2L9 12l-3 4h12l-4-6z" />
             </svg>
-            Data Gallery
+            Results Gallery
             </a>
         </div>
         </div>
@@ -92,10 +92,17 @@
       <source src="videos/hero_combined.mp4" type="video/mp4">
     </video>
   </div>
-  <p class="caption-text" style="max-width: calc(var(--content-width) * 1.2); margin: 10px auto 0;">
-    <em>Demo:</em> The model first hasn't seen the logo on the person's back, so its best
-    guess is a plain hoodie. Once the back is revealed, the model correctly reconstructs it.
-    When the back is hidden again, NSTM continues to faithfully reconstruct the logo from memory.
+
+  <div class="hero-badges">
+    <span class="hero-badge">Minute-scale memory</span>
+    <span class="hero-badge">30 FPS synthesis &middot; 1 FPS memory</span>
+    <span class="hero-badge">O(1) real-time inference</span>
+  </div>
+
+  <p class="tldr-caption">
+    <strong>TL;DR:</strong> NSTM renders novel views of dynamic scenes in real time while keeping a persistent,
+    minute-scale space-time memory &mdash; faithfully recalling temporarily occluded detail (like the logo on
+    the subject's back) long after it leaves view, at O(1) inference cost.
   </p>
 </section>
 
@@ -135,10 +142,27 @@
   </div>
 </section>
 
-  <!-- ===== visual-results ===== -->
+  <!-- ===== teaser ===== -->
+<!-- Teaser (paper Figure 1). Replace the image with an updated Fig 1 export if needed. -->
+<section id="teaser" class="section-padding">
+  <div class="content-width">
+    <div class="figure-container">
+      <img src="resources/teaser_nstm_pink.png"
+        alt="NSTM overview: input stereo video, periodic memorization, and per-frame synthesis over time.">
+      <p class="caption-text" style="max-width: 900px; margin: 1rem auto 0;">
+        <strong>Figure 1.</strong> Neural Space-Time Memory (NSTM) synthesizes novel views in real time from
+        30&nbsp;FPS multi-view video while updating its memory at 1&nbsp;FPS. As the subject rotates, the updated
+        memory captures the back logo (memory readout, middle); NSTM then faithfully recalls it from memory when
+        only frontal views are available.
+      </p>
+    </div>
+  </div>
+</section>
+
+  <!-- ===== memorization-results ===== -->
 <section id="visual-results" class="section-padding">
   <div class="content-width">
-    <h2 class="section-heading">Visual Results</h2>
+    <h2 class="section-heading">Memorization Results</h2>
     <p class="caption-text" style="margin-bottom: 2rem;">
       Select a scene, then click models in the comparison strip to inspect them in detail below.
     </p>
@@ -257,287 +281,89 @@
   </div>
 </section>
 
-  <!-- ===== overview-graph ===== -->
-<!-- Architecture Section — Carousel for architecture/training regime, two-column for camera/scaling -->
-<section id="overview-graph" class="section-padding">
-  <div class="container is-max-desktop">
-    <h2 class="section-heading">Architecture</h2>
-
-    <div class="overview-grid">
-
-      <!-- Architecture / Training Regime carousel (full-width 1st row) -->
-      <div class="overview-item overview-item--arch">
-        <div class="gallery-carousel" tabindex="0" aria-label="Architecture and training regime">
-          <!-- Navigation arrows -->
-          <button class="gallery-carousel-nav gallery-carousel-nav--prev" aria-label="Previous slide"></button>
-          <button class="gallery-carousel-nav gallery-carousel-nav--next" aria-label="Next slide"></button>
-        
-          <!-- Track -->
-          <div class="gallery-carousel-track">
-            <!-- Slide 1: Architecture -->
-            <div class="gallery-carousel-slide">
-              <img src="resources/architecture_v2.png"
-                alt="NSTM architecture with memorization and synthesis steps and layer details">
-              <p class="caption-text">
-                <em>NSTM Architecture:</em> NSTM alternates between Memorization Steps, where
-                fast-weight memory is updated via Apply/Update operations, and Synthesis Steps,
-                where the memory is read-only queried for novel view rendering. The NSTM Layer
-                (right) combines cross-view attention, learned scale modulation, and fast-weight
-                Apply/Update blocks with LayerNorm and feed-forward layers.
-              </p>
-            </div>
-<!-- Slide 2: Training regime -->
-<div class="gallery-carousel-slide">
-  <img src="resources/training_regime_v6.png"
-    alt="NSTM training regime with alternating memory and synthesis supervision">
-  <p class="caption-text">
-    <em>Training Regime:</em> NSTM alternates between two training objectives. In the
-    Memory Supervision step, isolated memory tokens query the fast-weights to reconstruct
-    a target view entirely from internalized context. In the Synthesis Supervision step,
-    input and target tokens freely cross-attend to capture current motion, querying
-    the previously updated memory without altering it.
-  </p>
-</div>
-          </div>
-          
-          <!-- Dot indicators -->
-          <div class="gallery-carousel-dots">
-            <button class="gallery-carousel-dot is-active" aria-label="Go to slide 1"></button>
-            <button class="gallery-carousel-dot" aria-label="Go to slide 2"></button>
-          </div>
-          </div>
-          </div>
-
-      <!-- Camera Setup (2nd row left) -->
-      <div class="overview-item overview-item--camera">
-        <div class="overview-img-box-top">
-          <img src="resources/camera_setup.png" alt="Multi-view camera rig setup">
-        </div>
-        <p class="caption-text" style="margin-top: 12px;"><strong>Camera Setup</strong></p>
-        <p class="overview-desc">
-          Our multi-view camera rig captures synchronized video streams of dynamic scenes,
-          providing the multi-view input observations at each timestep.
-        </p>
-      </div>
-
-      <!-- Runtime Scaling (2nd row right) -->
-      <div class="overview-item overview-item--scaling">
-        <div class="overview-img-box-top">
-          <img src="resources/teaser_graph.png" alt="Runtime scaling comparison graph">
-        </div>
-        <p class="caption-text" style="margin-top: 12px;"><strong>Runtime Scaling</strong></p>
-        <p class="overview-desc">
-          Unlike temporal full-attention baselines that scale quadratically with context length,
-          NSTM maintains constant inference latency regardless of video length, enabling
-          real-time performance on minute-scale streams.
-        </p>
-      </div>
-
-</div>
-  </div>
-</section>
-  <!-- ===== figures ===== -->
-<section id="figures" class="section-padding">
+  <!-- ===== results-gallery ===== -->
+<!-- Results Gallery — Quark-style image cards, grouped by paper experiment. -->
+<section id="results-gallery" class="section-padding">
   <div class="content-width">
-    <h2 class="section-heading">Figures</h2>
-
-    <div class="gallery-carousel" tabindex="0" aria-label="Paper figures gallery">
-      <!-- Navigation arrows -->
-      <button class="gallery-carousel-nav gallery-carousel-nav--prev" aria-label="Previous figure"></button>
-      <button class="gallery-carousel-nav gallery-carousel-nav--next" aria-label="Next figure"></button>
-
-      <!-- Track (slides sit side-by-side, translated by JS) -->
-      <div class="gallery-carousel-track">
-        <div class="gallery-carousel-slide">
-          <img src="resources/qualitative_results_v3.png"
-               alt="Qualitative comparison of novel view synthesis results across models">
-          <p class="caption-text">
-            <em>Fig. 3:</em> MVHumanNet++ qualitative comparison after one minute of continuous
-            video. NSTM accurately recalls back-view details such as T-shirt patterns and
-            hairstyles, while LVSM hallucinates unseen regions, LaCT-NVS suffers
-            out-of-distribution errors, and Token-Mem fails to recall back views.
-          </p>
-        </div>
-
-        <div class="gallery-carousel-slide">
-          <img src="resources/stability.png" alt="Long-horizon stability analysis over time">
-          <p class="caption-text">
-            <em>Fig. 4:</em> Memory stress test over time. The back view is shown only at T=0; for
-            later timesteps the model sees only frontal views and must synthesize the occluded
-            back. NSTM maintains high-fidelity recall across the sequence, while baselines drift or
-            collapse to a stateless prior.
-          </p>
-        </div>
-        <div class="gallery-carousel-slide">
-          <img src="resources/mvhuman_net_experiments.png" alt="Quantitative comparison table across timestep horizons">
-          <p class="caption-text">
-            <em>Table 1:</em> Memory stress test comparison on MVHumanNet++ across 360 scenes and
-            three durations (t=4/30/60). NSTM holds 20+ mPSNR at every duration, while LaCT-NVS
-            drops 5.47 dB and Token-Mem 1.56 dB from t=4 to t=60; the stateless LVSM stays roughly flat.
-          </p>
-        </div>
-      </div>
-
-      <!-- Dot indicators -->
-      <div class="gallery-carousel-dots">
-        <button class="gallery-carousel-dot is-active" aria-label="Go to figure 1"></button>
-        <button class="gallery-carousel-dot" aria-label="Go to figure 2"></button>
-        <button class="gallery-carousel-dot" aria-label="Go to figure 3"></button>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-  <!-- ===== ablation ===== -->
-<section id="ablation" class="section-padding">
-  <div class="content-width">
-    <h2 class="section-heading">Ablation Study</h2>
-
-    <div class="gallery-carousel" tabindex="0" aria-label="Ablation study figures">
-      <!-- Navigation arrows (hidden automatically when only 1 slide) -->
-      <button class="gallery-carousel-nav gallery-carousel-nav--prev" aria-label="Previous figure"></button>
-      <button class="gallery-carousel-nav gallery-carousel-nav--next" aria-label="Next figure"></button>
-
-      <!-- Track -->
-      <div class="gallery-carousel-track">
-        <div class="gallery-carousel-slide">
-          <img src="resources/ablations.png" alt="Ablation study results showing contribution of each component">
-          <p class="caption-text">
-            <em>Table 2 &amp; Fig. 5:</em> Ablation study. Each proposed component — Memory Loss,
-            Memory Caching, and decoupled update frequency — contributes independently to the
-            final performance. Removing any single component degrades quality.
-          </p>
-        </div>
-        <div class="gallery-carousel-slide">
-          <img src="resources/ablations_exp.png" alt="Ablation study quantitative results table">
-          <p class="caption-text">
-            <em>Table 2:</em> Ablation study of our model. Metrics are averaged over
-            60 timesteps in 390 MVHumanNet++ eval scenes.
-          </p>
-        </div>
-      </div>
-
-      <!-- Dot indicators -->
-      <div class="gallery-carousel-dots">
-        <button class="gallery-carousel-dot is-active" aria-label="Go to figure 1"></button>
-        <button class="gallery-carousel-dot" aria-label="Go to figure 2"></button>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-  <!-- ===== additional-results ===== -->
-<section id="additional-results" class="section-padding">
-  <div class="content-width">
-    <h2 class="section-heading">Additional Results</h2>
-
-    <div class="gallery-carousel" tabindex="0" aria-label="Additional results gallery">
-      <!-- Navigation arrows -->
-      <button class="gallery-carousel-nav gallery-carousel-nav--prev" aria-label="Previous figure"></button>
-      <button class="gallery-carousel-nav gallery-carousel-nav--next" aria-label="Next figure"></button>
-
-      <!-- Track -->
-      <div class="gallery-carousel-track">
-        <div class="gallery-carousel-slide">
-          <img src="resources/natural_memory.png"
-               alt="Qualitative comparison of memory from natural rotations across models">
-          <p class="caption-text">
-            <em>Fig. 6:</em> Memory from natural rotations. On natural video sequences with dynamic
-            reveals and occlusions, NSTM accurately recalls back-view details such as T-shirt patterns
-            and hairstyles, while LVSM hallucinates unseen regions and LaCT-NVS and Token-Mem fail to
-            recall back views.
-          </p>
-        </div>
-
-        <div class="gallery-carousel-slide">
-          <img src="resources/natural_memory_experiments.png"
-               alt="Quantitative comparison table for memory from natural rotations">
-          <p class="caption-text">
-            <em>Table 3:</em> Memory from natural rotations, comparison on natural sequences. NSTM
-            outperforms Token-Mem and LaCT-NVS by 1.74 dB and 2.95 dB mPSNR on the last frame, while
-            the stateless LVSM shows near-identical average and last-frame scores &mdash; confirming it
-            cannot retain past detail.
-          </p>
-        </div>
-
-        <div class="gallery-carousel-slide">
-          <img src="resources/inference_performance.png"
-               alt="Inference performance breakdown table">
-          <p class="caption-text">
-            <em>Table 5:</em> Inference performance breakdown on a single H100 GPU at 256&times;256.
-            Decoupling the update and synthesis frequencies lets the frequent Synthesis step run at
-            37 FPS, while the heavier Memorization step runs only periodically.
-          </p>
-        </div>
-      </div>
-
-      <!-- Dot indicators -->
-      <div class="gallery-carousel-dots">
-        <button class="gallery-carousel-dot is-active" aria-label="Go to figure 1"></button>
-        <button class="gallery-carousel-dot" aria-label="Go to figure 2"></button>
-        <button class="gallery-carousel-dot" aria-label="Go to figure 3"></button>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-  <!-- ===== gallery-links ===== -->
-<!-- Gallery Links Section — Large chip-style links to the four data gallery pages -->
-<section id="gallery-links" class="section-padding">
-  <div class="container is-max-desktop">
-    <h2 class="section-heading">Data Gallery</h2>
-    <p class="caption-text" style="margin-bottom: 28px;">
-      Explore all supplementary video results organized by category.
+    <h2 class="section-heading">Results Gallery</h2>
+    <p class="caption-text" style="max-width: 820px; margin: 0 auto 2.5rem;">
+      We provide extensive supplementary video results, grouped by the experiments in our paper. Memory Demos
+      showcase long-horizon recall; the Memory Stress Test and Memory from Natural Rotations probe memory
+      persistence over time and under unconstrained motion; the Ablation Study isolates each design choice; and
+      General NVS reports overall novel-view-synthesis quality against baselines.
     </p>
 
-    <div class="dg-footer-links">
-      <a class="dg-footer-chip" href="gallery-nvs.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M4 6H2v14a2 2 0 0 0 2 2h14v-2H4V6zm16-4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm0 14H8V4h12v12zm-6-1l-2-3-1.5 2L9 12l-3 4h12l-4-6z" />
-        </svg>
-        General NVS Results
+    <div class="results-grid">
+      <a class="results-card" href="gallery-renderings.html">
+        <img src="resources/gallery_thumbs/memory_demos.jpg" alt="Memory Demos preview">
+        <div class="results-card-body">
+          <div class="results-card-title">Memory Demos</div>
+          <div class="results-card-desc">View curated memory demonstrations &rarr;</div>
+        </div>
       </a>
-      <a class="dg-footer-chip" href="gallery-ablations.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M19.14 12.94a7.07 7.07 0 0 0 .06-.94 7.07 7.07 0 0 0-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.49.49 0 0 0-.59-.22l-2.39.96a7.04 7.04 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54a7.04 7.04 0 0 0-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L3.73 8.87a.48.48 0 0 0 .12.61l2.03 1.58a7.2 7.2 0 0 0 0 1.88l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.04.7 1.62.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54a7.04 7.04 0 0 0 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z" />
-        </svg>
-        Ablation Results
+
+      <a class="results-card" href="gallery-comparisons.html">
+        <img src="resources/gallery_thumbs/memory_stress_test.jpg" alt="Memory Stress Test preview">
+        <div class="results-card-body">
+          <div class="results-card-title">Memory Stress Test</div>
+          <div class="results-card-desc">View comparisons by history length &rarr;</div>
+        </div>
       </a>
-      <a class="dg-footer-chip" href="gallery-comparisons.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z" />
-        </svg>
-        Comparison by Timestep
+
+      <a class="results-card" href="gallery-natural-memory.html">
+        <img src="resources/gallery_thumbs/natural_rotations.jpg" alt="Memory from Natural Rotations preview">
+        <div class="results-card-body">
+          <div class="results-card-title">Memory from Natural Rotations</div>
+          <div class="results-card-desc">View natural-rotation results &rarr;</div>
+        </div>
       </a>
-      <a class="dg-footer-chip" href="gallery-natural-memory.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.17 19.58 10.53 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9zm0 15c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-8h-2v3H8v2h3v3h2v-3h3v-2h-3v-3z"/>
-        </svg>
-        Long Sequence Natural Memory
+
+      <a class="results-card" href="gallery-ablations.html">
+        <img src="resources/gallery_thumbs/ablation_study.jpg" alt="Ablation Study preview">
+        <div class="results-card-body">
+          <div class="results-card-title">Ablation Study</div>
+          <div class="results-card-desc">View ablation comparisons &rarr;</div>
+        </div>
       </a>
-      <a class="dg-footer-chip" href="gallery-renderings.html">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-          <path
-            d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4h-4z" />
-        </svg>
-        Memory Persistence Test Renderings
+
+      <a class="results-card" href="gallery-nvs.html">
+        <img src="resources/gallery_thumbs/general_nvs.jpg" alt="General NVS preview">
+        <div class="results-card-body">
+          <div class="results-card-title">General NVS</div>
+          <div class="results-card-desc">View general NVS comparisons &rarr;</div>
+        </div>
       </a>
     </div>
   </div>
 </section>
-  <!-- ===== supplementary-pdf ===== -->
-<!-- Supplementary PDF Section — Embedded viewer for the supplemental document -->
-<section id="supplementary-pdf" class="section-padding">
-  <div class="container is-max-desktop">
-    <h2 class="section-heading">Supplementary Material</h2>
 
-    <iframe src="resources/supplemental_draft.pdf#view=FitH" class="pdf-embed"></iframe>
+  <!-- ===== acknowledgements ===== -->
+<!-- Acknowledgements. TODO: replace the placeholder body with the final text before publication. -->
+<section id="acknowledgements" class="section-padding">
+  <div class="content-width">
+    <h2 class="section-heading">Acknowledgements</h2>
+    <p class="acknowledgements-text">
+      [TODO: placeholder] We thank our colleagues and collaborators for helpful discussions and feedback, and
+      the teams behind the datasets and infrastructure used in this work. Final acknowledgements to be added
+      before publication.
+    </p>
+  </div>
+</section>
+
+  <!-- ===== bibtex ===== -->
+<!-- BibTeX. TODO: fill in the real arXiv eprint id once assigned. -->
+<section id="bibtex" class="section-padding">
+  <div class="content-width">
+    <h2 class="section-heading">BibTeX</h2>
+    <pre class="citation">@article{elmieh2026nstm,
+  title   = {Online Neural Space Time Memory for Dynamic Novel View Synthesis},
+  author  = {Elmieh, Baback and Tsai, Lynn and Li, Zeman and Kaza, Srinivas and
+             Sun, Tiancheng and Csapo, Gabor and Behrouz, Ali and Deng, Yuan and
+             Lombardi, Stephen and Seitz, Steve and Luo, Xuan},
+  journal = {arXiv preprint},
+  eprint  = {arXiv:XXXX.XXXXX},
+  year    = {2026}
+}</pre>
   </div>
 </section>
 

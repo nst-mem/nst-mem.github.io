@@ -17,13 +17,11 @@ SECTIONS=(
   "sections/links.html"
   "sections/hero-demo.html"
   "sections/abstract.html"
-  "sections/visual-results.html"
-  "sections/overview-graph.html"
-  "sections/figures.html"
-  "sections/ablation.html"
-  "sections/additional-results.html"
-  "sections/gallery-links.html"
-  "sections/supplementary-pdf.html"
+  "sections/teaser.html"
+  "sections/memorization-results.html"
+  "sections/results-gallery.html"
+  "sections/acknowledgements.html"
+  "sections/bibtex.html"
 )
 
 cat > index.html << 'HEAD_EOF'

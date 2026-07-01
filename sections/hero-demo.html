@@ -4,9 +4,16 @@
       <source src="videos/hero_combined.mp4" type="video/mp4">
     </video>
   </div>
-  <p class="caption-text" style="max-width: calc(var(--content-width) * 1.2); margin: 10px auto 0;">
-    <em>Demo:</em> The model first hasn't seen the logo on the person's back, so its best
-    guess is a plain hoodie. Once the back is revealed, the model correctly reconstructs it.
-    When the back is hidden again, NSTM continues to faithfully reconstruct the logo from memory.
+
+  <div class="hero-badges">
+    <span class="hero-badge">Minute-scale memory</span>
+    <span class="hero-badge">30 FPS synthesis &middot; 1 FPS memory</span>
+    <span class="hero-badge">O(1) real-time inference</span>
+  </div>
+
+  <p class="tldr-caption">
+    <strong>TL;DR:</strong> NSTM renders novel views of dynamic scenes in real time while keeping a persistent,
+    minute-scale space-time memory &mdash; faithfully recalling temporarily occluded detail (like the logo on
+    the subject's back) long after it leaves view, at O(1) inference cost.
   </p>
 </section>
