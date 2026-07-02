@@ -19,6 +19,7 @@ SECTIONS=(
   "sections/abstract.html"
   "sections/teaser.html"
   "sections/memorization-results.html"
+  "sections/method.html"
   "sections/results-gallery.html"
   "sections/acknowledgements.html"
   "sections/bibtex.html"

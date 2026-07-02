@@ -14,7 +14,7 @@ import sys
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 EXPECTED_ORDER = ["title", "links", "hero-demo", "abstract", "teaser",
-                  "visual-results", "results-gallery", "acknowledgements", "bibtex"]
+                  "visual-results", "method", "results-gallery", "acknowledgements", "bibtex"]
 REMOVED_IDS = ["overview-graph", "figures", "ablation", "additional-results",
                "supplementary-pdf", "gallery-links"]
 ARCHIVE_FILES = ["overview-graph.html", "figures.html", "ablation.html",

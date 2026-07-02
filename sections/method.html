@@ -1,0 +1,50 @@
+<!-- Method — carousel of the two architecture diagrams. -->
+<section id="method" class="section-padding">
+  <div class="content-width">
+    <h2 class="section-heading">Method</h2>
+
+    <p class="caption-text" style="max-width: 820px; margin: 0 auto 2rem;">
+      [TODO: add a couple of lines here describing the diagrams before showing them.]
+    </p>
+
+    <div class="gallery-carousel" tabindex="0" aria-label="Method diagrams">
+      <!-- Navigation arrows -->
+      <button class="gallery-carousel-nav gallery-carousel-nav--prev" aria-label="Previous slide"></button>
+      <button class="gallery-carousel-nav gallery-carousel-nav--next" aria-label="Next slide"></button>
+
+      <!-- Track -->
+      <div class="gallery-carousel-track">
+        <!-- Slide 1: Architecture -->
+        <div class="gallery-carousel-slide">
+          <img src="resources/architecture_v2.png"
+            alt="NSTM architecture with memorization and synthesis steps and layer details">
+          <p class="caption-text">
+            <em>NSTM Architecture:</em> NSTM alternates between Memorization Steps, where
+            fast-weight memory is updated via Apply/Update operations, and Synthesis Steps,
+            where the memory is read-only queried for novel view rendering. The NSTM Layer
+            (right) combines cross-view attention, learned scale modulation, and fast-weight
+            Apply/Update blocks with LayerNorm and feed-forward layers.
+          </p>
+        </div>
+        <!-- Slide 2: Training regime -->
+        <div class="gallery-carousel-slide">
+          <img src="resources/training_regime_v6.png"
+            alt="NSTM training regime with alternating memory and synthesis supervision">
+          <p class="caption-text">
+            <em>Training Regime:</em> NSTM alternates between two training objectives. In the
+            Memory Supervision step, isolated memory tokens query the fast-weights to reconstruct
+            a target view entirely from internalized context. In the Synthesis Supervision step,
+            input and target tokens freely cross-attend to capture current motion, querying
+            the previously updated memory without altering it.
+          </p>
+        </div>
+      </div>
+
+      <!-- Dot indicators -->
+      <div class="gallery-carousel-dots">
+        <button class="gallery-carousel-dot is-active" aria-label="Go to slide 1"></button>
+        <button class="gallery-carousel-dot" aria-label="Go to slide 2"></button>
+      </div>
+    </div>
+  </div>
+</section>
