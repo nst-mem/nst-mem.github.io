@@ -1,17 +1,22 @@
-# SWEEP direction scenes (near_backreveal, NVS reveal timings)
-lg_202307_20230720_00036_02/near_backreveal/orbit_1   -- Ribbon
-ft_202307_20230716_00026_02/near_backreveal/orbit_1   -- Hair Length
-ft_202307_20230707_00017_01/near_backreveal/orbit_1   -- Unique Pose
-lg_202307_20230719_00007_01/near_backreveal/orbit_1   -- Large Number
-ft_202307_20230709_00007_02/near_backreveal/orbit_1   -- Text
-ft_202307_20230718_00021_01/near_backreveal/orbit_2   -- Graphic Logo
-lg_202306_20230629_00015_02/NVS/orbit_1               -- General NVS
-lg_202307_20230705_00015_02/near_backreveal/orbit_1   -- Hero
-ft_202308_20230824_00002_02/NVS/orbit_1               -- General NVS (2)
+# Front-page + Memory Demos gallery scenes.
+# Format: scene_id/orbit_group/orbit_index  -- Label
 
-# REVERSE direction scenes (reverse reveal timing)
-ft_202307_20230714_00032_02/reverse/orbit_1            -- Memorize >1min
-ft_202307_20230713_00014_02/reverse/orbit_1            -- Graphic Picture
-ft_202307_20230707_00017_01/reverse/orbit_1            -- Unique Pose (Rev.)
-lg_202307_20230720_00036_02/reverse/orbit_1            -- Ribbon (Rev.)
-ft_202307_20230716_00019_02/reverse/orbit_1            -- Style (Rev.)
+# REVERSE renders
+ft_202307_20230718_00021_01/reverse/orbit_1   -- Diamond Logo
+ft_202307_20230714_00032_02/reverse/orbit_1   -- Ladder
+ft_202307_20230716_00019_02/reverse/orbit_1   -- Infinity
+lg_202307_20230720_00036_02/reverse/orbit_1   -- Ribbon
+lg_202307_20230705_00015_02/reverse/orbit_1   -- Leaf Logo
+lg_202307_20230719_00007_01/reverse/orbit_1   -- Basketball
+lg_202307_20230720_00038_01/reverse/orbit_1   -- Cartoon
+lg_202307_20230716_00018_02/reverse/orbit_1   -- Plaid
+ft_202307_20230707_00017_01/reverse/orbit_1   -- Unique Pose
+ft_202307_20230709_00007_02/reverse/orbit_1   -- Text
+ft_202307_20230713_00014_02/reverse/orbit_1   -- Graphic Picture
+ft_202307_20230721_00025_02/reverse/orbit_1   -- Dress
+
+# NVS (360) renders
+ft_202308_20230824_00002_02/NVS/orbit_1       -- General NVS (2)
+lg_202306_20230629_00015_02/NVS/orbit_1       -- 360 Spin
+ft_202310_20231014_00011_01/NVS/orbit_1       -- Logo 360
+lg_202307_20230720_00038_01/NVS/orbit_1       -- Cartoon 360
