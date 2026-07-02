@@ -76,9 +76,9 @@
       models: buildModels('lg_202307_20230719_00007_01', 'reverse', 'orbit_1')
     },
     {
-      id: 'ft_202307_20230718_00021_01', label: 'Diamond Logo',
-      input: vp('nstm_hires', 'ft_202307_20230718_00021_01', 'reverse', 'orbit_1', 'input.mp4'),
-      models: buildModels('ft_202307_20230718_00021_01', 'reverse', 'orbit_1')
+      id: 'ft_202307_20230707_00017_01', label: 'Large Pattern',
+      input: vp('nstm_hires', 'ft_202307_20230707_00017_01', 'reverse', 'orbit_1', 'input.mp4'),
+      models: buildModels('ft_202307_20230707_00017_01', 'reverse', 'orbit_1')
     },
     {
       id: 'lg_202306_20230629_00015_02', label: '360 Spin',
