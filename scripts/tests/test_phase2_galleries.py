@@ -74,7 +74,7 @@ for g in GALLERY_FILES:
     check(f"old_labels_absent_{g}", not hits, f"found {hits}")
 
 # 5. Landing cards appear in the required order
-positions = [landing.find(f'dg-landing-card-title">{lbl}') for lbl in NEW_ORDER]
+positions = [landing.find(f'results-card-title">{lbl}') for lbl in NEW_ORDER]
 check("landing_order",
       all(p != -1 for p in positions) and positions == sorted(positions),
       f"positions={positions}")
