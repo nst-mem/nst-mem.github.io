@@ -51,8 +51,8 @@
 
   /* Layout */
   --content-width:      1080px;
-  --section-padding-y:  100px;
-  --section-padding-y-sm: 60px;
+  --section-padding-y:  3rem;
+  --section-padding-y-sm: 2rem;
 }
 
 /* --- Base Resets & Globals --- */
@@ -314,17 +314,29 @@ h1, h2, h3, h4, h5, h6,
 
 .results-card-body {
   padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .results-card-title {
   font-weight: 600;
   color: var(--color-text-primary);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .results-card-desc {
   font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.results-card-link {
+  font-size: var(--font-size-small);
   color: var(--color-accent);
+  font-weight: 600;
+  margin-top: auto;
 }
 
 /* --- BibTeX --- */

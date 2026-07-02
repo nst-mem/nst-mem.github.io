@@ -65,8 +65,6 @@ cat >> index.html << 'FOOT_EOF'
   <!-- ===== Footer ===== -->
   <footer class="site-footer">
     <div class="content-width">
-      <p>Baback Elmieh, Lynn Tsai, Zeman Li, Srinivas Kaza, Tiancheng Sun, Gabor Csapo, Ali Behrouz, Yuan Deng, Stephen Lombardi, Steve Seitz, Xuan Luo</p>
-      <p>University of Washington &middot; Google</p>
       <p>Website template adapted from the <a href="https://nerfies.github.io/">Nerfies</a> project page.</p>
     </div>
   </footer>

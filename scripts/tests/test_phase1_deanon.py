@@ -83,9 +83,9 @@ check("data_gallery_button", 'href="gallery.html"' in index)
 # 7. Nerfies credit present in footer
 check("nerfies_credit", "nerfies.github.io" in index.lower())
 
-# 8. Each gallery footer carries an author credit token
+# 8. Each gallery footer carries the (de-anonymized) Nerfies credit
 for g in GALLERIES:
-    check(f"footer_credit_{g}", "Elmieh" in read(g))
+    check(f"footer_nerfies_{g}", "nerfies.github.io" in read(g).lower())
 
 print(f"\nSUMMARY: {_passed} passed, {_failed} failed")
 sys.exit(1 if _failed else 0)
