@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Memory Stress Test — Neural Space-Time Memory</title>
-  <meta name="description" content="Baseline comparison results at different timesteps (t=4, t=30, t=60).">
+  <meta name="description" content="Baseline comparison results at t=60 (72 scenes).">
   <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="data-gallery.css">
@@ -18,8 +18,7 @@
 
     <div class="dg-header">
       <h1 class="dg-title">Memory Stress Test</h1>
-      <p class="dg-subtitle">Baseline comparisons across 4 models on randomly selected evaluation scenes at t=4 (72
-        scenes), t=30 (3 scenes), and t=60 (72 scenes).</p>
+      <p class="dg-subtitle">Baseline comparisons across 4 models on randomly selected evaluation scenes at t=60 (72 scenes).</p>
     </div>
 
     <div id="gallery-root"></div>
@@ -34,33 +33,6 @@
   <script src="js/data-gallery.js"></script>
   <script>
     (function () {
-      /* Each tab shows a different subset of scenes (round-robin buckets) */
-      var T4_SCENE_IDS = [
-        '100926', '101010', '101033', '101064', '101158', '101208', '101336', '101397',
-        '101456', '101502', '101581', '101688', '101716', '101754', '101813', '101908',
-        '101971', '102189', '102328', '102408', '102549', '102697', '102788', '103046',
-        '103112', '103209', '103270', '103421', '103484', '103527', '103572', '103660',
-        '103747', '103922', '104055', '104253', '104399', '200179', '200250', '200396',
-        '200467', '200536', '200582', '200675', '200702', '200776', '200850', '200968',
-        '201073', '201128', '201264', '201341', '201415', '201492', '201576', '201594',
-        '201698', '201755', '201820', '202018', '202120', '202178', '202270', '202459',
-        '202588', '202633', '202711', '202772', '202941', '202992', '203063', '203235',
-        '203400', '203635', '203832', '204030', '204124', '204266'
-      ];
-
-      var T30_SCENE_IDS = [
-        '100931', '101020', '101042', '101068', '101172', '101265', '101341', '101403',
-        '101477', '101503', '101585', '101696', '101721', '101757', '101825', '101921',
-        '102007', '102191', '102341', '102422', '102566', '102706', '102825', '103061',
-        '103132', '103233', '103363', '103423', '103493', '103540', '103595', '103668',
-        '103815', '103991', '104132', '104290', '104419', '200191', '200303', '200402',
-        '200499', '200544', '200598', '200684', '200724', '200790', '200858', '200990',
-        '201077', '201131', '201311', '201350', '201423', '201525', '201579', '201616',
-        '201721', '201756', '201823', '202032', '202122', '202233', '202304', '202464',
-        '202601', '202640', '202721', '202788', '202945', '203001', '203065', '203272',
-        '203413', '203640', '203915', '204048', '204129', '204313'
-      ];
-
       var T60_SCENE_IDS = [
         '100968', '101024', '101044', '101073', '101177', '101280', '101368', '101412',
         '101490', '101554', '101621', '101708', '101723', '101759', '101867', '101925',
@@ -73,14 +45,6 @@
         '202609', '202692', '202725', '202911', '202949', '203017', '203083', '203360',
         '203426', '203742', '203920', '204055', '204135', '204366'
       ];
-
-      var T4_SCENES = T4_SCENE_IDS.map(function (id) {
-        return { id: id, file: id + '_3.mp4' };
-      });
-
-      var T30_SCENES = T30_SCENE_IDS.map(function (id) {
-        return { id: id, file: id + '_29.mp4' };
-      });
 
       var T60_SCENES = T60_SCENE_IDS.map(function (id) {
         return { id: id, file: id + '_59.mp4' };
@@ -102,11 +66,8 @@
       DataGallery.init({
         containerId: 'gallery-root',
         models: MODELS,
-        tabs: [
-          { id: 't4', label: 't = 4 frames', scenes: T4_SCENES, models: MODELS, pathResolver: makeResolver('data_gallery/stress_test_t4') },
-          { id: 't30', label: 't = 30 frames', scenes: T30_SCENES, models: MODELS, pathResolver: makeResolver('data_gallery/stress_test_t30') },
-          { id: 't60', label: 't = 60 frames', scenes: T60_SCENES, models: MODELS, pathResolver: makeResolver('data_gallery/stress_test_t60') }
-        ]
+        scenes: T60_SCENES,
+        pathResolver: makeResolver('data_gallery/stress_test_t60')
       });
     })();
   </script>
