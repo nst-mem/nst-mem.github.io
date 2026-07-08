@@ -93,16 +93,13 @@
     </video>
   </div>
 
-  <div class="hero-badges">
-    <span class="hero-badge">Minute-scale memory</span>
-    <span class="hero-badge">O(1) real-time inference</span>
+  <div class="notification is-info is-rounded tldr-card"
+    style="text-align: center; padding: 10px 24px; background-color: #d0d5ec;">
+    <h6 style="text-align: center; color: rgb(0, 0, 0); font-size: 1.07rem; margin: 0;">
+      <strong>TL;DR</strong>: Real-time, Minute-Scale Space-Time Memory that remembers the past and 
+      reconstructs occluded regions. Beats SOTA like LaCT-NVS and LVSM.
+    </h6>
   </div>
-
-  <p class="tldr-caption">
-    <strong>TL;DR:</strong> NSTM renders novel views of dynamic scenes in real time while keeping a persistent,
-    minute-scale space-time memory &mdash; faithfully recalling temporarily occluded detail (like the logo on
-    the subject's back) long after it leaves view, at O(1) inference cost.
-  </p>
 </section>
 
   <!-- ===== abstract ===== -->
@@ -338,10 +335,10 @@
   <div class="content-width">
     <h2 class="section-heading">Results Gallery</h2>
     <p class="caption-text" style="max-width: 820px; margin: 0 auto 2.5rem;">
-      We provide extensive supplementary video results, grouped by the experiments in our paper. Memory Demos
-      showcase long-horizon recall; the Memory Stress Test and Memory from Natural Rotations probe memory
-      persistence over time and under unconstrained motion; the Ablation Study isolates each design choice; and
-      General NVS reports overall novel-view-synthesis quality against baselines.
+      We provide extensive video results, grouped by the experiments in our paper. Memory Demos showcase
+      long-horizon recall; the Memory Stress Test and Memory from Natural Rotations probe memory persistence
+      over time and under natural motion; the Ablation Study isolates each design choice; and General NVS
+      reports spatial generalization quality.
     </p>
 
     <div class="results-grid">
@@ -349,8 +346,7 @@
         <img src="resources/gallery_thumbs/memory_demos.jpg" alt="Memory Demos preview">
         <div class="results-card-body">
           <div class="results-card-title">Memory Demos</div>
-          <div class="results-card-desc">Curated examples demonstrating our memory: masked input views,
-            rendered outputs, and memory visualizations.</div>
+          <div class="results-card-desc">Showcase clips of minute-long memory recall and 360&deg; spins.</div>
           <div class="results-card-link">View Gallery &rarr;</div>
         </div>
       </a>
@@ -359,7 +355,7 @@
         <img src="resources/gallery_thumbs/memory_stress_test.jpg" alt="Memory Stress Test preview">
         <div class="results-card-body">
           <div class="results-card-title">Memory Stress Test</div>
-          <div class="results-card-desc">Baseline comparisons across 4 models at t=60 (72 scenes).</div>
+          <div class="results-card-desc">The back is shown once, and must be remembered over the next 60 timesteps.</div>
           <div class="results-card-link">View Gallery &rarr;</div>
         </div>
       </a>
@@ -368,8 +364,7 @@
         <img src="resources/gallery_thumbs/natural_rotations.jpg" alt="Memory from Natural Rotations preview">
         <div class="results-card-body">
           <div class="results-card-title">Memory from Natural Rotations</div>
-          <div class="results-card-desc">Long-horizon memory on unconstrained natural sequences
-            (17 scenes, camera 59).</div>
+          <div class="results-card-desc">Memory recall on natural motion, where the back reveals and occludes on its own.</div>
           <div class="results-card-link">View Gallery &rarr;</div>
         </div>
       </a>
@@ -378,7 +373,7 @@
         <img src="resources/gallery_thumbs/ablation_study.jpg" alt="Ablation Study preview">
         <div class="results-card-body">
           <div class="results-card-title">Ablation Study</div>
-          <div class="results-card-desc">Ablation across 6 model variants on 78 evaluation scenes.</div>
+          <div class="results-card-desc">Ablation study of our design choices.</div>
           <div class="results-card-link">View Gallery &rarr;</div>
         </div>
       </a>
@@ -387,8 +382,7 @@
         <img src="resources/gallery_thumbs/general_nvs.jpg" alt="General NVS preview">
         <div class="results-card-body">
           <div class="results-card-title">General NVS</div>
-          <div class="results-card-desc">Novel view synthesis comparison across 4 models on 78 evaluation
-            scenes (t=60, camera 59).</div>
+          <div class="results-card-desc">Time-varying, arbitrary novel viewpoints that limit memory contribution and isolate spatial generalization.</div>
           <div class="results-card-link">View Gallery &rarr;</div>
         </div>
       </a>

@@ -17,7 +17,7 @@ ORDER = ["Memory Demos", "Memory Stress Test",
          "Memory from Natural Rotations", "Ablation Study", "General NVS"]
 CARD_LINKS = ["gallery-renderings.html", "gallery-comparisons.html",
               "gallery-natural-memory.html", "gallery-ablations.html", "gallery-nvs.html"]
-STYLE_SELECTORS = [".hero-badge", ".tldr-caption", ".results-card", "pre.citation",
+STYLE_SELECTORS = [".tldr-card", ".results-card", "pre.citation",
                    ".acknowledgements-text"]
 
 _passed, _failed = 0, 0
@@ -56,8 +56,8 @@ index = read("index.html")
 # 1. Hero TL;DR + >=3 badges
 hero = section(index, "hero-demo")
 check("tldr_present",
-      "TL;DR" in hero and hero.count('class="hero-badge"') >= 2,
-      f'badges={hero.count("hero-badge")}')
+      "TL;DR" in hero and "tldr-card" in hero,
+      "missing TL;DR card")
 
 # 2. Teaser asset exists and is referenced
 teaser = section(index, "teaser")
