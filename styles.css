@@ -1048,8 +1048,12 @@ pre.citation {
     flex: 0 0 calc(50% - 4px);
   }
 
-    #analysis-single {
-    flex-direction: column;
+  /* Keep single-model view as one horizontal row on mobile (Input | Rendered |
+     [Memory]) — JS (layoutSingleRow) sizes the columns to fit the container width,
+     matching the compare view. Do NOT force flex-direction: column here or the
+     columns stack into 2-3 rows. */
+  #analysis-single {
+    flex-direction: row;
   }
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 #abstract .content {
