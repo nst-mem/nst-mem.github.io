@@ -13,7 +13,7 @@
 
 <body>
 
-  <div class="dg-page">
+  <div class="dg-page dg-page--ablations">
     <a href="gallery.html" class="dg-back-link">&larr; Back to Results Gallery</a>
 
     <div class="dg-header">
@@ -54,12 +54,12 @@
         containerId: 'gallery-root',
         gridCols: 'dg-grid--cols-6',
         models: [
-          { id: 'ours_with_memcaching', label: 'Ours (w/ MemCache)', pathPrefix: 'data_gallery/ablations/ours_with_memcaching' },
-          { id: 'ours_no_memcaching', label: 'Ours (no MemCache)', pathPrefix: 'data_gallery/ablations/ours_no_memcaching' },
-          { id: 'no_memaux_loss', label: 'No MemAux Loss', pathPrefix: 'data_gallery/ablations/no_memaux_loss' },
-          { id: 'causal_l2_memcache', label: 'Causal L2 + MemCache', pathPrefix: 'data_gallery/ablations/causal_l2_memcache' },
-          { id: 'causal_l2', label: 'Causal L2', pathPrefix: 'data_gallery/ablations/causal_l2' },
-          { id: 'causal_dot_product', label: 'Causal Dot-Product', pathPrefix: 'data_gallery/ablations/causal_dot_product' }
+          { id: 'ours_with_memcaching', label: 'Ours w/ Mem Caching', pathPrefix: 'data_gallery/ablations/ours_with_memcaching' },
+          { id: 'ours_no_memcaching', label: 'Ours wo/ Mem Caching', pathPrefix: 'data_gallery/ablations/ours_no_memcaching' },
+          { id: 'no_memaux_loss', label: 'Ours wo/ ℒₘₑₘ', pathPrefix: 'data_gallery/ablations/no_memaux_loss' },
+          { id: 'causal_l2_memcache', label: 'LaCT-NVS w/ L₂ w/ Mem Caching', pathPrefix: 'data_gallery/ablations/causal_l2_memcache' },
+          { id: 'causal_l2', label: 'LaCT-NVS w/ L₂', pathPrefix: 'data_gallery/ablations/causal_l2' },
+          { id: 'causal_dot_product', label: 'LaCT-NVS Baseline', pathPrefix: 'data_gallery/ablations/causal_dot_product' }
         ],
         scenes: scenes
       });

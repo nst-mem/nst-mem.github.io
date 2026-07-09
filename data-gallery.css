@@ -172,13 +172,24 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 4px 8px;
+  padding: 3px 3px;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
   font-size: 11px;
+  line-height: 1.2;
   font-weight: 600;
   text-align: center;
   pointer-events: none;
+}
+
+/* Ablations page only, desktop only: its dense 6-column grid has narrow cards and
+   long labels (e.g. "LaCT-NVS w/ L₂ w/ Mem Caching"), so shrink them to fit. Other
+   galleries keep the normal 11px. Below 1024px the grid drops to 3/2/1 columns
+   where cards are wide enough for the normal size. */
+@media (min-width: 1025px) {
+  .dg-page--ablations .dg-card-label {
+    font-size: 9px;
+  }
 }
 
 /* --- Lightbox --- */
