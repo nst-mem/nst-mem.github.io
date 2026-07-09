@@ -5,10 +5,13 @@
       <img src="resources/teaser_nstm_pink.png"
         alt="NSTM overview: input stereo video, periodic memorization, and per-frame synthesis over time.">
       <p class="caption-text" style="max-width: 900px; margin: 1rem auto 0;">
-        <strong>Figure 1.</strong> Neural Space-Time Memory (NSTM) synthesizes novel views in real time from
-        30&nbsp;FPS multi-view video while updating its memory at 1&nbsp;FPS. As the subject rotates, the updated
-        memory captures the back logo (memory readout, middle); NSTM then faithfully recalls it from memory when
-        only frontal views are available.
+        <strong>Neural Space-Time Memory (NSTM)</strong> synthesizes novel views in
+        amortized real-time from 30&nbsp;FPS multi-view videos, while updating its memory at 1&nbsp;FPS.
+        <strong>Middle:</strong> NSTM captures the back logo as the subject rotates (see memory readout),
+        faithfully recalling it later from memory given only frontal views. <strong>Right:</strong> While full
+        self-attention in typical feed-forward models (e.g., LVSM) scales quadratically with history sequence
+        length, NSTM scales with 𝒪(1) complexity, achieving amortized real-time inference at 256&times;256
+        resolution on one H100 GPU.
       </p>
     </div>
   </div>

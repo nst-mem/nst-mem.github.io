@@ -21,7 +21,7 @@
 
   var MODELS = ['nstm', 'nstm_hires', 'token_mem', 'full_attn', 'lact_nvs'];
   var MODEL_LABELS = {
-    nstm: 'NSTM (Ours)',
+    nstm: 'NSTM 256×256',
     nstm_hires: 'NSTM 512×512',
     token_mem: 'Token-Mem',
     full_attn: 'LVSM',
@@ -59,8 +59,8 @@
     { id: 'lg_202307_20230705_00015_02', label: 'Leaf Logo', og: 'reverse', oi: 'orbit_1' },
     { id: 'lg_202307_20230719_00007_01', label: 'Basketball', og: 'reverse', oi: 'orbit_1' },
     { id: 'ft_202307_20230707_00017_01', label: 'Large Pattern', og: 'reverse', oi: 'orbit_1' },
-    { id: 'lg_202306_20230629_00015_02', label: '360 Spin', og: 'NVS', oi: 'orbit_1' },
-    { id: 'lg_202307_20230720_00038_01', label: 'Cartoon 360', og: 'NVS', oi: 'orbit_1' }
+    { id: 'lg_202307_20230720_00038_01', label: 'Cartoon', og: 'NVS', oi: 'orbit_1' },
+    { id: 'lg_202306_20230629_00015_02', label: '360 Spin', og: 'NVS', oi: 'orbit_1' }
   ];
 
   var SCENE_DEFS = (window.VP_SCENES && window.VP_SCENES.length) ? window.VP_SCENES : DEFAULT_SCENE_DEFS;

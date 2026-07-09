@@ -145,10 +145,13 @@
       <img src="resources/teaser_nstm_pink.png"
         alt="NSTM overview: input stereo video, periodic memorization, and per-frame synthesis over time.">
       <p class="caption-text" style="max-width: 900px; margin: 1rem auto 0;">
-        <strong>Figure 1.</strong> Neural Space-Time Memory (NSTM) synthesizes novel views in real time from
-        30&nbsp;FPS multi-view video while updating its memory at 1&nbsp;FPS. As the subject rotates, the updated
-        memory captures the back logo (memory readout, middle); NSTM then faithfully recalls it from memory when
-        only frontal views are available.
+        <strong>Neural Space-Time Memory (NSTM)</strong> synthesizes novel views in
+        amortized real-time from 30&nbsp;FPS multi-view videos, while updating its memory at 1&nbsp;FPS.
+        <strong>Middle:</strong> NSTM captures the back logo as the subject rotates (see memory readout),
+        faithfully recalling it later from memory given only frontal views. <strong>Right:</strong> While full
+        self-attention in typical feed-forward models (e.g., LVSM) scales quadratically with history sequence
+        length, NSTM scales with 𝒪(1) complexity, achieving amortized real-time inference at 256&times;256
+        resolution on one H100 GPU.
       </p>
     </div>
   </div>
@@ -157,8 +160,8 @@
   <!-- ===== memorization-results ===== -->
 <section id="visual-results" class="section-padding">
   <div class="content-width">
-    <h2 class="section-heading">Memorization Results</h2>
-    <p class="caption-text" style="margin-bottom: 2rem;">
+    <h2 class="section-heading">Results</h2>
+    <p class="caption-text" style="margin-bottom: 2rem; text-align: center;">
       Select a scene, then click models in the comparison strip to inspect them in detail below.
     </p>
 
@@ -176,7 +179,7 @@
           <video autoplay loop muted playsinline></video>
           <div class="model-strip-check" aria-hidden="true">✓</div>
         </div>
-        <span class="model-strip-label">NSTM (Ours)</span>
+        <span class="model-strip-label">NSTM 256×256</span>
       </div>
       <div class="model-strip-item" data-model="nstm_hires">
         <div class="model-strip-video-wrap">
@@ -344,7 +347,7 @@
   <div class="content-width">
     <h2 class="section-heading">Results Gallery</h2>
     <p class="caption-text" style="max-width: 820px; margin: 0 auto 2.5rem;">
-      We provide extensive video results, grouped by the experiments in our paper. Memory Demos showcase
+      We provide extensive video results, grouped by the experiments in our paper. Demos showcase
       long-horizon recall; the Memory Stress Test and Memory from Natural Rotations probe memory persistence
       over time and under natural motion; the Ablation Study isolates each design choice; and General NVS
       reports spatial generalization quality.
@@ -352,9 +355,9 @@
 
     <div class="results-grid">
       <a class="results-card" href="gallery-renderings.html">
-        <img src="resources/gallery_thumbs/memory_demos.jpg" alt="Memory Demos preview">
+        <img src="resources/gallery_thumbs/memory_demos.jpg" alt="Demos preview">
         <div class="results-card-body">
-          <div class="results-card-title">Memory Demos</div>
+          <div class="results-card-title">Demos</div>
           <div class="results-card-desc">Showcase clips of minute-long memory recall and 360&deg; spins.</div>
           <div class="results-card-link">View Gallery &rarr;</div>
         </div>
@@ -391,7 +394,7 @@
         <img src="resources/gallery_thumbs/general_nvs.jpg" alt="General NVS preview">
         <div class="results-card-body">
           <div class="results-card-title">General NVS</div>
-          <div class="results-card-desc">Time-varying, arbitrary novel viewpoints that limit memory contribution and isolate spatial generalization.</div>
+          <div class="results-card-desc">Arbitrary viewpoints with temporally sparse disocclusions that limit memory contribution and isolate spatial generalization.</div>
           <div class="results-card-link">View Gallery &rarr;</div>
         </div>
       </a>
@@ -404,7 +407,8 @@
   <div class="content-width">
     <h2 class="section-heading">Acknowledgements</h2>
     <p class="acknowledgements-text">
-      We would like to thank Michael Broxton for his encouragement and support of the project at Google. We
+      We would like to thank Michael Broxton and Ryan Overbeck for their encouragement and support of the
+      project at Google. We
       also thank John Flynn and Osman Ulusoy for their valuable discussions and feedback on the manuscript,
       and Tianyuan Zhang and Bowei Chen for early clarifying discussions on LaCT. Finally, we extend our
       appreciation to Xiaoguang Han, Hongjie Liao, and Yihao Zhi for providing full-length MVHumanNet++
