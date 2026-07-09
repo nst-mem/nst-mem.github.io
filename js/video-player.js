@@ -49,48 +49,30 @@
     return m;
   }
 
-  var SCENES = [
-    {
-      id: 'ft_202307_20230714_00032_02', label: 'Ladder',
-      input: vp('nstm_hires', 'ft_202307_20230714_00032_02', 'reverse', 'orbit_1', 'input.mp4'),
-      models: buildModels('ft_202307_20230714_00032_02', 'reverse', 'orbit_1')
-    },
-    {
-      id: 'ft_202307_20230716_00019_02', label: 'Infinity',
-      input: vp('nstm_hires', 'ft_202307_20230716_00019_02', 'reverse', 'orbit_1', 'input.mp4'),
-      models: buildModels('ft_202307_20230716_00019_02', 'reverse', 'orbit_1')
-    },
-    {
-      id: 'lg_202307_20230720_00036_02', label: 'Ribbon',
-      input: vp('nstm_hires', 'lg_202307_20230720_00036_02', 'reverse', 'orbit_1', 'input.mp4'),
-      models: buildModels('lg_202307_20230720_00036_02', 'reverse', 'orbit_1')
-    },
-    {
-      id: 'lg_202307_20230705_00015_02', label: 'Leaf Logo',
-      input: vp('nstm_hires', 'lg_202307_20230705_00015_02', 'reverse', 'orbit_1', 'input.mp4'),
-      models: buildModels('lg_202307_20230705_00015_02', 'reverse', 'orbit_1')
-    },
-    {
-      id: 'lg_202307_20230719_00007_01', label: 'Basketball',
-      input: vp('nstm_hires', 'lg_202307_20230719_00007_01', 'reverse', 'orbit_1', 'input.mp4'),
-      models: buildModels('lg_202307_20230719_00007_01', 'reverse', 'orbit_1')
-    },
-    {
-      id: 'ft_202307_20230707_00017_01', label: 'Large Pattern',
-      input: vp('nstm_hires', 'ft_202307_20230707_00017_01', 'reverse', 'orbit_1', 'input.mp4'),
-      models: buildModels('ft_202307_20230707_00017_01', 'reverse', 'orbit_1')
-    },
-    {
-      id: 'lg_202306_20230629_00015_02', label: '360 Spin',
-      input: vp('nstm_hires', 'lg_202306_20230629_00015_02', 'NVS', 'orbit_1', 'input.mp4'),
-      models: buildModels('lg_202306_20230629_00015_02', 'NVS', 'orbit_1')
-    },
-    {
-      id: 'lg_202307_20230720_00038_01', label: 'Cartoon 360',
-      input: vp('nstm_hires', 'lg_202307_20230720_00038_01', 'NVS', 'orbit_1', 'input.mp4'),
-      models: buildModels('lg_202307_20230720_00038_01', 'NVS', 'orbit_1')
-    }
+  /* Scene descriptors: { id, label, og (orbitGroup), oi (orbitIndex) }.
+     A page may override the list by setting window.VP_SCENES before this
+     script loads (see gallery-renderings.html). Default = the 8 index scenes. */
+  var DEFAULT_SCENE_DEFS = [
+    { id: 'ft_202307_20230714_00032_02', label: 'Ladder', og: 'reverse', oi: 'orbit_1' },
+    { id: 'ft_202307_20230716_00019_02', label: 'Infinity', og: 'reverse', oi: 'orbit_1' },
+    { id: 'lg_202307_20230720_00036_02', label: 'Ribbon', og: 'reverse', oi: 'orbit_1' },
+    { id: 'lg_202307_20230705_00015_02', label: 'Leaf Logo', og: 'reverse', oi: 'orbit_1' },
+    { id: 'lg_202307_20230719_00007_01', label: 'Basketball', og: 'reverse', oi: 'orbit_1' },
+    { id: 'ft_202307_20230707_00017_01', label: 'Large Pattern', og: 'reverse', oi: 'orbit_1' },
+    { id: 'lg_202306_20230629_00015_02', label: '360 Spin', og: 'NVS', oi: 'orbit_1' },
+    { id: 'lg_202307_20230720_00038_01', label: 'Cartoon 360', og: 'NVS', oi: 'orbit_1' }
   ];
+
+  var SCENE_DEFS = (window.VP_SCENES && window.VP_SCENES.length) ? window.VP_SCENES : DEFAULT_SCENE_DEFS;
+
+  var SCENES = SCENE_DEFS.map(function (s) {
+    return {
+      id: s.id,
+      label: s.label,
+      input: vp('nstm_hires', s.id, s.og, s.oi, 'input.mp4'),
+      models: buildModels(s.id, s.og, s.oi)
+    };
+  });
 
   /* ════════════════════════════════════════════════════════════
      STATE
