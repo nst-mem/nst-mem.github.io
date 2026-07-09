@@ -40,7 +40,7 @@ cat > index.html << 'HEAD_EOF'
   <link rel="stylesheet" href="data-gallery.css">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="resources/favicon.svg">
+  <link rel="icon" type="image/png" href="resources/memory_block_64x64.png">
 
   <!-- Force page to open at top (prevent browser scroll-restoration) -->
   <script>

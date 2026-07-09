@@ -140,7 +140,9 @@ h1, h2, h3, h4, h5, h6,
   font-size: var(--font-size-caption);
   color: var(--color-text-secondary);
   line-height: 1.5;
-  text-align: center;
+  /* ZipMap-style column blurbs: body lines flush to both edges (justified),
+     last line left-aligned (default). */
+  text-align: justify;
 }
 
 /* --- Layout Utilities --- */
@@ -362,7 +364,7 @@ pre.citation {
 .acknowledgements-text {
   max-width: 780px;
   margin: 0 auto;
-  text-align: center;
+  text-align: justify;
   color: var(--color-text-secondary);
 }
 
