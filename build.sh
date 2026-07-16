@@ -32,8 +32,27 @@ cat > index.html << 'HEAD_EOF'
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Online Neural Space Time Memory for Dynamic Novel View Synthesis</title>
+  <title>NSTM: Online Neural Space Time Memory for Dynamic Novel View Synthesis</title>
   <meta name="description" content="Neural Space-Time Memory (NSTM) — Real-time novel view synthesis with minute-scale persistent memory. Supplementary materials and interactive results.">
+
+  <!-- Canonical + social preview (Open Graph / Twitter) -->
+  <link rel="canonical" href="https://nst-mem.github.io/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Neural Space-Time Memory (NSTM)">
+  <meta property="og:url" content="https://nst-mem.github.io/">
+  <meta property="og:title" content="NSTM: Online Neural Space Time Memory for Dynamic Novel View Synthesis">
+  <meta property="og:description" content="Neural Space-Time Memory (NSTM): real-time, minute-scale novel view synthesis from multi-view video. Interactive results, comparisons, and ablations.">
+  <meta property="og:image" content="https://nst-mem.github.io/resources/teaser_nstm_pink_og.jpg">
+  <meta property="og:image:alt" content="NSTM teaser: real-time novel view synthesis with minute-scale memory.">
+  <meta property="og:video" content="https://nst-mem.github.io/videos/annotated_hero_og.mp4">
+  <meta property="og:video:secure_url" content="https://nst-mem.github.io/videos/annotated_hero_og.mp4">
+  <meta property="og:video:type" content="video/mp4">
+  <meta property="og:video:width" content="1280">
+  <meta property="og:video:height" content="720">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="NSTM: Online Neural Space Time Memory for Dynamic Novel View Synthesis">
+  <meta name="twitter:description" content="Neural Space-Time Memory (NSTM): real-time, minute-scale novel view synthesis from multi-view video. Interactive results, comparisons, and ablations.">
+  <meta name="twitter:image" content="https://nst-mem.github.io/resources/teaser_nstm_pink_og.jpg">
 
   <!-- Bundled CSS (offline-safe) -->
   <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
@@ -47,6 +66,36 @@ cat > index.html << 'HEAD_EOF'
   <script>
     if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
     window.addEventListener('DOMContentLoaded', function () { window.scrollTo(0, 0); });
+  </script>
+
+  <!-- Structured data (schema.org ScholarlyArticle) for search engines / Scholar.
+       TODO: add "sameAs"/"identifier" with the arXiv URL once assigned. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ScholarlyArticle",
+    "name": "Online Neural Space Time Memory for Dynamic Novel View Synthesis",
+    "alternateName": "NSTM",
+    "url": "https://nst-mem.github.io/",
+    "image": "https://nst-mem.github.io/resources/teaser_nstm_pink_og.jpg",
+    "description": "Neural Space-Time Memory (NSTM): real-time, minute-scale novel view synthesis from multi-view video. Interactive results, comparisons, and ablations.",
+    "datePublished": "2026",
+    "inLanguage": "en",
+    "publisher": { "@type": "Organization", "name": "arXiv" },
+    "author": [
+      { "@type": "Person", "name": "Baback Elmieh", "url": "https://scholar.google.com/citations?user=k2pFAJ4AAAAJ&hl=en", "affiliation": [ { "@type": "Organization", "name": "University of Washington" }, { "@type": "Organization", "name": "Google" } ] },
+      { "@type": "Person", "name": "Lynn Tsai", "affiliation": { "@type": "Organization", "name": "Google" } },
+      { "@type": "Person", "name": "Zeman Li", "url": "https://sites.google.com/usc.edu/zemanli/", "affiliation": { "@type": "Organization", "name": "Google" } },
+      { "@type": "Person", "name": "Srinivas Kaza", "url": "https://kaza.io/portfolio", "affiliation": { "@type": "Organization", "name": "Google" } },
+      { "@type": "Person", "name": "Tiancheng Sun", "url": "https://www.kevinkingo.com", "affiliation": { "@type": "Organization", "name": "Google" } },
+      { "@type": "Person", "name": "Gabor Csapo", "url": "https://gaborcsapo.com/", "affiliation": { "@type": "Organization", "name": "Google" } },
+      { "@type": "Person", "name": "Ali Behrouz", "url": "https://abehrouz.github.io/", "affiliation": { "@type": "Organization", "name": "Google" } },
+      { "@type": "Person", "name": "Yuan Deng", "url": "https://sites.google.com/view/yuandeng/home", "affiliation": { "@type": "Organization", "name": "Google" } },
+      { "@type": "Person", "name": "Stephen Lombardi", "url": "https://stephenlombardi.github.io/", "affiliation": { "@type": "Organization", "name": "Google" } },
+      { "@type": "Person", "name": "Steven M. Seitz", "url": "https://homes.cs.washington.edu/~seitz/", "affiliation": { "@type": "Organization", "name": "Google" } },
+      { "@type": "Person", "name": "Xuan Luo", "url": "https://roxanneluo.github.io/", "affiliation": { "@type": "Organization", "name": "Google" } }
+    ]
+  }
   </script>
 </head>
 <body>
