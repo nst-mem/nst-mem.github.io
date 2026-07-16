@@ -2,21 +2,27 @@
  * Visual Results Viewer — 3-tier interactive video comparison.
  * Zero dependencies. Works offline via file:// protocol.
  *
+ * Multi-instance: each ".vr-player" root on the page becomes an independent
+ * player. All DOM lookups are scoped to the root, so several players can
+ * coexist on one page (e.g. index has "1-Min Results" and "360° Demos").
+ *
+ * Scene source per root, in priority order:
+ *   1. data-scenes="<key>"  -> window.VP_SCENE_SETS[key]
+ *   2. window.VP_SCENES     (single-player pages)
+ *   3. DEFAULT_SCENE_DEFS
+ *
  * Zone 1: Example Selector (scene carousel)
  * Zone 2: Model Strip (5 synced model videos)
  * Zone 3: Analysis Box
  *   - Single: Input | Rendered | [Memory checkbox] | [Memory]
  *   - Compare: Input | Swipe(A vs B)
  *   + Synced playback controls
- *
- * Layout: JS-computed column widths/heights from video aspect ratios.
- *   Column 1 (input) determines row height; other columns match it.
  */
 (function () {
   'use strict';
 
   /* ════════════════════════════════════════════════════════════
-     MANIFEST DATA
+     SHARED MANIFEST DATA (instance-independent)
      ════════════════════════════════════════════════════════════ */
 
   var MODELS = ['nstm', 'nstm_hires', 'token_mem', 'full_attn', 'lact_nvs'];
@@ -49,533 +55,511 @@
     return m;
   }
 
-  /* Scene descriptors: { id, label, og (orbitGroup), oi (orbitIndex) }.
-     A page may override the list by setting window.VP_SCENES before this
-     script loads (see gallery-renderings.html). Default = the 8 index scenes. */
+  /* Fallback scene list (the six one-minute reverse scenes). Pages normally
+     supply their own via data-scenes / window.VP_SCENE_SETS / window.VP_SCENES. */
   var DEFAULT_SCENE_DEFS = [
-    { id: 'ft_202307_20230714_00032_02', label: 'Ladder', og: 'reverse', oi: 'orbit_1' },
-    { id: 'ft_202307_20230716_00019_02', label: 'Infinity', og: 'reverse', oi: 'orbit_1' },
+    { id: 'ft_202307_20230714_00032_02', label: 'Ladder Graphic', og: 'reverse', oi: 'orbit_1' },
+    { id: 'ft_202307_20230716_00019_02', label: 'Infinity Pattern', og: 'reverse', oi: 'orbit_1' },
     { id: 'lg_202307_20230720_00036_02', label: 'Ribbon', og: 'reverse', oi: 'orbit_1' },
     { id: 'lg_202307_20230705_00015_02', label: 'Leaf Logo', og: 'reverse', oi: 'orbit_1' },
     { id: 'lg_202307_20230719_00007_01', label: 'Basketball', og: 'reverse', oi: 'orbit_1' },
-    { id: 'ft_202307_20230707_00017_01', label: 'Large Pattern', og: 'reverse', oi: 'orbit_1' },
-    { id: 'ft_202307_20230709_00007_02', label: 'Text 360', og: '360_rotation', oi: 'orbit_1' },
-    { id: 'lg_202307_20230719_00007_01', label: 'Basketball 360', og: '360_rotation', oi: 'orbit_1' }
+    { id: 'ft_202307_20230707_00017_01', label: 'Large Pattern', og: 'reverse', oi: 'orbit_1' }
   ];
 
-  var SCENE_DEFS = (window.VP_SCENES && window.VP_SCENES.length) ? window.VP_SCENES : DEFAULT_SCENE_DEFS;
-
-  var SCENES = SCENE_DEFS.map(function (s) {
-    return {
-      id: s.id,
-      label: s.label,
-      input: vp('nstm_hires', s.id, s.og, s.oi, 'input.mp4'),
-      models: buildModels(s.id, s.og, s.oi)
-    };
-  });
-
   /* ════════════════════════════════════════════════════════════
-     STATE
+     PLAYER INSTANCE
      ════════════════════════════════════════════════════════════ */
 
-  var activeScene = null;
-  var selectedModels = [];
-  var showMemory = false;
-  var syncRAF = null;
-  var isPlaying = true;
-  var isSeeking = false;
-  var allFollowers = [];
-
-  /* ════════════════════════════════════════════════════════════
-     DOM REFERENCES
-     ════════════════════════════════════════════════════════════ */
-
-  var selectorEl = document.getElementById('example-selector');
-  var stripEl = document.getElementById('model-strip');
-  var analysisBox = document.getElementById('analysis-box');
-  var analysisSingle = document.getElementById('analysis-single');
-  var analysisCompare = document.getElementById('analysis-compare');
-  var memoryToggle = document.getElementById('memory-toggle');
-  var memoryCheckbox = document.getElementById('memory-checkbox');
-
-  var stripVideos = {};
-  stripEl.querySelectorAll('.model-strip-item').forEach(function (item) {
-    stripVideos[item.dataset.model] = item.querySelector('video');
-  });
-
-  // Single-model DOM
-  var analysisColInput = document.getElementById('analysis-col-input');
-  var analysisColRendered = document.getElementById('analysis-col-rendered');
-  var analysisColMemory = document.getElementById('analysis-col-memory');
-  var analysisInputVideo = document.getElementById('analysis-input-video');
-  var analysisModelVideo = document.getElementById('analysis-model-video');
-  var analysisModelLabel = document.getElementById('analysis-model-label');
-  var analysisMemoryVideo = document.getElementById('analysis-memory-video');
-
-  // Comparison DOM
-  var compareColInput = document.getElementById('compare-col-input');
-  var compareContainer = document.getElementById('compare-container');
-  var compareInputVideo = document.getElementById('compare-input-video');
-  var compareUnder = document.getElementById('compare-video-under');
-  var compareOver = document.getElementById('compare-video-over');
-  var compareDivider = document.getElementById('compare-divider');
-  var compareLabelLeft = document.getElementById('compare-label-left');
-  var compareLabelRight = document.getElementById('compare-label-right');
-
-  // Playback controls
-  var playbackToggle = document.getElementById('playback-toggle');
-  var playbackSeek = document.getElementById('playback-seek');
-  var playbackSeekFill = document.getElementById('playback-seek-fill');
-  var playbackTime = document.getElementById('playback-time');
-  var iconPause = playbackToggle.querySelector('.icon-pause');
-  var iconPlay = playbackToggle.querySelector('.icon-play');
-
-  /* ════════════════════════════════════════════════════════════
-     CONSTANTS
-     ════════════════════════════════════════════════════════════ */
-
-  var GAP = 8; // px between columns
-
-  /* ════════════════════════════════════════════════════════════
-     ZONE 1: EXAMPLE SELECTOR
-     ════════════════════════════════════════════════════════════ */
-
-  function buildExampleSelector() {
-    var html = '';
-    SCENES.forEach(function (scene, i) {
-      html += '<button class="example-card' + (i === 0 ? ' is-active' : '') +
-        '" data-index="' + i + '">' +
-        '<span class="example-card-label">' + scene.label + '</span>' +
-        '</button>';
-    });
-    selectorEl.innerHTML = html;
-    selectorEl.addEventListener('click', function (e) {
-      var card = e.target.closest('.example-card');
-      if (!card) return;
-      selectScene(parseInt(card.dataset.index, 10));
-    });
-  }
-
-  function selectScene(index) {
-    activeScene = SCENES[index];
-    showMemory = false;
-    memoryCheckbox.checked = false;
-    isPlaying = true;
-    updatePlaybackUI();
-
-    selectorEl.querySelectorAll('.example-card').forEach(function (c, i) {
-      c.classList.toggle('is-active', i === index);
+  function initPlayer(root, sceneDefs) {
+    var SCENES = sceneDefs.map(function (s) {
+      return {
+        id: s.id,
+        label: s.label,
+        input: vp('nstm_hires', s.id, s.og, s.oi, 'input.mp4'),
+        models: buildModels(s.id, s.og, s.oi)
+      };
     });
 
-    loadStripVideos();
+    /* ── State (per instance) ── */
+    var activeScene = null;
+    var selectedModels = [];
+    var showMemory = false;
+    var syncRAF = null;
+    var isPlaying = true;
+    var isSeeking = false;
+    var allFollowers = [];
 
-    selectedModels = [];
+    /* ── DOM references (scoped to this root) ── */
+    var q = function (sel) { return root.querySelector(sel); };
+
+    var selectorEl = q('#example-selector');
+    var stripEl = q('#model-strip');
+    var analysisBox = q('#analysis-box');
+    var analysisSingle = q('#analysis-single');
+    var analysisCompare = q('#analysis-compare');
+    var memoryToggle = q('#memory-toggle');
+    var memoryCheckbox = q('#memory-checkbox');
+
+    var stripVideos = {};
     stripEl.querySelectorAll('.model-strip-item').forEach(function (item) {
-      item.classList.remove('is-selected');
+      stripVideos[item.dataset.model] = item.querySelector('video');
     });
-    if (activeScene.models[DEFAULT_MODEL]) {
-      selectedModels = [DEFAULT_MODEL];
-      var di = stripEl.querySelector('[data-model="' + DEFAULT_MODEL + '"]');
-      if (di) di.classList.add('is-selected');
+
+    // Single-model DOM
+    var analysisColInput = q('#analysis-col-input');
+    var analysisColRendered = q('#analysis-col-rendered');
+    var analysisColMemory = q('#analysis-col-memory');
+    var analysisInputVideo = q('#analysis-input-video');
+    var analysisModelVideo = q('#analysis-model-video');
+    var analysisModelLabel = q('#analysis-model-label');
+    var analysisMemoryVideo = q('#analysis-memory-video');
+
+    // Comparison DOM
+    var compareColInput = q('#compare-col-input');
+    var compareContainer = q('#compare-container');
+    var compareInputVideo = q('#compare-input-video');
+    var compareUnder = q('#compare-video-under');
+    var compareOver = q('#compare-video-over');
+    var compareDivider = q('#compare-divider');
+    var compareLabelLeft = q('#compare-label-left');
+    var compareLabelRight = q('#compare-label-right');
+
+    // Playback controls
+    var playbackToggle = q('#playback-toggle');
+    var playbackSeek = q('#playback-seek');
+    var playbackSeekFill = q('#playback-seek-fill');
+    var playbackTime = q('#playback-time');
+    var iconPause = playbackToggle.querySelector('.icon-pause');
+    var iconPlay = playbackToggle.querySelector('.icon-play');
+
+    var GAP = 8; // px between columns
+
+    /* ── Zone 1: Example Selector ── */
+
+    function buildExampleSelector() {
+      var html = '';
+      SCENES.forEach(function (scene, i) {
+        html += '<button class="example-card' + (i === 0 ? ' is-active' : '') +
+          '" data-index="' + i + '">' +
+          '<span class="example-card-label">' + scene.label + '</span>' +
+          '</button>';
+      });
+      selectorEl.innerHTML = html;
+      selectorEl.addEventListener('click', function (e) {
+        var card = e.target.closest('.example-card');
+        if (!card) return;
+        selectScene(parseInt(card.dataset.index, 10));
+      });
     }
-    updateAnalysisBox();
-  }
 
-  /* ════════════════════════════════════════════════════════════
-     ZONE 2: MODEL STRIP
-     ════════════════════════════════════════════════════════════ */
+    function selectScene(index) {
+      activeScene = SCENES[index];
+      showMemory = false;
+      memoryCheckbox.checked = false;
+      isPlaying = true;
+      updatePlaybackUI();
 
-  function loadStripVideos() {
-    if (!activeScene) return;
-    stopSync();
-    MODELS.forEach(function (model) {
-      var data = activeScene.models[model];
-      var item = stripEl.querySelector('[data-model="' + model + '"]');
-      if (data && data.rendered) {
-        setVideoSrc(stripVideos[model], data.rendered);
-        item.style.display = '';
-      } else {
-        item.style.display = 'none';
-      }
-    });
-    waitForVideosReady(getStripVideos(), function () {
-      playAll(getStripVideos());
-      startSync();
-    });
-  }
+      selectorEl.querySelectorAll('.example-card').forEach(function (c, i) {
+        c.classList.toggle('is-active', i === index);
+      });
 
-  function getStripVideos() {
-    var vids = [];
-    MODELS.forEach(function (m) {
-      var item = stripEl.querySelector('[data-model="' + m + '"]');
-      if (stripVideos[m] && item && item.style.display !== 'none') vids.push(stripVideos[m]);
-    });
-    return vids;
-  }
+      loadStripVideos();
 
-  function getLeader() {
-    var v = getStripVideos();
-    return v.length > 0 ? v[0] : null;
-  }
-
-  stripEl.addEventListener('click', function (e) {
-    var item = e.target.closest('.model-strip-item');
-    if (!item) return;
-    var model = item.dataset.model;
-    var idx = selectedModels.indexOf(model);
-    if (idx > -1) {
-      selectedModels.splice(idx, 1);
-      item.classList.remove('is-selected');
-    } else {
-      if (selectedModels.length >= 2) {
-        var old = selectedModels.shift();
-        stripEl.querySelector('[data-model="' + old + '"]').classList.remove('is-selected');
-      }
-      selectedModels.push(model);
-      item.classList.add('is-selected');
-    }
-    showMemory = false;
-    memoryCheckbox.checked = false;
-    updateAnalysisBox();
-  });
-
-  /* ════════════════════════════════════════════════════════════
-     ZONE 3: ANALYSIS BOX
-     ════════════════════════════════════════════════════════════ */
-
-  function updateAnalysisBox() {
-    if (!activeScene) return;
-    analysisSingle.style.display = 'none';
-    analysisCompare.style.display = 'none';
-    analysisColMemory.style.display = 'none';
-    memoryToggle.style.display = 'none';
-
-    if (selectedModels.length === 0) {
+      selectedModels = [];
+      stripEl.querySelectorAll('.model-strip-item').forEach(function (item) {
+        item.classList.remove('is-selected');
+      });
       if (activeScene.models[DEFAULT_MODEL]) {
         selectedModels = [DEFAULT_MODEL];
         var di = stripEl.querySelector('[data-model="' + DEFAULT_MODEL + '"]');
         if (di) di.classList.add('is-selected');
       }
+      updateAnalysisBox();
     }
 
-    if (selectedModels.length === 1) {
-      showSingleModel(selectedModels[0]);
-    } else if (selectedModels.length >= 2) {
-      showCompare(selectedModels[0], selectedModels[1]);
+    /* ── Zone 2: Model Strip ── */
+
+    function loadStripVideos() {
+      if (!activeScene) return;
+      stopSync();
+      MODELS.forEach(function (model) {
+        var data = activeScene.models[model];
+        var item = stripEl.querySelector('[data-model="' + model + '"]');
+        if (data && data.rendered) {
+          setVideoSrc(stripVideos[model], data.rendered);
+          item.style.display = '';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+      waitForVideosReady(getStripVideos(), function () {
+        playAll(getStripVideos());
+        startSync();
+      });
     }
-  }
 
-  function showSingleModel(model) {
-    var md = activeScene.models[model];
-    analysisSingle.style.display = '';
-    analysisModelLabel.textContent = MODEL_LABELS[model] || model;
+    function getStripVideos() {
+      var vids = [];
+      MODELS.forEach(function (m) {
+        var item = stripEl.querySelector('[data-model="' + m + '"]');
+        if (stripVideos[m] && item && item.style.display !== 'none') vids.push(stripVideos[m]);
+      });
+      return vids;
+    }
 
-    setVideoSrc(analysisInputVideo, activeScene.input);
-    setVideoSrc(analysisModelVideo, md.rendered);
+    function getLeader() {
+      var v = getStripVideos();
+      return v.length > 0 ? v[0] : null;
+    }
 
-    var vids = [analysisInputVideo, analysisModelVideo];
-
-    if (MEMORY_MODELS.indexOf(model) > -1 && md.memory) {
-      memoryToggle.style.display = '';
-      if (showMemory) {
-        analysisColMemory.style.display = '';
-        setVideoSrc(analysisMemoryVideo, md.memory);
-        vids.push(analysisMemoryVideo);
+    stripEl.addEventListener('click', function (e) {
+      var item = e.target.closest('.model-strip-item');
+      if (!item) return;
+      var model = item.dataset.model;
+      var idx = selectedModels.indexOf(model);
+      if (idx > -1) {
+        selectedModels.splice(idx, 1);
+        item.classList.remove('is-selected');
+      } else {
+        if (selectedModels.length >= 2) {
+          var old = selectedModels.shift();
+          stripEl.querySelector('[data-model="' + old + '"]').classList.remove('is-selected');
+        }
+        selectedModels.push(model);
+        item.classList.add('is-selected');
       }
-    }
+      showMemory = false;
+      memoryCheckbox.checked = false;
+      updateAnalysisBox();
+    });
 
-    var leader = getLeader();
-    if (leader) {
-      waitForVideosReady(vids, function () {
-        syncToLeader(leader, vids);
-        layoutAnalysisRow();
-      });
-    }
-  }
+    /* ── Zone 3: Analysis Box ── */
 
-  function showCompare(modelA, modelB) {
-    analysisCompare.style.display = '';
+    function updateAnalysisBox() {
+      if (!activeScene) return;
+      analysisSingle.style.display = 'none';
+      analysisCompare.style.display = 'none';
+      analysisColMemory.style.display = 'none';
+      memoryToggle.style.display = 'none';
 
-    compareLabelLeft.textContent = MODEL_LABELS[modelA] || modelA;
-    compareLabelRight.textContent = MODEL_LABELS[modelB] || modelB;
-
-    setVideoSrc(compareInputVideo, activeScene.input);
-    setVideoSrc(compareUnder, activeScene.models[modelB].rendered);
-    setVideoSrc(compareOver, activeScene.models[modelA].rendered);
-    setComparePosition(50);
-
-    var vids = [compareInputVideo, compareUnder, compareOver];
-    var leader = getLeader();
-    if (leader) {
-      waitForVideosReady(vids, function () {
-        syncToLeader(leader, vids);
-        layoutAnalysisRow();
-      });
-    }
-  }
-
-  /* ── Layout Analysis Row ──
-   *
-   * Computes explicit widths and heights for all columns based on:
-   *   W = container width (from .analysis-box clientWidth)
-   *   AR_in = input video aspect ratio (W/H)
-   *   AR_r  = rendered video aspect ratio
-   *   AR_m  = memory video aspect ratio (if visible)
-   *
-   * Single-model (no memory):
-   *   W = w1 + G + w2
-   *   H = w1 / AR_in
-   *   w2 = H × AR_r
-   *   ∴ w1 = (W - G) / (1 + AR_r / AR_in)
-   *
-   * Single-model (with memory):
-   *   W = w1 + G + w2 + G + w3
-   *   w1 = (W - 2G) / (1 + AR_r/AR_in + AR_m/AR_in)
-   *
-   * Comparison:
-   *   Same as "no memory" but w2 fills rest (compare videos use object-fit:cover)
-   */
-  function layoutAnalysisRow() {
-    var W = analysisBox.clientWidth;
-    if (W <= 0) return;
-
-    if (analysisSingle.style.display !== 'none') {
-      layoutSingleRow(W);
-    } else if (analysisCompare.style.display !== 'none') {
-      layoutCompareRow(W);
-    }
-  }
-
-  function layoutSingleRow(W) {
-    var arIn = getAR(analysisInputVideo);
-    var arR = getAR(analysisModelVideo);
-    if (!arIn || !arR) return;
-
-    var memoryVisible = analysisColMemory.style.display !== 'none';
-    var w1, H, w2, w3;
-
-    if (memoryVisible) {
-      var arM = getAR(analysisMemoryVideo) || arR; // fallback to rendered AR
-      w1 = (W - 2 * GAP) / (1 + arR / arIn + arM / arIn);
-      H = w1 / arIn;
-      w2 = H * arR;
-      w3 = H * arM;
-    } else {
-      w1 = (W - GAP) / (1 + arR / arIn);
-      H = w1 / arIn;
-      w2 = H * arR;
-    }
-
-    // Apply sizes
-    setSize(analysisColInput, w1, H);
-    setSize(analysisColRendered, w2, H);
-
-    if (memoryVisible) {
-      setSize(analysisColMemory, w3, H);
-    }
-  }
-
-  function layoutCompareRow(W) {
-    var arIn = getAR(compareInputVideo);
-    // For compare, the swipe container uses the rendered videos' AR
-    var arR = getAR(compareUnder);
-    if (!arIn || !arR) return;
-
-    var w1 = (W - GAP) / (1 + arR / arIn);
-    var H = w1 / arIn;
-    var w2 = H * arR;
-
-    setSize(compareColInput, w1, H);
-    setSize(compareContainer, w2, H);
-  }
-
-  function getAR(video) {
-    if (!video || !video.videoWidth || !video.videoHeight) return null;
-    return video.videoWidth / video.videoHeight;
-  }
-
-  function setSize(el, w, h) {
-    if (!el) return;
-    el.style.width = Math.round(w) + 'px';
-    el.style.height = Math.round(h) + 'px';
-  }
-
-  // Re-layout on resize
-  var resizeTimer = null;
-  window.addEventListener('resize', function () {
-    // Clear explicit sizes so clientWidth is accurate
-    clearSizes();
-    if (resizeTimer) clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(layoutAnalysisRow, 50);
-  });
-
-  function clearSizes() {
-    [analysisColInput, analysisColRendered, analysisColMemory,
-      compareColInput, compareContainer].forEach(function (el) {
-        if (el) { el.style.width = ''; el.style.height = ''; }
-      });
-  }
-
-  /* ── Memory Toggle ── */
-
-  memoryCheckbox.addEventListener('change', function () {
-    showMemory = memoryCheckbox.checked;
-    updateAnalysisBox();
-  });
-
-  /* ════════════════════════════════════════════════════════════
-     SWIPE COMPARISON
-     ════════════════════════════════════════════════════════════ */
-
-  var isDragging = false;
-
-  function setComparePosition(pct) {
-    pct = Math.max(0, Math.min(100, pct));
-    compareOver.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
-    compareDivider.style.left = pct + '%';
-  }
-
-  compareDivider.addEventListener('pointerdown', function (e) {
-    isDragging = true;
-    compareDivider.setPointerCapture(e.pointerId);
-    e.preventDefault();
-  });
-  document.addEventListener('pointermove', function (e) {
-    if (!isDragging) return;
-    var rect = compareContainer.getBoundingClientRect();
-    setComparePosition(((e.clientX - rect.left) / rect.width) * 100);
-  });
-  document.addEventListener('pointerup', function () { isDragging = false; });
-
-  /* ════════════════════════════════════════════════════════════
-     SYNC ENGINE
-     ════════════════════════════════════════════════════════════ */
-
-  function startSync() {
-    stopSync();
-    var leader = getLeader();
-    if (!leader) return;
-    allFollowers = getStripVideos().filter(function (v) { return v !== leader; });
-    var TH = 0.05;
-    function tick() {
-      if (leader.readyState >= 2) {
-        var t = leader.currentTime;
-        for (var i = 0; i < allFollowers.length; i++) {
-          var f = allFollowers[i];
-          if (f.readyState < 2) continue;
-          if (Math.abs(f.currentTime - t) > TH) f.currentTime = t;
-          if (!isPlaying && !f.paused) f.pause();
-          if (isPlaying && f.paused) f.play().catch(function () { });
+      if (selectedModels.length === 0) {
+        if (activeScene.models[DEFAULT_MODEL]) {
+          selectedModels = [DEFAULT_MODEL];
+          var di = stripEl.querySelector('[data-model="' + DEFAULT_MODEL + '"]');
+          if (di) di.classList.add('is-selected');
         }
       }
-      if (!isSeeking && leader.duration) {
-        var pct = (leader.currentTime / leader.duration) * 100;
-        playbackSeek.value = (leader.currentTime / leader.duration) * 1000;
-        playbackSeekFill.style.width = pct + '%';
-        playbackTime.textContent = fmt(leader.currentTime) + ' / ' + fmt(leader.duration);
+
+      if (selectedModels.length === 1) {
+        showSingleModel(selectedModels[0]);
+      } else if (selectedModels.length >= 2) {
+        showCompare(selectedModels[0], selectedModels[1]);
+      }
+    }
+
+    function showSingleModel(model) {
+      var md = activeScene.models[model];
+      analysisSingle.style.display = '';
+      analysisModelLabel.textContent = MODEL_LABELS[model] || model;
+
+      setVideoSrc(analysisInputVideo, activeScene.input);
+      setVideoSrc(analysisModelVideo, md.rendered);
+
+      var vids = [analysisInputVideo, analysisModelVideo];
+
+      if (MEMORY_MODELS.indexOf(model) > -1 && md.memory) {
+        memoryToggle.style.display = '';
+        if (showMemory) {
+          analysisColMemory.style.display = '';
+          setVideoSrc(analysisMemoryVideo, md.memory);
+          vids.push(analysisMemoryVideo);
+        }
+      }
+
+      var leader = getLeader();
+      if (leader) {
+        waitForVideosReady(vids, function () {
+          syncToLeader(leader, vids);
+          layoutAnalysisRow();
+        });
+      }
+    }
+
+    function showCompare(modelA, modelB) {
+      analysisCompare.style.display = '';
+
+      compareLabelLeft.textContent = MODEL_LABELS[modelA] || modelA;
+      compareLabelRight.textContent = MODEL_LABELS[modelB] || modelB;
+
+      setVideoSrc(compareInputVideo, activeScene.input);
+      setVideoSrc(compareUnder, activeScene.models[modelB].rendered);
+      setVideoSrc(compareOver, activeScene.models[modelA].rendered);
+      setComparePosition(50);
+
+      var vids = [compareInputVideo, compareUnder, compareOver];
+      var leader = getLeader();
+      if (leader) {
+        waitForVideosReady(vids, function () {
+          syncToLeader(leader, vids);
+          layoutAnalysisRow();
+        });
+      }
+    }
+
+    /* ── Layout Analysis Row (JS-computed column widths/heights) ── */
+
+    function layoutAnalysisRow() {
+      var W = analysisBox.clientWidth;
+      if (W <= 0) return;
+
+      if (analysisSingle.style.display !== 'none') {
+        layoutSingleRow(W);
+      } else if (analysisCompare.style.display !== 'none') {
+        layoutCompareRow(W);
+      }
+    }
+
+    function layoutSingleRow(W) {
+      var arIn = getAR(analysisInputVideo);
+      var arR = getAR(analysisModelVideo);
+      if (!arIn || !arR) return;
+
+      var memoryVisible = analysisColMemory.style.display !== 'none';
+      var w1, H, w2, w3;
+
+      if (memoryVisible) {
+        var arM = getAR(analysisMemoryVideo) || arR; // fallback to rendered AR
+        w1 = (W - 2 * GAP) / (1 + arR / arIn + arM / arIn);
+        H = w1 / arIn;
+        w2 = H * arR;
+        w3 = H * arM;
+      } else {
+        w1 = (W - GAP) / (1 + arR / arIn);
+        H = w1 / arIn;
+        w2 = H * arR;
+      }
+
+      setSize(analysisColInput, w1, H);
+      setSize(analysisColRendered, w2, H);
+
+      if (memoryVisible) {
+        setSize(analysisColMemory, w3, H);
+      }
+    }
+
+    function layoutCompareRow(W) {
+      var arIn = getAR(compareInputVideo);
+      var arR = getAR(compareUnder);
+      if (!arIn || !arR) return;
+
+      var w1 = (W - GAP) / (1 + arR / arIn);
+      var H = w1 / arIn;
+      var w2 = H * arR;
+
+      setSize(compareColInput, w1, H);
+      setSize(compareContainer, w2, H);
+    }
+
+    function getAR(video) {
+      if (!video || !video.videoWidth || !video.videoHeight) return null;
+      return video.videoWidth / video.videoHeight;
+    }
+
+    function setSize(el, w, h) {
+      if (!el) return;
+      el.style.width = Math.round(w) + 'px';
+      el.style.height = Math.round(h) + 'px';
+    }
+
+    // Re-layout on resize
+    var resizeTimer = null;
+    window.addEventListener('resize', function () {
+      clearSizes();
+      if (resizeTimer) clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(layoutAnalysisRow, 50);
+    });
+
+    function clearSizes() {
+      [analysisColInput, analysisColRendered, analysisColMemory,
+        compareColInput, compareContainer].forEach(function (el) {
+          if (el) { el.style.width = ''; el.style.height = ''; }
+        });
+    }
+
+    /* ── Memory Toggle ── */
+
+    memoryCheckbox.addEventListener('change', function () {
+      showMemory = memoryCheckbox.checked;
+      updateAnalysisBox();
+    });
+
+    /* ── Swipe Comparison ── */
+
+    var isDragging = false;
+
+    function setComparePosition(pct) {
+      pct = Math.max(0, Math.min(100, pct));
+      compareOver.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+      compareDivider.style.left = pct + '%';
+    }
+
+    compareDivider.addEventListener('pointerdown', function (e) {
+      isDragging = true;
+      compareDivider.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+    document.addEventListener('pointermove', function (e) {
+      if (!isDragging) return;
+      var rect = compareContainer.getBoundingClientRect();
+      setComparePosition(((e.clientX - rect.left) / rect.width) * 100);
+    });
+    document.addEventListener('pointerup', function () { isDragging = false; });
+
+    /* ── Sync Engine ── */
+
+    function startSync() {
+      stopSync();
+      var leader = getLeader();
+      if (!leader) return;
+      allFollowers = getStripVideos().filter(function (v) { return v !== leader; });
+      var TH = 0.05;
+      function tick() {
+        if (leader.readyState >= 2) {
+          var t = leader.currentTime;
+          for (var i = 0; i < allFollowers.length; i++) {
+            var f = allFollowers[i];
+            if (f.readyState < 2) continue;
+            if (Math.abs(f.currentTime - t) > TH) f.currentTime = t;
+            if (!isPlaying && !f.paused) f.pause();
+            if (isPlaying && f.paused) f.play().catch(function () { });
+          }
+        }
+        if (!isSeeking && leader.duration) {
+          var pct = (leader.currentTime / leader.duration) * 100;
+          playbackSeek.value = (leader.currentTime / leader.duration) * 1000;
+          playbackSeekFill.style.width = pct + '%';
+          playbackTime.textContent = fmt(leader.currentTime) + ' / ' + fmt(leader.duration);
+        }
+        syncRAF = requestAnimationFrame(tick);
       }
       syncRAF = requestAnimationFrame(tick);
     }
-    syncRAF = requestAnimationFrame(tick);
-  }
 
-  function stopSync() {
-    if (syncRAF) { cancelAnimationFrame(syncRAF); syncRAF = null; }
-  }
-
-  function syncToLeader(leader, extras) {
-    extras.forEach(function (v) {
-      v.currentTime = leader.currentTime;
-      if (isPlaying) v.play().catch(function () { });
-      else v.pause();
-    });
-    var merged = allFollowers.slice();
-    extras.forEach(function (v) { if (merged.indexOf(v) === -1) merged.push(v); });
-    allFollowers = merged;
-  }
-
-  /* ════════════════════════════════════════════════════════════
-     PLAYBACK CONTROLS
-     ════════════════════════════════════════════════════════════ */
-
-  playbackToggle.addEventListener('click', function () {
-    isPlaying = !isPlaying;
-    updatePlaybackUI();
-    getAllVideos().forEach(function (v) {
-      if (isPlaying) v.play().catch(function () { });
-      else v.pause();
-    });
-  });
-
-  playbackSeek.addEventListener('input', function () {
-    isSeeking = true;
-    var leader = getLeader();
-    if (!leader || !leader.duration) return;
-    var time = (playbackSeek.value / 1000) * leader.duration;
-    playbackSeekFill.style.width = (playbackSeek.value / 10) + '%';
-    playbackTime.textContent = fmt(time) + ' / ' + fmt(leader.duration);
-    getAllVideos().forEach(function (v) { v.currentTime = time; });
-  });
-
-  playbackSeek.addEventListener('change', function () { isSeeking = false; });
-
-  function updatePlaybackUI() {
-    iconPause.style.display = isPlaying ? '' : 'none';
-    iconPlay.style.display = isPlaying ? 'none' : '';
-    playbackToggle.title = isPlaying ? 'Pause' : 'Play';
-  }
-
-  function getAllVideos() {
-    var vids = getStripVideos();
-    [analysisInputVideo, analysisModelVideo, analysisMemoryVideo,
-      compareInputVideo, compareUnder, compareOver].forEach(function (v) {
-      if (v && v.src && vids.indexOf(v) === -1) vids.push(v);
-    });
-    return vids;
-  }
-
-  function fmt(s) {
-    if (!s || isNaN(s)) return '0:00';
-    var m = Math.floor(s / 60);
-    var sec = Math.floor(s % 60);
-    return m + ':' + (sec < 10 ? '0' : '') + sec;
-  }
-
-  /* ════════════════════════════════════════════════════════════
-     UTILITIES
-     ════════════════════════════════════════════════════════════ */
-
-  function setVideoSrc(video, src) {
-    if (video.querySelector('source')) {
-      video.querySelector('source').src = src;
-      video.load();
-    } else {
-      video.src = src;
+    function stopSync() {
+      if (syncRAF) { cancelAnimationFrame(syncRAF); syncRAF = null; }
     }
-  }
 
-  function waitForVideosReady(vids, cb) {
-    var n = 0, total = vids.length;
-    if (!total) { cb(); return; }
-    vids.forEach(function (v) {
-      function done() { n++; if (n >= total) cb(); }
-      if (v.readyState >= 2) done();
-      else v.addEventListener('loadeddata', function h() { v.removeEventListener('loadeddata', h); done(); });
-    });
-  }
+    function syncToLeader(leader, extras) {
+      extras.forEach(function (v) {
+        v.currentTime = leader.currentTime;
+        if (isPlaying) v.play().catch(function () { });
+        else v.pause();
+      });
+      var merged = allFollowers.slice();
+      extras.forEach(function (v) { if (merged.indexOf(v) === -1) merged.push(v); });
+      allFollowers = merged;
+    }
 
-  function playAll(vids) {
-    vids.forEach(function (v) {
-      v.currentTime = 0;
-      if (isPlaying) v.play().catch(function () { });
+    /* ── Playback Controls ── */
+
+    playbackToggle.addEventListener('click', function () {
+      isPlaying = !isPlaying;
+      updatePlaybackUI();
+      getAllVideos().forEach(function (v) {
+        if (isPlaying) v.play().catch(function () { });
+        else v.pause();
+      });
     });
+
+    playbackSeek.addEventListener('input', function () {
+      isSeeking = true;
+      var leader = getLeader();
+      if (!leader || !leader.duration) return;
+      var time = (playbackSeek.value / 1000) * leader.duration;
+      playbackSeekFill.style.width = (playbackSeek.value / 10) + '%';
+      playbackTime.textContent = fmt(time) + ' / ' + fmt(leader.duration);
+      getAllVideos().forEach(function (v) { v.currentTime = time; });
+    });
+
+    playbackSeek.addEventListener('change', function () { isSeeking = false; });
+
+    function updatePlaybackUI() {
+      iconPause.style.display = isPlaying ? '' : 'none';
+      iconPlay.style.display = isPlaying ? 'none' : '';
+      playbackToggle.title = isPlaying ? 'Pause' : 'Play';
+    }
+
+    function getAllVideos() {
+      var vids = getStripVideos();
+      [analysisInputVideo, analysisModelVideo, analysisMemoryVideo,
+        compareInputVideo, compareUnder, compareOver].forEach(function (v) {
+        if (v && v.src && vids.indexOf(v) === -1) vids.push(v);
+      });
+      return vids;
+    }
+
+    function fmt(s) {
+      if (!s || isNaN(s)) return '0:00';
+      var m = Math.floor(s / 60);
+      var sec = Math.floor(s % 60);
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    /* ── Utilities ── */
+
+    function setVideoSrc(video, src) {
+      if (video.querySelector('source')) {
+        video.querySelector('source').src = src;
+        video.load();
+      } else {
+        video.src = src;
+      }
+    }
+
+    function waitForVideosReady(vids, cb) {
+      var n = 0, total = vids.length;
+      if (!total) { cb(); return; }
+      vids.forEach(function (v) {
+        function done() { n++; if (n >= total) cb(); }
+        if (v.readyState >= 2) done();
+        else v.addEventListener('loadeddata', function h() { v.removeEventListener('loadeddata', h); done(); });
+      });
+    }
+
+    function playAll(vids) {
+      vids.forEach(function (v) {
+        v.currentTime = 0;
+        if (isPlaying) v.play().catch(function () { });
+      });
+    }
+
+    /* ── Init this instance ── */
+    buildExampleSelector();
+    selectScene(0);
   }
 
   /* ════════════════════════════════════════════════════════════
-     INIT
+     BOOT — initialize every .vr-player on the page
      ════════════════════════════════════════════════════════════ */
 
-  buildExampleSelector();
-  selectScene(0);
+  function resolveScenes(root) {
+    var key = root.getAttribute('data-scenes');
+    if (key && window.VP_SCENE_SETS && window.VP_SCENE_SETS[key]) return window.VP_SCENE_SETS[key];
+    if (window.VP_SCENES && window.VP_SCENES.length) return window.VP_SCENES;
+    return DEFAULT_SCENE_DEFS;
+  }
+
+  function boot() {
+    var roots = document.querySelectorAll('.vr-player');
+    roots.forEach(function (root) {
+      initPlayer(root, resolveScenes(root));
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 
 })();

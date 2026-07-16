@@ -1,33 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+<section id="demos-360" class="section-padding">
+  <div class="content-width">
+    <h2 class="section-heading">360&deg; Demos</h2>
+    <p class="caption-text" style="text-align: center; margin-bottom: 0.5rem;">360&deg; Novel-View-Synthesis with memory recall.</p>
+    <p class="caption-text" style="margin-bottom: 2rem; text-align: center;">
+      Select a scene, then click models in the comparison strip to inspect them in detail below.<br>Check the memory box to see our memory readout visuals.
+    </p>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>1-Min Demos — Neural Space-Time Memory</title>
-  <meta name="description"
-    content="Interactive rendering gallery with input views, rendered outputs, and memory visualizations.">
-  <link rel="stylesheet" href="vendor/bulma/bulma.min.css">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="data-gallery.css">
-  <link rel="icon" type="image/png" href="resources/memory_block_64x64.png">
-</head>
-
-<body>
-
-  <div class="dg-page">
-    <a href="gallery.html" class="dg-back-link">&larr; Back to Results Gallery</a>
-
-    <div class="dg-header">
-      <h1 class="dg-title">1-Min Demos</h1>
-      <p class="dg-subtitle">Showcase clips of minute-long memory recall.</p>
-    </div>
-
-    <!-- ═══ Interactive player (same viewer as the index Results section) ═══ -->
-    <div class="content-width vr-player">
-      <p class="caption-text" style="margin-bottom: 2rem; text-align: center;">
-        Select a scene, then click models in the comparison strip to inspect them in detail below.<br>Check the memory box to see our memory readout visuals.
-      </p>
+    <!-- Interactive player instance (scenes: window.VP_SCENE_SETS.threesixty) -->
+    <div class="vr-player" data-scenes="threesixty">
 
       <!-- ═══ Zone 1: Example Selector ═══ -->
       <div class="example-selector-wrap" id="example-selector-wrap">
@@ -142,33 +122,4 @@
       </div>
     </div>
   </div>
-
-  <footer class="site-footer">
-    <div class="content-width">
-      <p>Website template adapted from the <a href="https://nerfies.github.io/">Nerfies</a> project page.</p>
-    </div>
-  </footer>
-
-  <script>
-    /* The 12 one-minute memory-recall demo scenes (reverse renders).
-       Consumed by js/video-player.js via window.VP_SCENES. */
-    window.VP_SCENES = [
-      { id: 'ft_202307_20230714_00032_02', label: 'Ladder Graphic', og: 'reverse', oi: 'orbit_1' },
-      { id: 'ft_202307_20230716_00019_02', label: 'Infinity Pattern', og: 'reverse', oi: 'orbit_1' },
-      { id: 'lg_202307_20230720_00036_02', label: 'Ribbon', og: 'reverse', oi: 'orbit_1' },
-      { id: 'lg_202307_20230705_00015_02', label: 'Leaf Logo', og: 'reverse', oi: 'orbit_1' },
-      { id: 'lg_202307_20230719_00007_01', label: 'Basketball', og: 'reverse', oi: 'orbit_1' },
-      { id: 'lg_202307_20230720_00038_01', label: 'Cartoon', og: 'reverse', oi: 'orbit_1' },
-      { id: 'lg_202307_20230716_00018_02', label: 'Plaid', og: 'reverse', oi: 'orbit_1' },
-      { id: 'ft_202307_20230707_00017_01', label: 'Large Pattern', og: 'reverse', oi: 'orbit_1' },
-      { id: 'ft_202307_20230709_00007_02', label: 'Text', og: 'reverse', oi: 'orbit_1' },
-      { id: 'ft_202307_20230713_00014_02', label: 'Graphic Picture', og: 'reverse', oi: 'orbit_1' },
-      { id: 'ft_202307_20230721_00025_02', label: 'Dress', og: 'reverse', oi: 'orbit_1' },
-      { id: 'ft_202307_20230718_00021_01', label: 'Diamond Logo', og: 'reverse', oi: 'orbit_1' }
-    ];
-  </script>
-  <script src="js/video-player.js"></script>
-
-</body>
-
-</html>
+</section>

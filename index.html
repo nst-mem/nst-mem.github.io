@@ -35,14 +35,14 @@
           <div class="publication-authors">
             <span class="author-block"><a href="https://scholar.google.com/citations?user=k2pFAJ4AAAAJ&amp;hl=en" target="_blank" rel="noopener noreferrer">Baback Elmieh</a><sup>1,2</sup>,</span>
             <span class="author-block"><a href="#">Lynn Tsai</a><sup>2</sup>,</span>
-            <span class="author-block"><a href="#">Zeman Li</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://sites.google.com/usc.edu/zemanli/" target="_blank" rel="noopener noreferrer">Zeman Li</a><sup>2</sup>,</span>
             <span class="author-block"><a href="https://kaza.io/portfolio" target="_blank" rel="noopener noreferrer">Srinivas Kaza</a><sup>2</sup>,</span>
             <span class="author-block"><a href="https://www.kevinkingo.com" target="_blank" rel="noopener noreferrer">Tiancheng Sun</a><sup>2</sup>,</span>
-            <span class="author-block"><a href="#">Gabor Csapo</a><sup>2</sup>,</span>
-            <span class="author-block"><a href="#">Ali Behrouz</a><sup>2</sup>,</span>
-            <span class="author-block"><a href="#">Yuan Deng</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://gaborcsapo.com/" target="_blank" rel="noopener noreferrer">Gabor Csapo</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://abehrouz.github.io/" target="_blank" rel="noopener noreferrer">Ali Behrouz</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://sites.google.com/view/yuandeng/home" target="_blank" rel="noopener noreferrer">Yuan Deng</a><sup>2</sup>,</span>
             <span class="author-block"><a href="https://stephenlombardi.github.io/" target="_blank" rel="noopener noreferrer">Stephen Lombardi</a><sup>2</sup>,</span>
-            <span class="author-block"><a href="#">Steven M. Seitz</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="https://homes.cs.washington.edu/~seitz/" target="_blank" rel="noopener noreferrer">Steven M. Seitz</a><sup>2</sup>,</span>
             <span class="author-block"><a href="https://roxanneluo.github.io/" target="_blank" rel="noopener noreferrer">Xuan Luo</a><sup>2</sup></span>
           </div>
 
@@ -94,10 +94,10 @@
   </div>
 
   <div class="notification is-info is-rounded tldr-card"
-    style="text-align: center; padding: 10px 24px; background-color: #d0d5ec;">
-    <h6 style="text-align: center; color: rgb(0, 0, 0); font-size: 1.07rem; margin: 0;">
-      <strong>TL;DR</strong>: Real-time, Minute-Scale Space-Time Memory that remembers the past and 
-      reconstructs occluded regions. Beats SOTA like LaCT-NVS and LVSM.
+    style="text-align: center; background-color: #d0d5ec;">
+    <h6 style="text-align: center; color: rgb(0, 0, 0); font-size: 1.07rem; line-height: 1.5; margin: 0;">
+      <strong>TL;DR: Real-time, minute-long memory for dynamic NVS from multi-view videos:</strong>
+      Remembers the past and reconstructs occluded regions. Beats SOTA like LaCT-NVS and LVSM.
     </h6>
   </div>
 </section>
@@ -160,47 +160,51 @@
   <!-- ===== memorization-results ===== -->
 <section id="visual-results" class="section-padding">
   <div class="content-width">
-    <h2 class="section-heading">Results</h2>
+    <h2 class="section-heading">1-Min Results</h2>
+    <p class="caption-text" style="text-align: center; margin-bottom: 0.5rem;">Minute-long memory recall.</p>
     <p class="caption-text" style="margin-bottom: 2rem; text-align: center;">
-      Select a scene, then click models in the comparison strip to inspect them in detail below.
+      Select a scene, then click models in the comparison strip to inspect them in detail below.<br>Check the memory box to see our memory readout visuals.
     </p>
 
-    <!-- ═══ Zone 1: Example Selector ═══ -->
-    <div class="example-selector-wrap" id="example-selector-wrap">
-      <div class="example-selector" id="example-selector">
-        <!-- Cards populated by JS -->
-      </div>
-    </div>
+    <!-- Interactive player instance (scenes: window.VP_SCENE_SETS.oneMin) -->
+    <div class="vr-player" data-scenes="oneMin">
 
-    <!-- ═══ Zone 2: Model Strip ═══ -->
-    <div class="model-strip" id="model-strip">
-      <div class="model-strip-item" data-model="nstm">
-        <div class="model-strip-video-wrap">
-          <video autoplay loop muted playsinline></video>
-          <div class="model-strip-check" aria-hidden="true">✓</div>
+      <!-- ═══ Zone 1: Example Selector ═══ -->
+      <div class="example-selector-wrap" id="example-selector-wrap">
+        <div class="example-selector" id="example-selector">
+          <!-- Cards populated by JS -->
         </div>
-        <span class="model-strip-label">NSTM 256×256</span>
       </div>
-      <div class="model-strip-item" data-model="nstm_hires">
-        <div class="model-strip-video-wrap">
-          <video autoplay loop muted playsinline></video>
-          <div class="model-strip-check" aria-hidden="true">✓</div>
+
+      <!-- ═══ Zone 2: Model Strip ═══ -->
+      <div class="model-strip" id="model-strip">
+        <div class="model-strip-item" data-model="nstm">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">NSTM 256×256</span>
         </div>
-        <span class="model-strip-label">NSTM 512×512</span>
-      </div>
-      <div class="model-strip-item" data-model="token_mem">
-        <div class="model-strip-video-wrap">
-          <video autoplay loop muted playsinline></video>
-          <div class="model-strip-check" aria-hidden="true">✓</div>
+        <div class="model-strip-item" data-model="nstm_hires">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">NSTM 512×512</span>
         </div>
-        <span class="model-strip-label">Token-Mem</span>
-      </div>
-      <div class="model-strip-item" data-model="full_attn">
-        <div class="model-strip-video-wrap">
-          <video autoplay loop muted playsinline></video>
-          <div class="model-strip-check" aria-hidden="true">✓</div>
+        <div class="model-strip-item" data-model="token_mem">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">Token-Mem</span>
         </div>
-        <span class="model-strip-label">LVSM</span>
+        <div class="model-strip-item" data-model="full_attn">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">LVSM</span>
         </div>
         <div class="model-strip-item" data-model="lact_nvs">
           <div class="model-strip-video-wrap">
@@ -208,72 +212,221 @@
             <div class="model-strip-check" aria-hidden="true">✓</div>
           </div>
           <span class="model-strip-label">LACT-NVS</span>
+        </div>
+      </div>
+
+      <!-- ═══ Zone 3: Analysis Box ═══ -->
+      <div class="analysis-box" id="analysis-box">
+
+        <!-- Single-model view: Input | Rendered | Memory (optional) -->
+        <div class="analysis-row" id="analysis-single" style="display:none;">
+          <!-- Column 1: Input (single video, two stacked views) -->
+          <div class="analysis-col analysis-col--input" id="analysis-col-input">
+            <video id="analysis-input-video" autoplay loop muted playsinline></video>
+            <span class="vid-label">Input</span>
+          </div>
+          <!-- Column 2: Rendered output -->
+          <div class="analysis-col analysis-col--rendered" id="analysis-col-rendered">
+            <video id="analysis-model-video" autoplay loop muted playsinline></video>
+            <span class="vid-label" id="analysis-model-label"></span>
+            <!-- Memory toggle: checkbox overlay, top-right corner -->
+            <label class="memory-toggle" id="memory-toggle" style="display:none;">
+              <input type="checkbox" class="memory-toggle-checkbox" id="memory-checkbox">
+              <span class="memory-toggle-text">Memory</span>
+            </label>
+          </div>
+          <!-- Column 3: Memory (conditional) -->
+          <div class="analysis-col analysis-col--memory" id="analysis-col-memory" style="display:none;">
+            <video id="analysis-memory-video" autoplay loop muted playsinline></video>
+            <span class="vid-label">Memory</span>
+          </div>
+        </div>
+
+        <!-- Comparison (swipe) view: Input | Swipe -->
+        <div class="analysis-row" id="analysis-compare" style="display:none;">
+          <!-- Column 1: Input -->
+          <div class="analysis-col analysis-col--input" id="compare-col-input">
+            <video id="compare-input-video" autoplay loop muted playsinline></video>
+            <span class="vid-label">Input</span>
+          </div>
+          <!-- Column 2: Swipe comparison -->
+          <div class="analysis-col analysis-col--compare compare-container" id="compare-container">
+            <video class="compare-video compare-video--under" id="compare-video-under" autoplay loop muted playsinline></video>
+            <video class="compare-video compare-video--over" id="compare-video-over" autoplay loop muted playsinline></video>
+            <div class="compare-divider" id="compare-divider">
+              <div class="compare-divider-line"></div>
+              <div class="compare-divider-handle">⇔</div>
+            </div>
+            <span class="vid-label vid-label--left" id="compare-label-left"></span>
+            <span class="vid-label vid-label--right" id="compare-label-right"></span>
+          </div>
+        </div>
+
+        <!-- Playback Controls -->
+        <div class="playback-controls" id="playback-controls">
+          <button class="playback-btn playback-btn--play" id="playback-toggle" title="Pause">
+            <svg class="icon-pause" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <rect x="3" y="2" width="4" height="12" rx="1" />
+              <rect x="9" y="2" width="4" height="12" rx="1" />
+            </svg>
+            <svg class="icon-play" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="display:none">
+              <path d="M4 2.5v11l9-5.5z" />
+            </svg>
+          </button>
+          <div class="playback-seek-wrap">
+            <input type="range" class="playback-seek" id="playback-seek" min="0" max="1000" value="0" step="1">
+            <div class="playback-seek-fill" id="playback-seek-fill"></div>
+          </div>
+          <span class="playback-time" id="playback-time">0:00 / 0:00</span>
+        </div>
       </div>
     </div>
+  </div>
+</section>
 
-    <!-- ═══ Zone 3: Analysis Box ═══ -->
-    <div class="analysis-box" id="analysis-box">
+<script>
+  /* Scene sets for the two index players (consumed by js/video-player.js).
+     oneMin = the six 1-minute reverse-render scenes; threesixty = four 360° spins. */
+  window.VP_SCENE_SETS = {
+    oneMin: [
+      { id: 'ft_202307_20230714_00032_02', label: 'Ladder Graphic', og: 'reverse', oi: 'orbit_1' },
+      { id: 'ft_202307_20230716_00019_02', label: 'Infinity Pattern', og: 'reverse', oi: 'orbit_1' },
+      { id: 'lg_202307_20230720_00036_02', label: 'Ribbon', og: 'reverse', oi: 'orbit_1' },
+      { id: 'lg_202307_20230705_00015_02', label: 'Leaf Logo', og: 'reverse', oi: 'orbit_1' },
+      { id: 'lg_202307_20230719_00007_01', label: 'Basketball', og: 'reverse', oi: 'orbit_1' },
+      { id: 'ft_202307_20230707_00017_01', label: 'Large Pattern', og: 'reverse', oi: 'orbit_1' }
+    ],
+    threesixty: [
+      { id: 'lg_202307_20230705_00015_02', label: 'Leaf Logo', og: '360_rotation', oi: 'orbit_1' },
+      { id: 'ft_202307_20230714_00032_02', label: 'Ladder Graphic', og: '360_rotation', oi: 'orbit_1' },
+      { id: 'lg_202307_20230719_00007_01', label: 'Basketball', og: '360_rotation', oi: 'orbit_1' },
+      { id: 'lg_202307_20230720_00036_02', label: 'Ribbon', og: '360_rotation', oi: 'orbit_1' }
+    ]
+  };
+</script>
 
-      <!-- Single-model view: Input | Rendered | Memory (optional) -->
-      <div class="analysis-row" id="analysis-single" style="display:none;">
-        <!-- Column 1: Input (single video, two stacked views) -->
-        <div class="analysis-col analysis-col--input" id="analysis-col-input">
-          <video id="analysis-input-video" autoplay loop muted playsinline></video>
-          <span class="vid-label">Input</span>
-        </div>
-        <!-- Column 2: Rendered output -->
-        <div class="analysis-col analysis-col--rendered" id="analysis-col-rendered">
-          <video id="analysis-model-video" autoplay loop muted playsinline></video>
-          <span class="vid-label" id="analysis-model-label"></span>
-          <!-- Memory toggle: checkbox overlay, top-right corner -->
-          <label class="memory-toggle" id="memory-toggle" style="display:none;">
-            <input type="checkbox" class="memory-toggle-checkbox" id="memory-checkbox">
-            <span class="memory-toggle-text">Memory</span>
-          </label>
-        </div>
-        <!-- Column 3: Memory (conditional) -->
-        <div class="analysis-col analysis-col--memory" id="analysis-col-memory" style="display:none;">
-          <video id="analysis-memory-video" autoplay loop muted playsinline></video>
-          <span class="vid-label">Memory</span>
+  <!-- ===== demos-360 ===== -->
+<section id="demos-360" class="section-padding">
+  <div class="content-width">
+    <h2 class="section-heading">360&deg; Demos</h2>
+    <p class="caption-text" style="text-align: center; margin-bottom: 0.5rem;">360&deg; Novel-View-Synthesis with memory recall.</p>
+    <p class="caption-text" style="margin-bottom: 2rem; text-align: center;">
+      Select a scene, then click models in the comparison strip to inspect them in detail below.<br>Check the memory box to see our memory readout visuals.
+    </p>
+
+    <!-- Interactive player instance (scenes: window.VP_SCENE_SETS.threesixty) -->
+    <div class="vr-player" data-scenes="threesixty">
+
+      <!-- ═══ Zone 1: Example Selector ═══ -->
+      <div class="example-selector-wrap" id="example-selector-wrap">
+        <div class="example-selector" id="example-selector">
+          <!-- Cards populated by JS -->
         </div>
       </div>
 
-      <!-- Comparison (swipe) view: Input | Swipe -->
-      <div class="analysis-row" id="analysis-compare" style="display:none;">
-        <!-- Column 1: Input -->
-        <div class="analysis-col analysis-col--input" id="compare-col-input">
-          <video id="compare-input-video" autoplay loop muted playsinline></video>
-          <span class="vid-label">Input</span>
-        </div>
-        <!-- Column 2: Swipe comparison -->
-        <div class="analysis-col analysis-col--compare compare-container" id="compare-container">
-          <video class="compare-video compare-video--under" id="compare-video-under" autoplay loop muted playsinline></video>
-          <video class="compare-video compare-video--over" id="compare-video-over" autoplay loop muted playsinline></video>
-          <div class="compare-divider" id="compare-divider">
-            <div class="compare-divider-line"></div>
-            <div class="compare-divider-handle">⇔</div>
+      <!-- ═══ Zone 2: Model Strip ═══ -->
+      <div class="model-strip" id="model-strip">
+        <div class="model-strip-item" data-model="nstm">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
           </div>
-          <span class="vid-label vid-label--left" id="compare-label-left"></span>
-          <span class="vid-label vid-label--right" id="compare-label-right"></span>
+          <span class="model-strip-label">NSTM 256×256</span>
+        </div>
+        <div class="model-strip-item" data-model="nstm_hires">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">NSTM 512×512</span>
+        </div>
+        <div class="model-strip-item" data-model="token_mem">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">Token-Mem</span>
+        </div>
+        <div class="model-strip-item" data-model="full_attn">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">LVSM</span>
+        </div>
+        <div class="model-strip-item" data-model="lact_nvs">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">LACT-NVS</span>
         </div>
       </div>
 
-      <!-- Playback Controls -->
-      <div class="playback-controls" id="playback-controls">
-        <button class="playback-btn playback-btn--play" id="playback-toggle" title="Pause">
-          <svg class="icon-pause" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-            <rect x="3" y="2" width="4" height="12" rx="1" />
-            <rect x="9" y="2" width="4" height="12" rx="1" />
-          </svg>
-          <svg class="icon-play" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="display:none">
-            <path d="M4 2.5v11l9-5.5z" />
-          </svg>
-        </button>
-        <div class="playback-seek-wrap">
-          <input type="range" class="playback-seek" id="playback-seek" min="0" max="1000" value="0" step="1">
-          <div class="playback-seek-fill" id="playback-seek-fill"></div>
+      <!-- ═══ Zone 3: Analysis Box ═══ -->
+      <div class="analysis-box" id="analysis-box">
+
+        <!-- Single-model view: Input | Rendered | Memory (optional) -->
+        <div class="analysis-row" id="analysis-single" style="display:none;">
+          <!-- Column 1: Input (single video, two stacked views) -->
+          <div class="analysis-col analysis-col--input" id="analysis-col-input">
+            <video id="analysis-input-video" autoplay loop muted playsinline></video>
+            <span class="vid-label">Input</span>
+          </div>
+          <!-- Column 2: Rendered output -->
+          <div class="analysis-col analysis-col--rendered" id="analysis-col-rendered">
+            <video id="analysis-model-video" autoplay loop muted playsinline></video>
+            <span class="vid-label" id="analysis-model-label"></span>
+            <!-- Memory toggle: checkbox overlay, top-right corner -->
+            <label class="memory-toggle" id="memory-toggle" style="display:none;">
+              <input type="checkbox" class="memory-toggle-checkbox" id="memory-checkbox">
+              <span class="memory-toggle-text">Memory</span>
+            </label>
+          </div>
+          <!-- Column 3: Memory (conditional) -->
+          <div class="analysis-col analysis-col--memory" id="analysis-col-memory" style="display:none;">
+            <video id="analysis-memory-video" autoplay loop muted playsinline></video>
+            <span class="vid-label">Memory</span>
+          </div>
         </div>
-        <span class="playback-time" id="playback-time">0:00 / 0:00</span>
+
+        <!-- Comparison (swipe) view: Input | Swipe -->
+        <div class="analysis-row" id="analysis-compare" style="display:none;">
+          <!-- Column 1: Input -->
+          <div class="analysis-col analysis-col--input" id="compare-col-input">
+            <video id="compare-input-video" autoplay loop muted playsinline></video>
+            <span class="vid-label">Input</span>
+          </div>
+          <!-- Column 2: Swipe comparison -->
+          <div class="analysis-col analysis-col--compare compare-container" id="compare-container">
+            <video class="compare-video compare-video--under" id="compare-video-under" autoplay loop muted playsinline></video>
+            <video class="compare-video compare-video--over" id="compare-video-over" autoplay loop muted playsinline></video>
+            <div class="compare-divider" id="compare-divider">
+              <div class="compare-divider-line"></div>
+              <div class="compare-divider-handle">⇔</div>
+            </div>
+            <span class="vid-label vid-label--left" id="compare-label-left"></span>
+            <span class="vid-label vid-label--right" id="compare-label-right"></span>
+          </div>
+        </div>
+
+        <!-- Playback Controls -->
+        <div class="playback-controls" id="playback-controls">
+          <button class="playback-btn playback-btn--play" id="playback-toggle" title="Pause">
+            <svg class="icon-pause" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <rect x="3" y="2" width="4" height="12" rx="1" />
+              <rect x="9" y="2" width="4" height="12" rx="1" />
+            </svg>
+            <svg class="icon-play" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" style="display:none">
+              <path d="M4 2.5v11l9-5.5z" />
+            </svg>
+          </button>
+          <div class="playback-seek-wrap">
+            <input type="range" class="playback-seek" id="playback-seek" min="0" max="1000" value="0" step="1">
+            <div class="playback-seek-fill" id="playback-seek-fill"></div>
+          </div>
+          <span class="playback-time" id="playback-time">0:00 / 0:00</span>
+        </div>
       </div>
     </div>
   </div>

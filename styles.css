@@ -250,8 +250,19 @@ h1, h2, h3, h4, h5, h6,
 /* --- Hero TL;DR card (ZipMap-style blue notification) --- */
 
 .tldr-card {
-  max-width: calc(var(--content-width) * 1.2);
+  /* 840 - 2*28 padding = 784px content, enough to keep "LVSM" on one line (desktop). */
+  max-width: 840px;
   margin: 20px auto 0;
+  /* Override Bulma's asymmetric .notification padding (2.5rem right / 1.5rem left). */
+  padding: 16px 28px;
+}
+
+@media (max-width: 768px) {
+  .tldr-card {
+    margin-left: 16px;
+    margin-right: 16px;
+    padding: 14px 20px;
+  }
 }
 
 /* --- Results Gallery cards --- */
@@ -629,6 +640,14 @@ pre.citation {
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
   padding: 4px 0;
+}
+
+/* 1-Min Results has 6 chips → lay them out as a clean 3×2 on desktop.
+   (Mobile keeps the 2-per-row rule below; other players keep 4-per-row.) */
+@media (min-width: 769px) {
+  #visual-results .example-selector {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .example-card {
