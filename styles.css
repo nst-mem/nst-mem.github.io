@@ -900,9 +900,12 @@ pre.citation {
   top: 0;
   bottom: 0;
   left: 50%;
-  width: 3px;
+  /* Wide invisible drag strip (contains the handle) for an easy touch target;
+     the visible line + handle inside stay centered and thin. */
+  width: 44px;
   transform: translateX(-50%);
   cursor: ew-resize;
+  touch-action: none;
   z-index: 5;
   display: flex;
   flex-direction: column;
@@ -914,6 +917,8 @@ pre.citation {
   position: absolute;
   top: 0;
   bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 2px;
   background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
@@ -1063,12 +1068,29 @@ pre.citation {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  /* Keep all five model thumbnails on one compact row so the comparison view
+     stays above the fold on small phones (iPhone SE / S8 / Pixel 7). */
   .model-strip {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    gap: 5px;
+    margin: 10px 0;
   }
 
   .model-strip-item {
-    flex: 0 0 calc(50% - 4px);
+    flex: 1;
+  }
+
+  .model-strip-label {
+    font-size: 9px;
+    padding: 3px 2px;
+    letter-spacing: 0;
+  }
+
+  .model-strip-check {
+    width: 16px;
+    height: 16px;
+    top: 3px;
+    right: 3px;
   }
 
   /* Keep single-model view as one horizontal row on mobile (Input | Rendered |
