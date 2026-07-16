@@ -87,7 +87,6 @@
     var syncRAF = null;
     var isPlaying = true;
     var isSeeking = false;
-    var allFollowers = [];
 
     /* ── DOM references (scoped to this root) ── */
     var q = function (sel) { return root.querySelector(sel); };
@@ -208,8 +207,30 @@
     }
 
     function getLeader() {
+      // Timing master = the on-screen input video for the current mode
+      // (falls back to the first strip thumbnail before analysis is ready).
+      if (analysisCompare.style.display !== 'none' && compareInputVideo.readyState >= 2) return compareInputVideo;
+      if (analysisSingle.style.display !== 'none' && analysisInputVideo.readyState >= 2) return analysisInputVideo;
       var v = getStripVideos();
       return v.length > 0 ? v[0] : null;
+    }
+
+    // The videos that should be rotating for the current interaction state — the
+    // whole decoder-budget policy, state-driven (not scroll/visibility driven):
+    //   compare mode -> only the 3 comparison videos (strip thumbnails frozen)
+    //   single mode  -> the strip thumbnails + input/rendered (+ memory)
+    function playingSet() {
+      if (analysisCompare.style.display !== 'none') {
+        return [compareInputVideo, compareUnder, compareOver];
+      }
+      var vids = getStripVideos();
+      vids.push(analysisInputVideo, analysisModelVideo);
+      if (analysisColMemory.style.display !== 'none') vids.push(analysisMemoryVideo);
+      return vids;
+    }
+
+    function pauseVideos(list) {
+      list.forEach(function (v) { if (v && !v.paused) v.pause(); });
     }
 
     stripEl.addEventListener('click', function (e) {
@@ -276,13 +297,24 @@
         }
       }
 
-      var leader = getLeader();
-      if (leader) {
-        waitForVideosReady(vids, function () {
-          syncToLeader(leader, vids);
-          layoutAnalysisRow();
-        });
+      // Single mode: comparison videos idle; the strip thumbnails rotate again.
+      pauseVideos([compareInputVideo, compareUnder, compareOver]);
+      if (isPlaying) {
+        getStripVideos().forEach(function (v) { if (v.paused) v.play().catch(function () { }); });
       }
+      waitForVideosReady(vids, function () {
+        // Align the analysis videos to the strip clock so the strip (followers)
+        // don't get yanked to a different time.
+        var sl = getStripVideos()[0];
+        var t0 = sl ? sl.currentTime : 0;
+        vids.forEach(function (v) {
+          v.currentTime = t0;
+          v.playbackRate = 1;
+          if (isPlaying) v.play().catch(function () { });
+          else v.pause();
+        });
+        layoutAnalysisRow();
+      });
     }
 
     function showCompare(modelA, modelB) {
@@ -296,14 +328,24 @@
       setVideoSrc(compareOver, activeScene.models[modelA].rendered);
       setComparePosition(50);
 
+      // Compare mode: freeze ALL strip thumbnails and the single-view videos so
+      // only the three comparison videos hold decoders. Capture the strip clock
+      // first so the comparison starts where the thumbnails were.
+      var sl = getStripVideos()[0];
+      var refT = sl ? sl.currentTime : 0;
+      pauseVideos(getStripVideos());
+      pauseVideos([analysisInputVideo, analysisModelVideo, analysisMemoryVideo]);
+
       var vids = [compareInputVideo, compareUnder, compareOver];
-      var leader = getLeader();
-      if (leader) {
-        waitForVideosReady(vids, function () {
-          syncToLeader(leader, vids);
-          layoutAnalysisRow();
+      waitForVideosReady(vids, function () {
+        vids.forEach(function (v) {
+          v.currentTime = refT;
+          v.playbackRate = 1;
+          if (isPlaying) v.play().catch(function () { });
+          else v.pause();
         });
-      }
+        layoutAnalysisRow();
+      });
     }
 
     /* ── Layout Analysis Row (JS-computed column widths/heights) ── */
@@ -417,28 +459,49 @@
 
     /* ── Sync Engine ── */
 
+    var TH_RATE = 0.04;   // > ~1 frame of drift: nudge playbackRate to converge
+    var TH_SEEK = 0.35;   // > 350ms drift (stall / loop wrap / seek): resync once
+
     function startSync() {
       stopSync();
-      var leader = getLeader();
-      if (!leader) return;
-      allFollowers = getStripVideos().filter(function (v) { return v !== leader; });
-      var TH = 0.05;
       function tick() {
-        if (leader.readyState >= 2) {
+        var leader = getLeader();
+        var play = playingSet();
+        // Only drive playback when the leader is part of the active set. During the
+        // brief switch into compare mode the fallback leader is a frozen strip
+        // thumbnail — skip so the tick doesn't un-freeze it.
+        if (leader && leader.readyState >= 2 && play.indexOf(leader) !== -1) {
           var t = leader.currentTime;
-          for (var i = 0; i < allFollowers.length; i++) {
-            var f = allFollowers[i];
-            if (f.readyState < 2) continue;
-            if (Math.abs(f.currentTime - t) > TH) f.currentTime = t;
-            if (!isPlaying && !f.paused) f.pause();
-            if (isPlaying && f.paused) f.play().catch(function () { });
+          if (isPlaying && leader.paused) leader.play().catch(function () { });
+          if (leader.playbackRate !== 1) leader.playbackRate = 1;
+
+          for (var i = 0; i < play.length; i++) {
+            var f = play[i];
+            if (f === leader || f.readyState < 2) continue;
+            if (!isPlaying) {
+              if (!f.paused) f.pause();
+              if (f.playbackRate !== 1) f.playbackRate = 1;
+              continue;
+            }
+            if (f.paused) f.play().catch(function () { });
+            var drift = f.currentTime - t;             // + ahead, - behind
+            var adrift = drift < 0 ? -drift : drift;
+            if (adrift > TH_SEEK) {
+              f.currentTime = t;                        // large drift: one hard resync
+              if (f.playbackRate !== 1) f.playbackRate = 1;
+            } else if (adrift > TH_RATE) {
+              f.playbackRate = drift > 0 ? 0.96 : 1.04; // small drift: glide into sync
+            } else if (f.playbackRate !== 1) {
+              f.playbackRate = 1;
+            }
           }
-        }
-        if (!isSeeking && leader.duration) {
-          var pct = (leader.currentTime / leader.duration) * 100;
-          playbackSeek.value = (leader.currentTime / leader.duration) * 1000;
-          playbackSeekFill.style.width = pct + '%';
-          playbackTime.textContent = fmt(leader.currentTime) + ' / ' + fmt(leader.duration);
+
+          if (!isSeeking && leader.duration) {
+            var pct = (leader.currentTime / leader.duration) * 100;
+            playbackSeek.value = (leader.currentTime / leader.duration) * 1000;
+            playbackSeekFill.style.width = pct + '%';
+            playbackTime.textContent = fmt(leader.currentTime) + ' / ' + fmt(leader.duration);
+          }
         }
         syncRAF = requestAnimationFrame(tick);
       }
@@ -449,23 +512,14 @@
       if (syncRAF) { cancelAnimationFrame(syncRAF); syncRAF = null; }
     }
 
-    function syncToLeader(leader, extras) {
-      extras.forEach(function (v) {
-        v.currentTime = leader.currentTime;
-        if (isPlaying) v.play().catch(function () { });
-        else v.pause();
-      });
-      var merged = allFollowers.slice();
-      extras.forEach(function (v) { if (merged.indexOf(v) === -1) merged.push(v); });
-      allFollowers = merged;
-    }
-
     /* ── Playback Controls ── */
 
     playbackToggle.addEventListener('click', function () {
       isPlaying = !isPlaying;
       updatePlaybackUI();
-      getAllVideos().forEach(function (v) {
+      // Play the current interaction set; pause the full set so nothing keeps
+      // decoding in the background.
+      (isPlaying ? playingSet() : getAllVideos()).forEach(function (v) {
         if (isPlaying) v.play().catch(function () { });
         else v.pause();
       });
