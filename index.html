@@ -436,13 +436,15 @@
 <!-- Method — carousel of the two architecture diagrams. -->
 <section id="method" class="section-padding">
   <div class="content-width">
-    <h2 class="section-heading">Method</h2>
+    <h2 class="section-heading">Method Overview</h2>
 
     <p class="caption-text" style="max-width: 820px; margin: 0 auto 2rem;">
-      NSTM is the first online framework for dynamic novel-view synthesis to sustain minute-long memory at
+      NSTM is the first online framework for dynamic novel-view synthesis from multi-view videos to sustain minute-long memory at
       amortized real-time speed. The two diagrams below show how NSTM achieves this by (1) decoupling periodic, 
       heavy memory updates from continuous per-frame synthesis, and (2) training with an alternating memorization 
-      and synthesis regime plus an auxiliary memory loss that internalizes persistent scene context.
+      and synthesis regime plus an auxiliary memory loss that internalizes persistent scene context. Our method
+      also contributes Memory Caching and an L2 inner loss formulation that are key to our minute-long stability
+      and described in our paper.
     </p>
 
     <div class="gallery-carousel" tabindex="0" aria-label="Method diagrams">
@@ -575,8 +577,7 @@
       also thank John Flynn and Osman Ulusoy for their valuable discussions and feedback on the manuscript,
       and Tianyuan Zhang and Bowei Chen for early clarifying discussions on LaCT. Finally, we extend our
       appreciation to Xiaoguang Han, Hongjie Liao, and Yihao Zhi for providing full-length MVHumanNet++
-      videos for our experiments. Baback Elmieh was supported in part by the University of Washington Reality
-      Lab.
+      videos for our experiments.
     </p>
   </div>
 </section>
