@@ -48,8 +48,7 @@
     window.addEventListener('DOMContentLoaded', function () { window.scrollTo(0, 0); });
   </script>
 
-  <!-- Structured data (schema.org ScholarlyArticle) for search engines / Scholar.
-       TODO: add "sameAs"/"identifier" with the arXiv URL once assigned. -->
+  <!-- Structured data (schema.org ScholarlyArticle) for search engines / Scholar. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -57,6 +56,8 @@
     "name": "Online Neural Space Time Memory for Dynamic Novel View Synthesis",
     "alternateName": "NSTM",
     "url": "https://nst-mem.github.io/",
+    "sameAs": "https://arxiv.org/abs/2607.15271",
+    "identifier": "arXiv:2607.15271",
     "image": "https://nst-mem.github.io/resources/teaser_nstm_pink_og.jpg",
     "description": "Neural Space-Time Memory (NSTM): real-time, minute-scale novel view synthesis from multi-view video. Interactive results, comparisons, and ablations.",
     "datePublished": "2026",
@@ -125,8 +126,8 @@
     <div class="columns is-centered">
       <div class="column has-text-centered publication-links-container">
         <div class="publication-links">
-          <!-- arXiv (covers Paper + Supplemental). TODO: replace href="#" with the real arXiv URL. -->
-          <a class="link-button" href="#">
+          <!-- arXiv (covers Paper + Supplemental) -->
+          <a class="link-button" href="https://arxiv.org/abs/2607.15271">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path
                 d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM6 20V4h5v7h7v9H6z" />
@@ -645,18 +646,18 @@
 </section>
 
   <!-- ===== bibtex ===== -->
-<!-- BibTeX. TODO: fill in the real arXiv eprint id once assigned. -->
+<!-- BibTeX -->
 <section id="bibtex" class="section-padding">
   <div class="content-width">
     <h2 class="section-heading">BibTeX</h2>
-    <pre class="citation">@article{elmieh2026nstm,
-  title   = {Online Neural Space Time Memory for Dynamic Novel View Synthesis},
-  author  = {Elmieh, Baback and Tsai, Lynn and Li, Zeman and Kaza, Srinivas and
-             Sun, Tiancheng and Csapo, Gabor and Behrouz, Ali and Deng, Yuan and
-             Lombardi, Stephen and Seitz, Steven M. and Luo, Xuan},
-  journal = {arXiv preprint},
-  eprint  = {arXiv:XXXX.XXXXX},
-  year    = {2026}
+    <pre class="citation">@misc{elmieh2026nstm,
+      title={Online Neural Space Time Memory for Dynamic Novel View Synthesis},
+      author={Baback Elmieh and Lynn Tsai and Zeman Li and Srinivas Kaza and Tiancheng Sun and Gabor Csapo and Ali Behrouz and Yuan Deng and Stephen Lombardi and Steven M. Seitz and Xuan Luo},
+      year={2026},
+      eprint={2607.15271},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2607.15271},
 }</pre>
   </div>
 </section>

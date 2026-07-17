@@ -77,8 +77,7 @@ cat > index.html << 'HEAD_EOF'
     window.addEventListener('DOMContentLoaded', function () { window.scrollTo(0, 0); });
   </script>
 
-  <!-- Structured data (schema.org ScholarlyArticle) for search engines / Scholar.
-       TODO: add "sameAs"/"identifier" with the arXiv URL once assigned. -->
+  <!-- Structured data (schema.org ScholarlyArticle) for search engines / Scholar. -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -86,6 +85,8 @@ cat > index.html << 'HEAD_EOF'
     "name": "Online Neural Space Time Memory for Dynamic Novel View Synthesis",
     "alternateName": "NSTM",
     "url": "https://nst-mem.github.io/",
+    "sameAs": "https://arxiv.org/abs/2607.15271",
+    "identifier": "arXiv:2607.15271",
     "image": "https://nst-mem.github.io/resources/teaser_nstm_pink_og.jpg",
     "description": "Neural Space-Time Memory (NSTM): real-time, minute-scale novel view synthesis from multi-view video. Interactive results, comparisons, and ablations.",
     "datePublished": "2026",

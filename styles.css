@@ -297,9 +297,11 @@ h1, h2, h3, h4, h5, h6,
   }
 }
 
+/* Phones: stay 2-up (2x3, like the index Results Gallery) with a tighter gap
+   so the cards shrink instead of stacking into one tall column. */
 @media (max-width: 540px) {
   .results-landing-grid {
-    grid-template-columns: 1fr;
+    gap: 16px;
   }
 }
 
