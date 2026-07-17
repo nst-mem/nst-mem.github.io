@@ -562,6 +562,13 @@
     /* ── Utilities ── */
 
     function setVideoSrc(video, src) {
+      // Re-setting the same src re-runs the media load algorithm and resets the
+      // video to t=0 (e.g. toggling Memory would restart Input/Rendered). Skip
+      // only when this element already has this exact source AND is healthy —
+      // an errored or stalled element (readyState < 2) falls through to a fresh
+      // load(), keeping the old code's self-healing on every interaction.
+      if (video.dataset.vpSrc === src && !video.error && video.readyState >= 2) return;
+      video.dataset.vpSrc = src;
       if (video.querySelector('source')) {
         video.querySelector('source').src = src;
         video.load();
