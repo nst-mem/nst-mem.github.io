@@ -1,13 +1,14 @@
-<section id="visual-results" class="section-padding">
+<section id="kubric-nvs" class="section-padding">
   <div class="content-width">
-    <h2 class="section-heading">1-Min Results</h2>
-    <p class="caption-text" style="text-align: center; margin-bottom: 0.5rem;">Minute-long memory recall.</p>
+    <h2 class="section-heading">Object-Centric NVS</h2>
+    <p class="caption-text" style="text-align: center; margin-bottom: 0.5rem;">NSTM is prior-free and generalizes beyond humans as shown by our Category-Agnostic Object-Centric NVS examples below. Although synthetic, this dataset remains highly challenging due to its complex occlusion patterns. Significant ambiguity arises in novel view synthesis when relying on a single view or partial observations, which manifests as jittering in our stateless baseline (LVSM).</p>
     <p class="caption-text" style="margin-bottom: 2rem; text-align: center;">
       Select a scene, then click models in the comparison strip to inspect them in detail below. Check the memory box to see our memory readout visuals.
     </p>
 
-    <!-- Interactive player instance (scenes: window.VP_SCENE_SETS.oneMin) -->
-    <div class="vr-player" data-scenes="oneMin">
+    <!-- Interactive player instance (scenes: window.VP_SCENE_SETS.kubric).
+         4-model section: no nstm_hires; input + default model = nstm. -->
+    <div class="vr-player" data-scenes="kubric" data-models="nstm,token_mem,full_attn,lact_nvs,gt" data-input-model="nstm" data-default-model="nstm" data-max-panel-height="512">
 
       <!-- ═══ Zone 1: Example Selector ═══ -->
       <div class="example-selector-wrap" id="example-selector-wrap">
@@ -24,13 +25,6 @@
             <div class="model-strip-check" aria-hidden="true">✓</div>
           </div>
           <span class="model-strip-label">NSTM 256×256</span>
-        </div>
-        <div class="model-strip-item" data-model="nstm_hires">
-          <div class="model-strip-video-wrap">
-            <video autoplay loop muted playsinline></video>
-            <div class="model-strip-check" aria-hidden="true">✓</div>
-          </div>
-          <span class="model-strip-label">NSTM 512×512</span>
         </div>
         <div class="model-strip-item" data-model="token_mem">
           <div class="model-strip-video-wrap">
@@ -52,6 +46,13 @@
             <div class="model-strip-check" aria-hidden="true">✓</div>
           </div>
           <span class="model-strip-label">LACT-NVS</span>
+        </div>
+        <div class="model-strip-item" data-model="gt">
+          <div class="model-strip-video-wrap">
+            <video autoplay loop muted playsinline></video>
+            <div class="model-strip-check" aria-hidden="true">✓</div>
+          </div>
+          <span class="model-strip-label">Ground Truth</span>
         </div>
       </div>
 
@@ -123,33 +124,3 @@
     </div>
   </div>
 </section>
-
-<script>
-  /* Scene sets for the three index players (consumed by js/video-player.js).
-     oneMin = six 1-minute reverse-render scenes; threesixty = four 360° spins;
-     kubric = six 30s Category-Agnostic Object-Centric NVS scenes. */
-  window.VP_SCENE_SETS = {
-    oneMin: [
-      { id: 'ft_202307_20230714_00032_02', label: 'Ladder Graphic', og: 'reverse', oi: 'orbit_1' },
-      { id: 'ft_202307_20230716_00019_02', label: 'Infinity Pattern', og: 'reverse', oi: 'orbit_1' },
-      { id: 'lg_202307_20230720_00036_02', label: 'Ribbon', og: 'reverse', oi: 'orbit_1' },
-      { id: 'lg_202307_20230705_00015_02', label: 'Leaf Logo', og: 'reverse', oi: 'orbit_1' },
-      { id: 'lg_202307_20230719_00007_01', label: 'Basketball Jersey', og: 'reverse', oi: 'orbit_1' },
-      { id: 'ft_202307_20230707_00017_01', label: 'Large Pattern', og: 'reverse', oi: 'orbit_1' }
-    ],
-    threesixty: [
-      { id: 'ft_202307_20230714_00032_02', label: 'Ladder Graphic', og: '360_rotation', oi: 'orbit_1' },
-      { id: 'lg_202307_20230720_00036_02', label: 'Ribbon', og: '360_rotation', oi: 'orbit_1' },
-      { id: 'lg_202307_20230705_00015_02', label: 'Leaf Logo', og: '360_rotation', oi: 'orbit_1' },
-      { id: 'lg_202307_20230719_00007_01', label: 'Basketball Jersey', og: '360_rotation', oi: 'orbit_1' }
-    ],
-    kubric: [
-      { id: 'kubric_018248', label: 'Helmet', og: '30s', oi: 'orbit_1' },
-      { id: 'kubric_017216', label: 'Couch', og: '30s', oi: 'orbit_1' },
-      { id: 'kubric_017848', label: 'Stripe', og: '30s', oi: 'orbit_1' },
-      { id: 'kubric_016497', label: 'Bus', og: '30s', oi: 'orbit_1' },
-      { id: 'kubric_017540', label: 'Race-Car', og: '30s', oi: 'orbit_1' },
-      { id: 'kubric_017040', label: 'Metal', og: '30s', oi: 'orbit_1' }
-    ]
-  };
-</script>

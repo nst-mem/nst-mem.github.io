@@ -20,6 +20,7 @@ SECTIONS=(
   "sections/teaser.html"
   "sections/memorization-results.html"
   "sections/demos-360.html"
+  "sections/kubric-nvs.html"
   "sections/method.html"
   "sections/results-gallery.html"
   "sections/acknowledgements.html"
