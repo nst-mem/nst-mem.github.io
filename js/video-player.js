@@ -31,7 +31,8 @@
     nstm_hires: 'NSTM 512×512',
     token_mem: 'Token-Mem',
     full_attn: 'LVSM',
-    lact_nvs: 'LACT-NVS'
+    lact_nvs: 'LACT-NVS',
+    gt: 'Ground Truth'  // pseudo-model: the scene's target view (kubric players)
   };
   var MEMORY_MODELS = ['nstm', 'nstm_hires'];
   var DEFAULT_MODEL = 'nstm_hires';
@@ -41,11 +42,11 @@
     return 'videos/' + model + '/' + sceneId + '/' + orbitGroup + '/' + orbitIndex + '/' + file;
   }
 
-  /* Build model entries for a scene — all 5 models share the same sceneId.
+  /* Build model entries for a scene — the instance's models share the sceneId.
      nstm & nstm_hires include memory; others do not. */
-  function buildModels(sceneId, og, oi) {
+  function buildModels(sceneId, og, oi, models) {
     var m = {};
-    MODELS.forEach(function (model) {
+    models.forEach(function (model) {
       var entry = { rendered: vp(model, sceneId, og, oi, 'rendered.mp4') };
       if (MEMORY_MODELS.indexOf(model) > -1) {
         entry.memory = vp(model, sceneId, og, oi, 'memory.mp4');
@@ -71,12 +72,24 @@
      ════════════════════════════════════════════════════════════ */
 
   function initPlayer(root, sceneDefs) {
+    /* Per-instance config via data attributes; defaults reproduce the
+       original behavior exactly (5 models, input + default = nstm_hires). */
+    var instModels = root.dataset.models
+      ? root.dataset.models.split(',').map(function (s) { return s.trim(); })
+      : MODELS;
+    var inputModel = root.dataset.inputModel || 'nstm_hires';
+    var defaultModel = root.dataset.defaultModel ||
+      (instModels.indexOf(DEFAULT_MODEL) > -1 ? DEFAULT_MODEL : instModels[0]);
+    /* data-max-panel-height="256": clamp analysis panels to the videos' native
+       height so low-res (synthetic) content is never upscaled/blurred. 0 = off. */
+    var maxPanelH = parseInt(root.dataset.maxPanelHeight, 10) || 0;
+
     var SCENES = sceneDefs.map(function (s) {
       return {
         id: s.id,
         label: s.label,
-        input: vp('nstm_hires', s.id, s.og, s.oi, 'input.mp4'),
-        models: buildModels(s.id, s.og, s.oi)
+        input: vp(inputModel, s.id, s.og, s.oi, 'input.mp4'),
+        models: buildModels(s.id, s.og, s.oi, instModels)
       };
     });
 
@@ -168,9 +181,9 @@
       stripEl.querySelectorAll('.model-strip-item').forEach(function (item) {
         item.classList.remove('is-selected');
       });
-      if (activeScene.models[DEFAULT_MODEL]) {
-        selectedModels = [DEFAULT_MODEL];
-        var di = stripEl.querySelector('[data-model="' + DEFAULT_MODEL + '"]');
+      if (activeScene.models[defaultModel]) {
+        selectedModels = [defaultModel];
+        var di = stripEl.querySelector('[data-model="' + defaultModel + '"]');
         if (di) di.classList.add('is-selected');
       }
       updateAnalysisBox();
@@ -181,9 +194,10 @@
     function loadStripVideos() {
       if (!activeScene) return;
       stopSync();
-      MODELS.forEach(function (model) {
-        var data = activeScene.models[model];
+      instModels.forEach(function (model) {
         var item = stripEl.querySelector('[data-model="' + model + '"]');
+        if (!item || !stripVideos[model]) return; // no strip item in this instance
+        var data = activeScene.models[model];
         if (data && data.rendered) {
           setVideoSrc(stripVideos[model], data.rendered);
           item.style.display = '';
@@ -199,7 +213,7 @@
 
     function getStripVideos() {
       var vids = [];
-      MODELS.forEach(function (m) {
+      instModels.forEach(function (m) {
         var item = stripEl.querySelector('[data-model="' + m + '"]');
         if (stripVideos[m] && item && item.style.display !== 'none') vids.push(stripVideos[m]);
       });
@@ -264,9 +278,9 @@
       memoryToggle.style.display = 'none';
 
       if (selectedModels.length === 0) {
-        if (activeScene.models[DEFAULT_MODEL]) {
-          selectedModels = [DEFAULT_MODEL];
-          var di = stripEl.querySelector('[data-model="' + DEFAULT_MODEL + '"]');
+        if (activeScene.models[defaultModel]) {
+          selectedModels = [defaultModel];
+          var di = stripEl.querySelector('[data-model="' + defaultModel + '"]');
           if (di) di.classList.add('is-selected');
         }
       }
@@ -373,11 +387,13 @@
         var arM = getAR(analysisMemoryVideo) || arR; // fallback to rendered AR
         w1 = (W - 2 * GAP) / (1 + arR / arIn + arM / arIn);
         H = w1 / arIn;
+        if (maxPanelH && H > maxPanelH) { H = maxPanelH; w1 = H * arIn; }
         w2 = H * arR;
         w3 = H * arM;
       } else {
         w1 = (W - GAP) / (1 + arR / arIn);
         H = w1 / arIn;
+        if (maxPanelH && H > maxPanelH) { H = maxPanelH; w1 = H * arIn; }
         w2 = H * arR;
       }
 
@@ -396,6 +412,7 @@
 
       var w1 = (W - GAP) / (1 + arR / arIn);
       var H = w1 / arIn;
+      if (maxPanelH && H > maxPanelH) { H = maxPanelH; w1 = H * arIn; }
       var w2 = H * arR;
 
       setSize(compareColInput, w1, H);

@@ -647,11 +647,18 @@ pre.citation {
 /* 1-Min Results has 6 chips → lay them out as a clean 3×2 on desktop.
    (Mobile keeps the 2-per-row rule below; other players keep 4-per-row.) */
 @media (min-width: 769px) {
-  #visual-results .example-selector {
+  #visual-results .example-selector,
+  #kubric-nvs .example-selector {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
+/* Height-capped players (data-max-panel-height, e.g. Object-Centric NVS at a
+   clean 2× of the 256px synthetic renders) lay out narrower than the box —
+   center their rows. Applies wherever the cap attribute is used. */
+.vr-player[data-max-panel-height] .analysis-row {
+  justify-content: center;
+}
 .example-card {
   display: flex;
   flex-direction: column;
