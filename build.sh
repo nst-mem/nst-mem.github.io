@@ -94,7 +94,7 @@ cat > index.html << 'HEAD_EOF'
     "inLanguage": "en",
     "publisher": { "@type": "Organization", "name": "arXiv" },
     "author": [
-      { "@type": "Person", "name": "Baback Elmieh", "url": "https://scholar.google.com/citations?user=k2pFAJ4AAAAJ&hl=en", "affiliation": [ { "@type": "Organization", "name": "University of Washington" }, { "@type": "Organization", "name": "Google" } ] },
+      { "@type": "Person", "name": "Baback Elmieh", "url": "https://scholar.google.com/citations?user=k2pFAJ4AAAAJ&hl=en", "affiliation": [ { "@type": "Organization", "name": "Google" }, { "@type": "Organization", "name": "University of Washington" } ] },
       { "@type": "Person", "name": "Lynn Tsai", "affiliation": { "@type": "Organization", "name": "Google" } },
       { "@type": "Person", "name": "Zeman Li", "url": "https://sites.google.com/usc.edu/zemanli/", "affiliation": { "@type": "Organization", "name": "Google" } },
       { "@type": "Person", "name": "Srinivas Kaza", "url": "https://kaza.io/portfolio", "affiliation": { "@type": "Organization", "name": "Google" } },
