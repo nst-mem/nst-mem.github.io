@@ -250,11 +250,18 @@ h1, h2, h3, h4, h5, h6,
 /* --- Hero TL;DR card (ZipMap-style blue notification) --- */
 
 .tldr-card {
-  /* 840 - 2*28 padding = 784px content, enough to keep "LVSM" on one line (desktop). */
   max-width: 840px;
   margin: 20px auto 0;
   /* Override Bulma's asymmetric .notification padding (2.5rem right / 1.5rem left). */
   padding: 16px 28px;
+}
+
+/* Wide desktop (Bulma widescreen): the TL;DR needs ~900px to fit on two lines;
+   940px leaves slack for font/zoom differences. */
+@media (min-width: 1216px) {
+  .tldr-card {
+    max-width: 940px;
+  }
 }
 
 @media (max-width: 768px) {
