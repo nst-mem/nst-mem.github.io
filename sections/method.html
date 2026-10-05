@@ -38,16 +38,18 @@
             alt="NSTM training regime with alternating memory and synthesis supervision">
           <p class="caption-text">
             <strong>Training Scheme.</strong> <strong>Left:</strong> Our alternating training scheme explicitly
-            enforces memorization. In the Memory Supervision step, isolated memory tokens (target camera rays)
-            perform strict self-attention (sharing weights with the cross-view attention layer) without
-            attending to input views. Once the memory is updated by the inputs, these isolated tokens query the
-            memory to reconstruct the target view. This forces a pure memory readout, ensuring context
-            internalization. During Synthesis Supervision, we perform self-attention across input and target
-            tokens to capture ongoing motion, and then query the previously updated memory state.
+            enforces memorization. In the <em>Memory Supervision</em> step, isolated <em>memory tokens</em>
+            (target camera rays) perform strict self-attention &mdash; sharing weights with the
+            <em>cross-view attention</em> layer &mdash; without attending to input views. Once the memory is
+            updated by the inputs, these isolated tokens query the memory to reconstruct the target view. This
+            forces a pure memory readout, ensuring context internalization. During <em>Synthesis Supervision</em>,
+            we perform self-attention across input and target tokens to capture ongoing motion, and then query
+            the previously updated memory state.
             <strong>Right:</strong> Visualizations of the inputs, targets, and memory in both steps. Crucially,
-            the historical memory state often exhibits a different pose from the current observation during
-            synthesis. Our cross-view attention addresses this deformation, successfully fusing past appearance
-            with current motion.
+            the memory state predates the current observation during synthesis: here the memory holds a standing
+            pose (arms down, bottom-right) while the current inputs show a throwing pose (arms raised,
+            bottom-left). Our <em>cross-view attention</em> resolves this misalignment, transferring the
+            memorized shirt-back pattern onto the current pose.
           </p>
         </div>
       </div>
